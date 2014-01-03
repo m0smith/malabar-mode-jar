@@ -17,6 +17,7 @@
     <url>https://github.com/m0smith/malabar-mode-jar.git</url>
     <connection>scm:git:git@github.com:m0smith/malabar-mode-jar.git</connection>
     <developerConnection>scm:git:git@github.com:m0smith/malabar-mode-jar.git</developerConnection>
+    <tag>develop</tag>
   </scm>
   <issueManagement>
     <system>GitHub</system>
