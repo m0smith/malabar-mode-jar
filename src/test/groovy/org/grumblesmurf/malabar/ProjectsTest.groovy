@@ -44,7 +44,7 @@ class ProjectsTest
     
     @Test
     void projectPopulated() {
-        assertThat(p.name, is("malabar-mode"));
+        assertThat(p.name, is("malabar-mode-jar"));
     }
 
     @Test

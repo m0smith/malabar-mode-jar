@@ -8,19 +8,19 @@
   </parent>
   <groupId>com.software-ninja</groupId>
   <artifactId>malabar</artifactId>
-  <version>1.5.5</version>
-  <name>malabar-mode</name>
+  <version>1.5.5-SNAPSHOT</version>
+  <name>malabar-mode-jar</name>
   <description>A Maven-enabled Java mode for Emacs</description>
   <inceptionYear>2009</inceptionYear>
-  <url>http://github.com/m0smith/malabar-mode</url>
+  <url>http://github.com/m0smith/malabar-mode-jar</url>
   <scm>
-    <url>https://github.com/m0smith/malabar-mode.git</url>
-    <connection>scm:git:git@github.com:m0smith/malabar-mode.git</connection>
-    <developerConnection>scm:git:git@github.com:m0smith/malabar-mode.git</developerConnection>
+    <url>https://github.com/m0smith/malabar-mode-jar.git</url>
+    <connection>scm:git:git@github.com:m0smith/malabar-mode-jar.git</connection>
+    <developerConnection>scm:git:git@github.com:m0smith/malabar-mode-jar.git</developerConnection>
   </scm>
   <issueManagement>
     <system>GitHub</system>
-    <url>http://github.com/m0smith/malabar-mode/issues</url>
+    <url>http://github.com/m0smith/malabar-mode-jar/issues</url>
   </issueManagement>
   <licenses>
     <license>
@@ -227,71 +227,6 @@
           <source>${project.build.source.version}</source>
           <target>${project.build.target.version}</target>
         </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-	<version>${maven.assembly.plugin.version}</version>
-	<configuration>
-	  <finalName>${project.artifactId}</finalName>
-	  <appendAssemblyId>false</appendAssemblyId>
-	</configuration>
-        <executions>
-          <execution>
-            <id>make-assembly</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <configuration>
-              <descriptors>
-                <descriptor>src/main/assembly/dist.xml</descriptor>
-              </descriptors>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>${exec.maven.plugin.version}</version>
-        <executions>
-          <execution>
-            <id>run-elisp-tests</id>
-            <phase>test</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-            <configuration>
-              <executable>emacs</executable>
-              <arguments>
-                <argument>-Q</argument>
-                <argument>--batch</argument>
-                <argument>-l</argument>
-                <argument>src/test/lisp/init.el</argument>
-                <argument>-l</argument>
-                <argument>src/test/lisp/all-tests.el</argument>
-              </arguments>
-            </configuration>
-          </execution>
-          <execution>
-            <id>run-loadability-test</id>
-            <phase>test</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-            <configuration>
-              <executable>emacs</executable>
-              <arguments>
-                <argument>-Q</argument>
-                <argument>--batch</argument>
-                <argument>-l</argument>
-                <argument>src/test/lisp/init.el</argument>
-                <argument>-l</argument>
-                <argument>src/test/lisp/load-all.el</argument>
-              </arguments>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
       <!-- <plugin> -->
       <!--   <artifactId>maven-release-plugin</artifactId> -->
