@@ -67,33 +67,33 @@ class Compiler
                                  null, compilationUnits);
             def success = task.call();
             LOGGER.debug(String.format("compiler result: %s",success));
-            LOGGER.debug(String.format("diagnostics: %s",diagnosticCollector.diagnostics));
+            LOGGER.debug(String.format("diagnostics: %s", diagnosticCollector.diagnostics));
 
             diagnosticCollector.diagnostics.each {
                 if (it.source) {
-                    def info = String.format("source: %s linenumber: %d, columnNumber: %d strartposition: %d endposition: %d position: %d kind: %s message %s", 
+                    def info = String.format("source: %s linenumber: %d, columnNumber: %d startposition: %d endposition: %d position: %d kind: %s message %s", 
                                              it.source.getClass(), 
-					     it.lineNumber,
-					     it.columnNumber,
-					     it.startPosition, 
-					     it.endPosition, 
-					     it.position,	
-					     it.kind,
-					     it.getMessage(null));
+                                             it.lineNumber,
+                                             it.columnNumber,
+                                             it.startPosition, 
+                                             it.endPosition, 
+                                             it.position,        
+                                             it.kind,
+                                             it.getMessage(null));
                     LOGGER.debug(info);
-		    try {                           
-                    	def src = new File(it.source.toUri().toString()).path
-			def start = [src, it.lineNumber].join(":")
-                        def message = it.getMessage(null).replace(start + ":", "")
-                        println([it.kind, Utils.standardizeSlashes(src), 
+                    try {                           
+                        def src = new File(it.source.toUri().toString()).path.replace("file:", "");
+                        def start = [src, it.lineNumber].join(":");
+                        def message = it.getMessage(null).replace(start + ":", "");
+                        println([it.kind, Utils.standardizeSlashes(src),
                                  it.lineNumber, it.columnNumber,
                                  it.startPosition, it.endPosition, it.position,
-                                 message].join("::"))
-		    } catch (IllegalArgumentException ex ) {
-			throw new IllegalArgumentException(ex.getMessage() + " " + info, ex);
-		    }
+                                 message].join("::"));
+                    } catch (IllegalArgumentException ex ) {
+                        throw new IllegalArgumentException(ex.getMessage() + " " + info, ex);
+                    }
                 } else {
-                    println("[${it.kind}] ${it.getMessage(null)}")
+                    println("[${it.kind}] ${it.getMessage(null)}");
                 }
             }
             fileManager.close();
@@ -114,7 +114,7 @@ class Compiler
             try {
                 compiler.compile(file);
             } catch (CompilationFailedException e) {
-		LOGGER.debug("Groovy compiler failure", e);
+                LOGGER.debug("Groovy compiler failure", e);
                 return false;
             }
             project.successfulCompilation();
