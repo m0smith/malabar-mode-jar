@@ -72,7 +72,7 @@ class Compiler
             diagnosticCollector.diagnostics.each {
                 if (it.source) {
                     def info = String.format("source: %s linenumber: %d, columnNumber: %d startposition: %d endposition: %d position: %d kind: %s message %s", 
-                                             it.source.getClass(), 
+                                             it.source.toUri(), 
                                              it.lineNumber,
                                              it.columnNumber,
                                              it.startPosition, 
@@ -82,7 +82,7 @@ class Compiler
                                              it.getMessage(null));
                     LOGGER.debug(info);
                     try {                           
-                        def src = new File(it.source.toUri().toString()).path.replace("file:", "");
+                        def src = it.source.toUri().path.replaceAll("^/([A-Z]:/)", '$1');
                         def start = [src, it.lineNumber].join(":");
                         def message = it.getMessage(null).replace(start + ":", "");
                         println([it.kind, Utils.standardizeSlashes(src),
