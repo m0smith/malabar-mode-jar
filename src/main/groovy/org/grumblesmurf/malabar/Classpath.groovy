@@ -134,7 +134,10 @@ class Classpath
         if (classMap.isEmpty()) {
             populateClassMap();
         }
-        populateExtraClassMap();
+
+		if (extraClassMap.isEmpty()) {
+			populateExtraClassMap();
+		}
 
         Utils.printAsLispList classMapEntry(name);
     }
