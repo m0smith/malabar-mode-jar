@@ -55,8 +55,8 @@ class Project
     def availableProfiles;
 
     def encoding = "UTF-8" as String;
-    def source = "1.3" as String;
-    def target = "1.1" as String;
+    def source = "1.5" as String;
+    def target = "1.5" as String;
 
     def mavenProject;
     def request;
