@@ -2,6 +2,10 @@
 
 See malabar-mode: https://github.com/m0smith/malabar-mode
 
+# Hacking
+
+All development is done on the 'master' branch in as part of a SNAPSHOP.  When a release needs to happen, the maven release plugin is used to tag the build and push it to maven central.
+
 # Boring legal stuff
 
 malabar-mode-jar is copyright (c) 2009-2010 Espen Wiborg <espenhw@grumblesmurf.org>
