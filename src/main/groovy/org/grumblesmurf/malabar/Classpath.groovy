@@ -80,7 +80,7 @@ class Classpath
     def classnamecollector = { fileName, path, map ->
         def classbinaryname = fileName[0..-7];
         def simplename = classbinaryname[classbinaryname.lastIndexOf('$') + 1..-1]
-        def pkgname = path.replace('/', '.')
+        def pkgname = path.replace('/', '.').replace('\\','.');
 
         if (!map.containsKey(simplename)) {
             map[simplename] = []
