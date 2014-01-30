@@ -55,6 +55,20 @@ public class MvnServer
 
     final def plexus
 
+    def boolean showErrors = false;
+    def int loggingLevel = Logger.LEVEL_INFO;
+
+    def verbose(boolean flag) {
+        showErrors = flag;
+        loggingLevel = flag ? Logger.LEVEL_DEBUG : Logger.LEVEL_INFO;
+        
+        maven.logger.setThreshold(loggingLevel);
+        logger.setThreshold(showErrors ? 0 : 1);
+
+	return  "flag=" + flag;
+    }
+
+
     MvnServer() {
         ClassWorld classWorld = new ClassWorld("plexus.core",
                                                Thread.currentThread().getContextClassLoader());
@@ -64,8 +78,9 @@ public class MvnServer
         plexus = new DefaultPlexusContainer(cc);
         logger = new MvnServerLogger();
         plexus.loggerManager = new MavenLoggerManager(logger);
-
+        plexus.loggerManager.thresholds = loggingLevel;
         maven = plexus.lookup(Maven.class);
+        logger.debug("MAVEN=" + maven);
         modelProcessor = plexus.lookup(ModelProcessor.class);
         
         transferListener = new MvnServerTransferListener();
@@ -83,6 +98,8 @@ public class MvnServer
             baseDirectory:basedir,
             pom:modelProcessor.locatePom(basedir),
             transferListener:transferListener,
+            showErrors:showErrors,
+            loggingLevel:loggingLevel,
             executionListener:executionListener).with { req ->
             def settings = withComponent(SettingsBuilder.class) {
                 def sbr = new DefaultSettingsBuildingRequest(globalSettingsFile:req.globalSettingsFile,
@@ -163,6 +180,8 @@ class RunDescriptor
     String[] goals;
     String[] profiles = new String[0];
     Properties properties = new Properties();
+    int loggingLevel = Logger.LEVEL_INFO;
+    boolean showErrors = false;
     
     MvnServer mvnServer;
 
@@ -171,6 +190,8 @@ class RunDescriptor
         return this;
     }
     
+    
+
     public boolean run() {
         PrintStream oldOut = System.out;
         PrintStream oldErr = System.err;
@@ -184,11 +205,19 @@ class RunDescriptor
                 goals = Arrays.asList(owner.goals)
                 recursive = owner.recursive
                 userProperties = owner.properties
+
+                setLoggingLevel(loggingLevel);
+                setShowErrors(showErrors);
+                mvnServer.logger.debug("loggingLevel=" + getLoggingLevel() +
+                                       " showErrors=" + isShowErrors() + 
+                                       " maven=" + mvnServer.maven);
+                mvnServer.logger.debug("Delegate " + delegate);
                 
                 mvnServer.maven.execute(delegate).with {
-                    // if (hasExceptions()) {
-                    //     exceptions.each {mvnServer.logger.error("Execution error", it)}
-                    // }
+
+                     if (hasExceptions()) {
+                         exceptions.each {mvnServer.logger.error("Execution error", it)}
+                     }
                     !hasExceptions();
                 }
             }
