@@ -21,6 +21,7 @@ package org.grumblesmurf.malabar
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.CumulativeScopeArtifactFilter;
 import java.util.regex.Matcher;
+import org.codehaus.plexus.logging.Logger;
 
 class Project
 {
@@ -63,7 +64,21 @@ class Project
 
     def compiler;
 
+    def boolean showErrors = false;
+    def int loggingLevel = Logger.LEVEL_INFO;
+
     def mvnServer;
+
+    def verbose(boolean flag) {
+        showErrors = flag;
+        loggingLevel = flag ? Logger.LEVEL_DEBUG : Logger.LEVEL_INFO;
+        String mrtnval = mvnServer.verbose(flag);
+        compiler.LOGGER.setThreshold( flag ? 0 : 1);
+        return "loggingLevel=" + loggingLevel + 
+            " mvnServer=[" + mrtnval +"] " +
+            " compiler=" + compiler.LOGGER.getThreshold();
+    }
+            
 
     def runtest(testname) {
         return run(["test"], [], [ test: testname ]);
@@ -75,10 +90,13 @@ class Project
 
     def run(goals, profiles, properties) {
         def run = mvnServer.run(pomFile, false, goals as String[]);
+        run.setLoggingLevel(loggingLevel);
+        run.setShowErrors(showErrors);
         run.setProfiles(profiles as String[]);
         properties.each {
             run.addProperty(it.key, it.value);
         }
+        
         return run.run();
     }
 
