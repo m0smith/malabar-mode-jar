@@ -27,6 +27,10 @@ import org.apache.maven.project.ProjectBuilder;
 class Projects
 {
     static def projects = [:];
+    
+    static void resetProjects() {
+      projects = [:];
+    }     
 
     static Project get(pom, profiles) {
         Project p = projects[pom]
