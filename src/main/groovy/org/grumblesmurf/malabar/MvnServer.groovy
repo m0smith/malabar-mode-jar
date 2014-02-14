@@ -77,7 +77,7 @@ public class MvnServer
 
         plexus = new DefaultPlexusContainer(cc);
         logger = new MvnServerLogger();
-        plexus.loggerManager = new MavenLoggerManager(logger);
+        plexus.loggerManager = new MvnServerLoggerManager(logger);
         plexus.loggerManager.thresholds = loggingLevel;
         maven = plexus.lookup(Maven.class);
         logger.debug("MAVEN=" + maven);
