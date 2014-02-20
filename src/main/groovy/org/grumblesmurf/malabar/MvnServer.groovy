@@ -105,7 +105,7 @@ public class MvnServer
                 def sbr = new DefaultSettingsBuildingRequest(globalSettingsFile:req.globalSettingsFile,
                                                              userSettingsFile:req.userSettingsFile);
                 it.build(sbr).effectiveSettings;
-            }
+            }G
 
             profiles.each {
                 req.addActiveProfile(it);
