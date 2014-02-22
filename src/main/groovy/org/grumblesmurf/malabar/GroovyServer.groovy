@@ -28,7 +28,7 @@ import org.codehaus.groovy.tools.shell.util.Logger;
 class GroovyServer
 {
     static ready = new CountDownLatch(2);
-    static mvnServer = new MvnServer();
+    static mvnServer = new InvokerMvnServer();
     static servers = [:].asSynchronized();
     static console;
 

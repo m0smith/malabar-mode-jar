@@ -1,6 +1,6 @@
 package org.grumblesmurf.malabar;
 
 public interface MvnServerIntf {
-    boolean run() throws MalabarException;
+    RunDescriptorIntf run(String pomFile, boolean recursive, String... goals) throws MalabarException;
 
 }

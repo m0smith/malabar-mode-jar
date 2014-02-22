@@ -45,7 +45,7 @@ import org.sonatype.aether.RepositorySystem;
 import org.sonatype.aether.resolution.ArtifactRequest;
 import org.sonatype.aether.transfer.TransferListener;
 
-public class MvnServer
+public class MvnServer implements MvnServerIntf
 {
     final Logger logger;
     final TransferListener transferListener;
@@ -137,7 +137,7 @@ public class MvnServer
         return run(pomFileName, false, goals).run();
     }
 
-    public RunDescriptor run(String pomFileName, boolean recursive, String... goals) {
+    public RunDescriptorIntf run(String pomFileName, boolean recursive, String... goals) {
         return new RunDescriptor(
             mvnServer:this,
             pom:pomFileName as File,
@@ -173,7 +173,7 @@ public class MvnServer
     }
 }
 
-class RunDescriptor 
+class RunDescriptor implements RunDescriptorIntf 
 {
     File pom;
     boolean recursive;

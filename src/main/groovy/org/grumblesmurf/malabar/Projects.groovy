@@ -39,7 +39,7 @@ class Projects
             return p
         }
 
-        MvnServer mvnServer = GroovyServer.mvnServer;
+        MvnServerIntf mvnServer = GroovyServer.mvnServer;
         MavenExecutionRequest req = mvnServer.newRequest(pomFile.parentFile, profiles)
 
         ProjectBuildingRequest config = req.getProjectBuildingRequest()
