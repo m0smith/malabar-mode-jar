@@ -25,8 +25,8 @@ public class InvokerMvnServerTest {
     @Parameters
     public static Collection<Object[]> data() {
         Object[][] data = new Object[][] { 
-            { "src/test/project/basic", "c:/Users/Smith/opt/apache-maven-3.1.1" },
-            { "src/test/project/basic", "c:/Users/Smith/opt/apache-maven-3.0.5" }
+            { "src/test/project/basic", "opt/apache-maven-3.1.1" },
+            { "src/test/project/basic", "opt/apache-maven-3.0.5" }
         };
         return Arrays.asList(data);
     }
@@ -34,7 +34,9 @@ public class InvokerMvnServerTest {
 
     @Before
     public void setup () {
-        System.setProperty("maven.home", mavenHome);
+        String home = System.getProperty("user.home");
+        System.out.printf("home=%s%n", home);
+        System.setProperty("maven.home", home + "/" + mavenHome);
     }
 
     @Test
