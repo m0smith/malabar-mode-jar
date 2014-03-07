@@ -121,6 +121,30 @@ class Project
         return result.wasSuccessful();
     }
 
+    /**
+     * Load the classname and run its main method
+     */
+    def runMain(classname, String[] args) {
+        // Extra care must be taken to ensure class reloadability
+        def classloader = testClasspath.newClassLoader()
+        //def junitcore = classloader.loadClass("org.junit.runner.JUnitCore").newInstance()
+        def mainclass = classloader.loadClass(classname)
+        // our RunListener must be loaded by a descendant of the test
+        // classloader, otherwise all kinds of weird errors happen
+        def byteStream = new ByteArrayOutputStream();
+        //def listenerName = MalabarRunListener.name;
+        //this.class.classLoader.getResourceAsStream(listenerName.replace('.', '/') + ".class").eachByte {
+        //  byteStream.write(it)
+        //}
+        //def runListenerClassLoader =
+        //    new SingleClassClassLoader(listenerName,
+        //                               byteStream.toByteArray(),
+        //                               classloader);
+        //junitcore.addListener(runListenerClassLoader.loadClass(listenerName).newInstance(Utils.getOut()));
+        def result = mainclass.main(args);
+        return result;
+    }
+
     File findSourceJarForClass(String name) {
         def artifact = testClasspath.artifactForClass(name);
         if (artifact == null) {
