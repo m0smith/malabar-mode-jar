@@ -23,6 +23,10 @@ import org.junit.Test;
 import static org.junit.Assert.*
 import static org.junit.matchers.JUnitMatchers.*
 import static org.hamcrest.CoreMatchers.*
+import static net.java.quickcheck.generator.PrimitiveGenerators.*
+import static net.java.quickcheck.generator.CombinedGenerators.*
+import static net.java.quickcheck.QuickCheck.*
+import static net.java.quickcheck.generator.iterable.Iterables.*
 
 class UtilsTest 
 {
@@ -39,5 +43,32 @@ class UtilsTest
     @Test
     void nestedList() {
         assertThat(Utils.asLispList(['a', ['b'], 'c']), is('("a" ("b") "c")'))
+    }
+
+    /**
+     * Utils.asLisp
+     * passed a list of strings
+     * Properties:
+     *  # Starts with a paren (
+     *  # Ends with a paren )
+     *  # contains all the elements in the list
+     *  # elements are in the same order
+     *  # Each element is in double quotes
+     */
+    @Test
+    void asLispWithStringGenerated () {
+        for (List<String> words : toIterable( nonEmptyLists(strings()))) {
+            String result = Utils.asLisp(words);
+            assertEquals(true, result.endsWith(")"));
+            assertEquals(true, result.startsWith("("));
+            int index = -1;
+            for(String word: words) {
+                String w = "\"" + word + "\"";
+                int i = result.indexOf(w , index);
+                assertTrue ("word not found in increasing order: word: [" + w + "] i:" + i + " index:" + index+ " result:" + result, 
+                                i > index);
+                index = i + word.length() + 2 // for the quotes
+            }
+        }
     }
 }
