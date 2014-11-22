@@ -7,22 +7,55 @@
          // http://www.programcreek.com/java-api-examples/index.php?api=org.apache.maven.project.MavenProjectBuilder See # 20
 
 import org.codehaus.plexus.DefaultPlexusContainer
-import  org.apache.maven.project.MavenProjectBuilder
+import org.apache.maven.project.MavenProjectBuilder
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import  org.apache.maven.project.DefaultProjectBuilderConfiguration
+import org.apache.maven.project.DefaultProjectBuilderConfiguration
 import org.apache.maven.artifact.repository.DefaultArtifactRepository
+import com.jcabi.aether.Aether
+import org.sonatype.aether.repository.RemoteRepository;
+import org.sonatype.aether.util.artifact.DefaultArtifact;
+import org.sonatype.aether.artifact.Artifact;
 
-File pomFile = new File("c:/Users/lpmsmith/projects/malabar-mode-jar/pom.xml");
-String localRepoUrl = "file://c:/Users/lpmsmith/.m2/repository";
 
 container=new DefaultPlexusContainer();
-
 projectBuilder=(MavenProjectBuilder)container.lookup(MavenProjectBuilder.class.getName());
-ArtifactRepositoryLayout layout=(ArtifactRepositoryLayout)container.lookup(ArtifactRepositoryLayout.class.getName(),"default");
-ArtifactRepository localRepo=new DefaultArtifactRepository("local",localRepoUrl,layout);
-pbConfig=new DefaultProjectBuilderConfiguration().setLocalRepository(localRepo);
+layout=(ArtifactRepositoryLayout)container.lookup(ArtifactRepositoryLayout.class.getName(),"default");
 
-project = projectBuilder.build( pomFile, pbConfig );
+def projectInfo(localRepoUrl, pom){
 
-println project.getDependencies()
+    File pomFile = new File(pom);
+    String localRepoUrl2 = "file://" + localRepoUrl;
+    File local = new File(localRepoUrl);
+
+
+
+    ArtifactRepository localRepo=new DefaultArtifactRepository("local",localRepoUrl2,layout);
+    pbConfig=new DefaultProjectBuilderConfiguration().setLocalRepository(localRepo);
+    project = projectBuilder.build( pomFile, pbConfig );
+    aether = new Aether(project, local);
+    [ runtime: resolveDependencies(aether, project, "runtime"),
+      test : resolveDependencies(aether, project, "test") ];
+}
+
+
+def resolveDependencies (aether, project, scope) {
+    depLists = project.getDependencies().collect { 
+    
+        art = new DefaultArtifact(it.getGroupId(), it.getArtifactId(), it.getClassifier(), it.getType(), 
+                                  it.getVersion());
+        Collection<Artifact> deps = aether.resolve( art, scope );
+
+        deps.collect{  it.getFile().getAbsolutePath() }
+        
+    }
+
+    [ dependencies : depLists.collect {it.first()},  classpath : depLists.flatten() ]
+}
+
+
+
+println projectInfo("c:/Users/lpmsmith/.m2/repository", "pom.xml");
+
+
+
