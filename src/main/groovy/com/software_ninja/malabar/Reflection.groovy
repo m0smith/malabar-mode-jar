@@ -34,8 +34,8 @@ MavenProject ret = null;
 
 
 
-      MavenXpp3Reader mavenReader = new MavenXpp3Reader();
-     FileReader reader = null;   
+MavenXpp3Reader mavenReader = new MavenXpp3Reader();
+FileReader reader = null;   
      File pomFile = new File("c:/Users/Smith/projects/malabar-mode-jar/pom.xml")
      pomFile.exists();
      reader = new FileReader(pomFile);

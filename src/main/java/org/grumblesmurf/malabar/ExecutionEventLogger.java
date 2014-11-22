@@ -55,11 +55,11 @@ public class ExecutionEventLogger
         "------------------------------------------------------------------------";
     
     private final Logger logger;
-
+    
     public ExecutionEventLogger(Logger logger) {
         this.logger = logger;
     }
-
+    
     @Override
     public void projectDiscoveryStarted(ExecutionEvent event) {
         if (logger.isInfoEnabled()) {
