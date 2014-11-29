@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.ihc</groupId>
+  <artifactId>common-ihc</artifactId>
+  <name>Common Code</name>
+  <version>1.8</version>
+  <description>Common code for use in any project</description>
+  <url>http://maven.co.ihc.com/common-ihc/</url>
+  <parent>
+  	<artifactId>java5-pom</artifactId>
+  	<groupId>org.ihc.framework</groupId>
+  	<version>1.0.1</version>
+  </parent>
+  <issueManagement>
+    <system>jira</system>
+    <url>http://jira.co.ihc.com</url>
+  </issueManagement>
+  <ciManagement>
+    <system>Bamboo</system>
+    <url>http://maven.co.ihc.com/bamboo/browse/FRMWRK-COMMON</url>
+    <notifiers>
+      <notifier>
+        <configuration>
+          <address>jkitterm</address>
+        </configuration>
+      </notifier>
+    </notifiers>
+  </ciManagement>
+  <inceptionYear>2006</inceptionYear>
+  <developers>
+    <developer>
+      <id>jkitterm</id>
+      <name>Josh Kitterman</name>
+      <email>josh.kitterman@intermountainmail.org</email>
+    </developer>
+    <developer>
+      <id>lpmsmith</id>
+      <name>Matthew O. Smith</name>
+      <email>lpmsmith@ihc.com</email>
+      <organization>Enterprise Web Developement</organization>
+      <organizationUrl>https://teamspace.intermountain.net/ewd</organizationUrl>
+    </developer>
+  </developers>
+  <scm>
+    <connection>scm:svn:https://subversion.co.ihc.com/webdev/general/infrastructure/common/trunk</connection>
+    <developerConnection>scm:svn:https://subversion.co.ihc.com/webdev/general/infrastructure/common/trunk</developerConnection>
+    <url>https://subversion.co.ihc.com/webdev/general/infrastructure/common/trunk</url>
+  </scm>
+  <organization>
+    <name>Intermountain Healthcare</name>
+    <url>http://intermountainhealthcare.org</url>
+  </organization>
+  <dependencies>
+    <dependency>
+      <groupId>com.bea</groupId>
+      <artifactId>weblogic</artifactId>
+      <version>8.1.4.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.14</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>3.0.5.RELEASE</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.2</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+    	<groupId>org.springframework</groupId>
+    	<artifactId>spring-context-support</artifactId>
+    	<version>3.0.5.RELEASE</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
+    </dependency>
+    <dependency>
+    	<groupId>org.springframework</groupId>
+    	<artifactId>spring-jdbc</artifactId>
+    	<version>3.0.5.RELEASE</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
+    </dependency>
+  </dependencies>
+  <reporting>
+    <plugins>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-pmd-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
+</project>
+

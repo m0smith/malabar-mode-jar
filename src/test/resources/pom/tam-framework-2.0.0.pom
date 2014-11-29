@@ -1,0 +1,168 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    
+     <parent>
+        <groupId>org.ihc.framework</groupId>
+        <artifactId>java5-pom</artifactId>
+        <version>1.0.1</version>
+    </parent>
+    
+    <groupId>org.ihc.security</groupId>
+    <artifactId>tam-framework</artifactId>
+    <packaging>jar</packaging>
+    <version>2.0.0</version>
+    <name>tam-framework</name>
+    
+    <description>This POM (2.0.0 version) is using Spring Security 3.1.0 . Previous 1.0.0 version is using Spring 2.0.4 Security</description>
+    <build>
+    	<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</resource>			
+		</resources>
+		<finalName>tam-framework</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+          			<archive>
+            			<manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+          			</archive>
+        		</configuration>
+			</plugin>					
+		</plugins>
+	</build>
+    
+     <dependencies>
+		
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.14</version>
+			<scope>compile</scope>
+		</dependency>
+		          	     
+     	<dependency>
+	    	<groupId>org.springframework.security</groupId>
+	    	<artifactId>spring-security-core</artifactId>
+	    	<version>3.1.0.RELEASE</version>
+	    	<scope>provided</scope>
+	    	<exclusions>
+	    		<exclusion>
+	    			<groupId>org.springframework</groupId>
+	    			<artifactId>spring-core</artifactId>
+	    		</exclusion>
+	    		<exclusion>
+	    			<groupId>org.springframework</groupId>
+	    			<artifactId>spring-context</artifactId>
+	    		</exclusion>
+	    		<exclusion>
+	    			<groupId>org.springframework</groupId>
+	    			<artifactId>spring-beans</artifactId>
+	    		</exclusion>
+	    		<exclusion>
+	    			<groupId>org.springframework</groupId>
+	    			<artifactId>spring-support</artifactId>
+	    		</exclusion>
+	    		<exclusion>
+	    			<groupId>org.springframework</groupId>
+	    			<artifactId>spring-aop</artifactId>
+	    		</exclusion>
+	    		<exclusion>
+	    			<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+	    		</exclusion>
+	    		<exclusion>
+	    			<groupId>commons-collections</groupId>
+					<artifactId>commons-collections</artifactId>
+	    		</exclusion>
+	    	</exclusions>
+    	</dependency>
+    
+    	<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>3.1.0.RELEASE</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>3.1.0.RELEASE</version>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-beans</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-context</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-context-support</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-web</artifactId>
+				</exclusion>								
+			</exclusions>
+		</dependency>
+    
+    	<dependency>
+    		<groupId>org.springframework.security</groupId>
+    		<artifactId>spring-security-core-tiger</artifactId>
+    		<version>2.0.6.RELEASE</version>
+    		<scope>provided</scope>
+    	</dependency>
+    	
+    	<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+    	
+     	<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.4</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>3.1.0.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>3.1.0.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>3.1.0.RELEASE</version>
+		</dependency>
+     </dependencies>
+    
+</project>

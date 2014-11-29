@@ -1,0 +1,77 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion> 
+  <parent>
+    <groupId>com.fasterxml</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>4</version>
+  </parent>
+  <groupId>com.fasterxml.jackson.datatype</groupId>
+  <artifactId>jackson-datatype-json-org</artifactId>
+  <name>Jackson-datatype-json.org</name>
+  <version>2.1.2</version>
+  <description>Support for datatypes of "org.json" JSON library (see http://json.org/java),
+mainly to make it easier to upgrade code to Jackson, using automated conversions.
+  </description>
+  <url>http://wiki.fasterxml.com/JacksonModuleProjects</url>
+  <scm>
+    <connection>scm:git:git@github.com:FasterXML/jackson-datatype-json-org.git</connection>
+    <developerConnection>scm:git:git@github.com:FasterXML/jackson-datatype-json-org.git</developerConnection>
+    <url>http://github.com/FasterXML/jackson-datatype-json-org</url>    
+    <tag>jackson-datatype-json-org-2.1.2</tag>
+  </scm>
+  <properties>
+    <version.jackson>2.1.2</version.jackson>
+    <osgi.import>com.fasterxml.jackson.core
+,com.fasterxml.jackson.core.util
+,com.fasterxml.jackson.databind
+,com.fasterxml.jackson.databind.deser
+,com.fasterxml.jackson.databind.deser.std
+,com.fasterxml.jackson.databind.jsontype
+,com.fasterxml.jackson.databind.module
+,com.fasterxml.jackson.databind.node
+,com.fasterxml.jackson.databind.ser
+,com.fasterxml.jackson.databind.ser.std
+,org.json
+    </osgi.import>
+    <osgi.export>com.fasterxml.jackson.datatype.jsonorg.*;version=${project.version}
+</osgi.export>
+  </properties>
+
+  <dependencies>
+    <!-- Extends Jackson mapper, 2.x -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>${version.jackson}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${version.jackson}</version>
+    </dependency>
+    <!-- And support org.json/java types -->
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20090211</version>
+    </dependency>
+
+     <!-- and for testing, JUnit -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.2</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>  
+    </resources>
+  </build>
+
+</project>

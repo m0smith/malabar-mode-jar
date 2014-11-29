@@ -1,0 +1,807 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<!--
+
+	Global parent pom.xml for Spring Data modules to inherit from.
+
+	- Shared resources are pulled in from the spring-data-build-resources dependency (images, CSS, XSLTs for documentation generation)
+	- Renders reference documentation from Docbook file named index.xml within src/docbkx
+	- In the "distribute" profile, two assemblies are generated:
+	  - one to be published on the download portal (incl. binaries, sources, javadoc (jarred and browsable), reference documentation in pdf, html and html single page)
+	  - one to be uploaded to static.springsource.org (incl. javadoc (browsable), reference docs as described before)
+
+	Preconfigures the following:
+
+	- Logging dependencies: SLF4j + Commons Logging bridge and Logback as test dependency
+	- Test dependencies: JUnit / Hamcrest / Mockito
+	- Dependency versions for commonly used dependencies
+
+	-->
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>spring-data-parent</artifactId>
+	<packaging>pom</packaging>
+
+	<parent>
+		<groupId>org.springframework.data.build</groupId>
+		<artifactId>spring-data-build</artifactId>
+		<version>1.4.4.RELEASE</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<name>Spring Data Build - General parent module</name>
+	<description>Global parent pom.xml to be used by Spring Data modules</description>
+	<url>http://www.spring.io/spring-data</url>
+	<inceptionYear>2011-2014</inceptionYear>
+
+	<organization>
+		<name>Pivotal Software, Inc.</name>
+		<url>http://www.spring.io</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>ogierke</id>
+			<name>Oliver Gierke</name>
+			<email>ogierke at gopivotal.com</email>
+			<organization>Pivotal Software, Inc.</organization>
+			<organizationUrl>http://www.gopivotal.com</organizationUrl>
+			<roles>
+				<role>Project lead</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+			<comments>
+			Copyright 2008-2013 the original author or authors.
+
+			Licensed under the Apache License, Version 2.0 (the "License");
+			you may not use this file except in compliance with the License.
+			You may obtain a copy of the License at
+
+				 http://www.apache.org/licenses/LICENSE-2.0
+
+			Unless required by applicable law or agreed to in writing, software
+			distributed under the License is distributed on an "AS IS" BASIS,
+			WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+			implied.
+			See the License for the specific language governing permissions and
+			limitations under the License.
+			</comments>
+		</license>
+	</licenses>
+
+	<properties>
+
+		<bundlor.enabled>true</bundlor.enabled>
+		<bundlor.failOnWarnings>true</bundlor.failOnWarnings>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.type>single</project.type>
+		<project.root>${basedir}</project.root>
+		<source.level>1.6</source.level>
+
+		<dist.id>${project.artifactId}</dist.id>
+		<dist.name>${project.name}</dist.name>
+		<dist.releaseType>snapshot</dist.releaseType>
+		<dist.bucketName>dist.springframework.org</dist.bucketName>
+		<dist.assemblyName>${dist.id}-${project.version}</dist.assemblyName>
+		<dist.fileName>${dist.assemblyName}.zip</dist.fileName>
+		<dist.filePath>${project.build.directory}/${dist.assemblyName}-distribution.zip</dist.filePath>
+		<dist.version>${project.version}</dist.version>
+
+		<!-- Additional properties required to be set by child projects -->
+		<!-- dist.key: the distribution key (e.g. DATACMNS) -->
+
+		<!-- Additional properties required to be set in settings.xml -->
+		<!-- dist.accessKey -->
+		<!-- dist.secretKey -->
+
+		<apt>1.1.1</apt>
+		<aspectj>1.8.1</aspectj>
+		<cdi>1.0</cdi>
+		<hamcrest>1.3</hamcrest>
+		<jackson>2.3.4</jackson>
+		<jodatime>2.3</jodatime>
+		<junit>4.11</junit>
+		<logback>1.1.2</logback>
+		<mockito>1.9.5</mockito>
+		<querydsl>3.3.4</querydsl>
+		<slf4j>1.7.7</slf4j>
+		<spring>3.2.10.RELEASE</spring>
+		<webbeans>1.2.6</webbeans>
+
+	</properties>
+
+	<profiles>
+
+		<profile>
+
+			<!-- Profile to be run on the CI server, JARs JavaDocs -->
+
+			<id>ci</id>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>package-javadoc</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+								<phase>package</phase>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+
+		</profile>
+
+		<profile>
+
+			<!--
+				Profile to be activated when building the distribution atrifacts.
+
+				Generates reference documentation, aggregates JavaDoc etc. Has to be combined with
+				profiles "release" or "milestone" to deploy artifacts into the appropriate places.
+			-->
+
+			<id>distribute</id>
+
+			<properties>
+				<shared.resources>${project.build.directory}/shared-resources</shared.resources>
+			</properties>
+
+			<dependencies>
+				<dependency>
+					<groupId>org.springframework.data.build</groupId>
+					<artifactId>spring-data-build-resources</artifactId>
+					<version>1.4.4.RELEASE</version>
+					<scope>provided</scope>
+					<type>zip</type>
+				</dependency>
+			</dependencies>
+
+			<build>
+
+				<plugins>
+
+					<!--
+						Unpacks the content of spring-data-build-resources into the shared resources folder.
+					-->
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>unpack-shared-resources</id>
+								<goals>
+									<goal>unpack-dependencies</goal>
+								</goals>
+								<phase>generate-resources</phase>
+							</execution>
+						</executions>
+						<configuration>
+							<includeGroupIds>${project.groupId}</includeGroupIds>
+							<includeArtifacIds>spring-data-build-resources</includeArtifacIds>
+							<includeTypes>zip</includeTypes>
+							<excludeTransitive>true</excludeTransitive>
+							<outputDirectory>${shared.resources}</outputDirectory>
+						</configuration>
+					</plugin>
+
+					<!--
+						Configures JavaDoc generation.
+					-->
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>aggregate-javadoc</id>
+								<goals>
+									<goal>aggregate</goal>
+								</goals>
+								<phase>package</phase>
+							</execution>
+						</executions>
+					</plugin>
+
+					<!--
+						Renders reference documentation from Docbook sources.
+					-->
+
+					<plugin>
+						<groupId>com.agilejava.docbkx</groupId>
+						<artifactId>docbkx-maven-plugin</artifactId>
+						<version>2.0.14</version>
+						<executions>
+
+							<!-- Configuration for PDF creation -->
+							<execution>
+								<id>pdf</id>
+								<goals>
+									<goal>generate-pdf</goal>
+								</goals>
+								<phase>package</phase>
+								<configuration>
+									<admonGraphicsPath>${shared.resources}/docbkx/images/</admonGraphicsPath>
+									<imgSrcPath>${basedir}/src/docbkx/</imgSrcPath>
+									<postProcess>
+										<copy todir="${project.basedir}/target/site/reference">
+											<fileset dir="${project.basedir}/target/docbkx">
+												<include name="**/*.pdf" />
+											</fileset>
+										</copy>
+										<move file="${project.basedir}/target/site/reference/pdf/index.pdf" tofile="${project.basedir}/target/site/reference/pdf/${dist.id}-reference.pdf" />
+									</postProcess>
+								</configuration>
+							</execution>
+
+							<!-- Configuration for single-page HTML configuration -->
+							<execution>
+								<id>html-single</id>
+								<goals>
+									<goal>generate-html</goal>
+								</goals>
+								<phase>package</phase>
+								<configuration>
+									<targetDirectory>${basedir}/target/docbkx/htmlsingle</targetDirectory>
+									<htmlCustomization>${shared.resources}/docbkx/xsl/html-singlepage.xsl</htmlCustomization>
+									<imgSrcPath>images/</imgSrcPath>
+									<postProcess>
+										<copy todir="${project.basedir}/target/site/reference/htmlsingle">
+											<fileset dir="${project.basedir}/target/docbkx/htmlsingle">
+												<include name="**/*.html" />
+											</fileset>
+										</copy>
+										<copy todir="${project.basedir}/target/site/reference/htmlsingle">
+											<fileset dir="${shared.resources}/docbkx">
+												<include name="**/*.css" />
+												<include name="**/*.png" />
+												<include name="**/*.gif" />
+												<include name="**/*.jpg" />
+											</fileset>
+										</copy>
+									</postProcess>
+								</configuration>
+							</execution>
+
+							<!-- Configuration for chunked HTML generation -->
+							<execution>
+								<id>html</id>
+								<goals>
+									<goal>generate-html</goal>
+								</goals>
+								<phase>package</phase>
+								<configuration>
+									<chunkedOutput>true</chunkedOutput>
+									<targetDirectory>${basedir}/target/docbkx/html</targetDirectory>
+									<htmlCustomization>${shared.resources}/docbkx/xsl/html-multipage.xsl</htmlCustomization>
+									<imgSrcPath>images/</imgSrcPath>
+									<postProcess>
+										<copy todir="${project.basedir}/target/site/reference/html">
+											<fileset dir="${project.basedir}/target/docbkx/html/index">
+												<include name="**/*.html" />
+											</fileset>
+										</copy>
+										<copy todir="${project.basedir}/target/site/reference/html">
+											<fileset dir="${shared.resources}/docbkx">
+												<include name="**/*.css" />
+												<include name="**/*.png" />
+												<include name="**/*.gif" />
+												<include name="**/*.jpg" />
+											</fileset>
+										</copy>
+									</postProcess>
+								</configuration>
+							</execution>
+
+						</executions>
+
+						<dependencies>
+							<dependency>
+								<groupId>org.docbook</groupId>
+								<artifactId>docbook-xml</artifactId>
+								<version>4.4</version>
+								<scope>runtime</scope>
+							</dependency>
+						</dependencies>
+
+						<!-- Common Docbook configuration -->
+						<configuration>
+							<includes>index.xml</includes>
+							<xincludeSupported>true</xincludeSupported>
+							<chunkedOutput>false</chunkedOutput>
+							<foCustomization>${shared.resources}/docbkx/xsl/pdf.xsl</foCustomization>
+							<useExtensions>1</useExtensions>
+							<highlightSource>1</highlightSource>
+							<entities>
+								<entity>
+									<name>version</name>
+									<value>${project.version}</value>
+								</entity>
+							</entities>
+						</configuration>
+					</plugin>
+
+					<!--
+						Copies all namespaces schemas to target/schemas flatten the directory structure.
+						Depended on by the site.xml assembly descriptor.
+					-->
+
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.7</version>
+						<dependencies>
+							<dependency>
+								<groupId>org.springframework.build</groupId>
+								<artifactId>org.springframework.build.aws.ant</artifactId>
+								<version>3.0.6.RELEASE</version>
+							</dependency>
+							<dependency>
+								<groupId>org.jets3t</groupId>
+								<artifactId>com.springsource.org.jets3t</artifactId>
+								<version>0.8.1</version>
+							</dependency>
+						</dependencies>
+						<executions>
+
+							<execution>
+								<id>copy-documentation-images</id>
+								<phase>process-resources</phase>
+								<configuration>
+									<target>
+										<copy todir="${shared.resources}/docbkx/images">
+											<fileset dir="${basedir}/src/docbkx" erroronmissingdir="false">
+												<include name="**/*.jpg" />
+												<include name="**/*.gif" />
+												<include name="**/*.png" />
+											</fileset>
+											<flattenmapper />
+										</copy>
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+
+							<execution>
+								<id>collect-schema-files</id>
+								<phase>process-resources</phase>
+								<configuration>
+									<target>
+										<copy todir="${project.build.directory}/schemas">
+											<fileset dir="${basedir}" erroronmissingdir="false">
+												<include name="**/src/main/resources/**/config/spring-*.xsd" />
+											</fileset>
+											<flattenmapper />
+										</copy>
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>upload-distribution</id>
+								<phase>deploy</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<ant antfile="${shared.resources}/ant/upload-dist.xml">
+											<target name="upload-distribution" />
+										</ant>
+									</target>
+									<failOnError>false</failOnError>
+								</configuration>
+							</execution>
+						</executions>
+
+					</plugin>
+
+				</plugins>
+
+				<pluginManagement>
+					<plugins>
+
+						<!--
+							Creates two zip files for download as well as API and reference documentation distribution.
+						-->
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-assembly-plugin</artifactId>
+							<version>2.4</version>
+							<executions>
+								<execution>
+									<id>distribution</id>
+									<goals>
+										<goal>single</goal>
+									</goals>
+									<phase>package</phase>
+									<configuration>
+										<descriptors>
+											<descriptor>${shared.resources}/assemblies/distribution-${project.type}.xml</descriptor>
+										</descriptors>
+										<finalName>${dist.assemblyName}</finalName>
+									</configuration>
+								</execution>
+								<execution>
+									<id>static</id>
+									<goals>
+										<goal>single</goal>
+									</goals>
+									<phase>package</phase>
+									<configuration>
+										<descriptors>
+											<descriptor>${shared.resources}/assemblies/static-resources.xml</descriptor>
+										</descriptors>
+										<finalName>static-resources</finalName>
+										<appendAssemblyId>false</appendAssemblyId>
+									</configuration>
+								</execution>
+							</executions>
+						</plugin>
+
+						<plugin>
+							<groupId>org.codehaus.mojo</groupId>
+							<artifactId>wagon-maven-plugin</artifactId>
+							<version>1.0-beta-5</version>
+							<configuration>
+								<fromDir>${project.build.directory}</fromDir>
+							</configuration>
+							<executions>
+
+								<!-- Upload namespace XSDs -->
+
+								<execution>
+									<id>upload-schema</id>
+									<phase>deploy</phase>
+									<goals>
+										<goal>upload</goal>
+									</goals>
+									<configuration>
+										<fromDir>${project.root}/target/schemas</fromDir>
+										<includes>*.xsd,.autoschemaln</includes>
+										<serverId>static-dot-s2</serverId>
+										<url>scp://static.springsource.org</url>
+										<toDir>/var/www/domains/springsource.org/www/htdocs/autorepo/schema/${dist.id}/${project.version}</toDir>
+										<optimize>true</optimize>
+									</configuration>
+								</execution>
+
+								<!-- Distribute static resources -->
+
+								<execution>
+									<id>upload-static-resources</id>
+									<phase>deploy</phase>
+									<goals>
+										<goal>upload</goal>
+									</goals>
+									<configuration>
+										<fromDir>${project.build.directory}/static-resources</fromDir>
+										<includes>**</includes>
+										<serverId>static-dot-s2</serverId>
+										<url>scp://static.springsource.org</url>
+										<toDir>/var/www/domains/springsource.org/www/htdocs/autorepo/docs/${dist.id}/${project.version}</toDir>
+										<optimize>true</optimize>
+									</configuration>
+								</execution>
+							</executions>
+						</plugin>
+
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+
+		<profile>
+			<id>milestone</id>
+			<properties>
+				<dist.releaseType>milestone</dist.releaseType>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>release</id>
+			<properties>
+				<dist.releaseType>release</dist.releaseType>
+			</properties>
+		</profile>
+
+		<profile>
+
+			<id>spring32-next</id>
+
+			<properties>
+				<spring>3.2.11.BUILD-SNAPSHOT</spring>
+			</properties>
+
+			<repositories>
+				<repository>
+					<id>spring-libs-snapshot</id>
+					<url>http://repo.spring.io/libs-snapshot</url>
+				</repository>
+			</repositories>
+
+		</profile>
+
+		<profile>
+
+			<id>spring4</id>
+
+			<properties>
+				<spring>4.0.6.RELEASE</spring>
+			</properties>
+
+			<dependencies>
+				<dependency>
+					<groupId>javax.servlet</groupId>
+					<artifactId>javax.servlet-api</artifactId>
+					<version>3.0.1</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+
+		</profile>
+
+		<profile>
+
+			<id>spring4-next</id>
+
+			<properties>
+				<spring>4.0.7.BUILD-SNAPSHOT</spring>
+			</properties>
+
+			<dependencies>
+				<dependency>
+					<groupId>javax.servlet</groupId>
+					<artifactId>javax.servlet-api</artifactId>
+					<version>3.0.1</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+
+			<repositories>
+				<repository>
+					<id>spring-libs-snapshot</id>
+					<url>http://repo.spring.io/libs-snapshot</url>
+				</repository>
+			</repositories>
+
+		</profile>
+
+		<profile>
+			<id>querydsl-next</id>
+			<properties>
+				<querydsl>3.3.5.BUILD-SNAPSHOT</querydsl>
+			</properties>
+			<repositories>
+				<repository>
+					<id>oss-nexus-snapshots</id>
+					<url>http://oss.sonatype.org/content/repositories/snapshots</url>
+				</repository>
+			</repositories>
+		</profile>
+
+	</profiles>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-framework-bom</artifactId>
+				<version>${spring}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+
+		<!-- Test -->
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-library</artifactId>
+			<version>${hamcrest}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-core</artifactId>
+			<version>${hamcrest}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>${mockito}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback}</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ssh</artifactId>
+				<version>2.5</version>
+			</extension>
+		</extensions>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.8</version>
+			</plugin>
+
+			<plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>${source.level}</source>
+					<target>${source.level}</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.17</version>
+				<configuration>
+					<useFile>false</useFile>
+					<includes>
+						<include>**/*Tests.java</include>
+					</includes>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<useDefaultManifestFile>true</useDefaultManifestFile>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>com.springsource.bundlor</groupId>
+				<artifactId>com.springsource.bundlor.maven</artifactId>
+				<version>1.0.0.RELEASE</version>
+				<configuration>
+					<enabled>${bundlor.enabled}</enabled>
+					<failOnWarnings>${bundlor.failOnWarnings}</failOnWarnings>
+				</configuration>
+				<executions>
+					<execution>
+						<id>bundlor</id>
+						<goals>
+							<goal>bundlor</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<configuration>
+					<breakiterator>true</breakiterator>
+					<header>${project.name}</header>
+					<source>${source.level}</source>
+					<quiet>true</quiet>
+					<javadocDirectory>${shared.resources}/javadoc</javadocDirectory>
+					<overview>${shared.resources}/javadoc/overview.html</overview>
+					<stylesheetfile>${shared.resources}/javadoc/spring-javadoc.css</stylesheetfile>
+					<!-- copies doc-files subdirectory which contains image resources -->
+					<docfilessubdirs>true</docfilessubdirs>
+					<links>
+						<link>http://docs.spring.io/spring/docs/3.2.x/javadoc-api/</link>
+						<link>http://docs.spring.io/spring-data/data-commons/docs/current/api/</link>
+						<link>http://docs.oracle.com/javase/6/docs/api</link>
+					</links>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.8.1</version>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>spring-libs-release</id>
+			<url>http://repo.spring.io/libs-release</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>spring-plugins-release</id>
+			<url>http://repo.spring.io/plugins-release</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+</project>

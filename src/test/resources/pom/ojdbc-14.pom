@@ -1,0 +1,14 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>ojdbc</groupId>
+  <artifactId>ojdbc</artifactId>
+  <version>14</version>
+  <name>Oracle JDBC Driver</name>
+  <description>
+    Oracle JDBC Driver
+  </description>
+  <url>http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html</url>
+  <distributionManagement>
+    <downloadUrl>http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html</downloadUrl>
+  </distributionManagement>
+</project>

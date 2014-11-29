@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.ihc.framework</groupId>
+        <artifactId>java4-pom</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>org.ihc.audit</groupId>
+    <artifactId>audit-parent-pom</artifactId>
+    <version>3.2.0</version>
+    <packaging>pom</packaging>
+    <name>Audit Service Parent Project</name>
+    <description>The parent POM and project for the audit service EAR and audit client</description>
+    <scm>
+        <url>https://subversion.co.ihc.com/webdev/general/service/AuditEJB/trunk</url>
+        <connection>scm:svn:https://subversion.co.ihc.com/webdev/general/service/AuditEJB/trunk</connection>
+    </scm>
+    <modules>
+        <module>ejb</module>
+        <module>ear</module>
+    </modules>
+    <developers>
+        <developer>
+            <id>coaday</id>
+            <name>Allen Day</name>
+            <email>coaday@imail.org</email>
+        </developer>
+    </developers>
+</project>

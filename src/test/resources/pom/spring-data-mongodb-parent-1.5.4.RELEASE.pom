@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.springframework.data</groupId>
+	<artifactId>spring-data-mongodb-parent</artifactId>
+	<version>1.5.4.RELEASE</version>
+	<packaging>pom</packaging>
+
+	<name>Spring Data MongoDB</name>
+	<description>MongoDB support for Spring Data</description>
+	<url>http://projects.spring.io/spring-data-mongodb</url>
+
+	<parent>
+		<groupId>org.springframework.data.build</groupId>
+		<artifactId>spring-data-parent</artifactId>
+		<version>1.4.4.RELEASE</version>
+		<relativePath>../spring-data-build/parent/pom.xml</relativePath>
+	</parent>
+
+	<modules>
+		<module>spring-data-mongodb</module>
+		<module>spring-data-mongodb-cross-store</module>
+		<module>spring-data-mongodb-log4j</module>
+		<module>spring-data-mongodb-distribution</module>
+	</modules>
+
+	<properties>
+		<project.type>multi</project.type>
+		<dist.id>spring-data-mongodb</dist.id>
+		<springdata.commons>1.8.4.RELEASE</springdata.commons>
+		<mongo>2.12.1</mongo>
+		<mongo.osgi>2.12.1</mongo.osgi>
+	</properties>
+
+	<developers>
+		<developer>
+			<id>ogierke</id>
+			<name>Oliver Gierke</name>
+			<email>ogierke at gopivotal.com</email>
+			<organization>Pivotal</organization>
+			<organizationUrl>http://www.gopivotal.com</organizationUrl>
+			<roles>
+				<role>Project Lead</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>trisberg</id>
+			<name>Thomas Risberg</name>
+			<email>trisberg at vmware.com</email>
+			<organization>Pivotal</organization>
+			<organizationUrl>http://www.gopivotal.com</organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>-5</timezone>
+		</developer>
+		<developer>
+			<id>mpollack</id>
+			<name>Mark Pollack</name>
+			<email>mpollack at gopivotal.com</email>
+			<organization>Pivotal</organization>
+			<organizationUrl>http://www.gopivotal.com</organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>-5</timezone>
+		</developer>
+		<developer>
+			<id>jbrisbin</id>
+			<name>Jon Brisbin</name>
+			<email>jbrisbin at gopivotal.com</email>
+			<organization>Pivotal</organization>
+			<organizationUrl>http://www.gopivotal.com</organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>-6</timezone>
+		</developer>
+		<developer>
+			<id>tdarimont</id>
+			<name>Thomas Darimont</name>
+			<email>tdarimont at gopivotal.com</email>
+			<organization>Pivotal</organization>
+			<organizationUrl>http://www.gopivotal.com</organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>cstrobl</id>
+			<name>Christoph Strobl</name>
+			<email>cstrobl at gopivotal.com</email>
+			<organization>Pivotal</organization>
+			<organizationUrl>http://www.gopivotal.com</organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+	</developers>
+
+	<profiles>
+		<profile>
+
+			<id>mongo-next</id>
+			<properties>
+				<mongo>2.12.3-SNAPSHOT</mongo>
+			</properties>
+
+			<repositories>
+				<repository>
+					<id>mongo-snapshots</id>
+					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+				</repository>
+			</repositories>
+
+		</profile>
+
+		<profile>
+
+			<id>mongo-3-next</id>
+			<properties>
+				<mongo>3.0.0-SNAPSHOT</mongo>
+			</properties>
+
+			<repositories>
+				<repository>
+					<id>mongo-snapshots</id>
+					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+				</repository>
+			</repositories>
+
+		</profile>
+	</profiles>
+
+	<dependencies>
+		<!-- MongoDB -->
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+			<version>${mongo}</version>
+		</dependency>
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>spring-libs-release</id>
+			<url>http://repo.spring.io/libs-release</url>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>spring-plugins-release</id>
+			<url>http://repo.spring.io/plugins-release</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+</project>

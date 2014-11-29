@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>mojo-parent</artifactId>
+    <version>30</version>
+  </parent>
+
+  <groupId>org.codehaus.mojo</groupId>
+  <artifactId>buildnumber-maven-plugin</artifactId>
+  <packaging>maven-plugin</packaging>
+  <name>Build Number Maven Plugin</name>
+  <version>1.2</version>
+
+  <inceptionYear>2007</inceptionYear>
+
+  <prerequisites>
+    <maven>2.0.6</maven>
+  </prerequisites>
+  
+  
+  <description>
+     This plugin is designed to give you a build number. So when you might make 100 builds of version
+     1.0-SNAPSHOT, you can differentiate between them all.
+  </description>
+  
+  <scm>
+    <connection>scm:svn:http://svn.codehaus.org/mojo/tags/buildnumber-maven-plugin-1.2</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/mojo/tags/buildnumber-maven-plugin-1.2</developerConnection>
+    <url>http://fisheye.codehaus.org/browse/mojo/tags/buildnumber-maven-plugin-1.2</url>
+  </scm>
+
+  <issueManagement>
+    <system>jira</system>
+    <url>http://jira.codehaus.org/browse/MBUILDNUM</url>
+  </issueManagement>
+
+  
+  <licenses>
+    <license>
+      <name>The MIT License</name>
+      <url>LICENSE.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  
+  
+
+  <developers>
+    <developer>
+      <id>woodj</id>
+      <name>Julian Wood</name>
+      <email>woodj@ucalgary.ca</email>
+      <organization>Learning Commons, University of Calgary</organization>
+      <organizationUrl>http://commons.ucalgary.ca</organizationUrl>
+      <roles>
+        <role>Programmer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>olamy</id>
+      <name>Olivier Lamy</name>
+      <email>olamy@apache.org</email>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
+      <developer>
+          <id>bimargulies</id>
+          <name>Benson Margulies</name>
+          <email>bimargulies@apache.org</email>
+          <roles>
+              <role>developer</role>
+          </roles>
+      </developer>
+  </developers>
+
+    
+  <properties>
+    <maven.scm.version>1.8</maven.scm.version>
+    <maven.compiler.source>1.5</maven.compiler.source>
+    <maven.compiler.target>1.5</maven.compiler.target>    
+    <maven.api.version>2.0.6</maven.api.version>
+    <mojo.java.target>1.5</mojo.java.target>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+      <version>${maven.api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-settings</artifactId>
+      <version>${maven.api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-core</artifactId>
+      <version>${maven.api.version}</version>
+    </dependency>    
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+      <version>${maven.api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-container-default</artifactId>
+      <version>1.0-alpha-9-stable-1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-api</artifactId>
+      <version>${maven.scm.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-manager-plexus</artifactId>
+      <version>${maven.scm.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-bazaar</artifactId>
+      <version>${maven.scm.version}</version>
+    </dependency>    
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-svnexe</artifactId>
+      <version>${maven.scm.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-gitexe</artifactId>
+      <version>${maven.scm.version}</version>
+    </dependency>    
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-svn-commons</artifactId>
+      <version>${maven.scm.version}</version>
+    </dependency>    
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-cvsexe</artifactId>
+      <version>${maven.scm.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-starteam</artifactId>
+      <version>${maven.scm.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-clearcase</artifactId>
+      <version>${maven.scm.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-perforce</artifactId>
+      <version>${maven.scm.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.scm</groupId>
+      <artifactId>maven-scm-provider-hg</artifactId>
+      <version>${maven.scm.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.maven-scm-provider-svnjava</groupId>
+      <artifactId>maven-scm-provider-svnjava</artifactId>
+      <version>1.13</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.tmatesoft.svnkit</groupId>
+          <artifactId>svnkit</artifactId>        
+        </exclusion>
+      </exclusions>          
+    </dependency>    
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId> 
+      <version>2.0.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.tmatesoft.svnkit</groupId>
+      <artifactId>svnkit</artifactId>
+      <version>1.3.5</version>
+      <!--  the current jna dependency is a range and it sucks -->
+      <exclusions>
+        <exclusion>
+          <groupId>net.java.dev.jna</groupId>
+          <artifactId>jna</artifactId>        
+        </exclusion>
+      </exclusions> 
+    </dependency>
+    <dependency>
+      <groupId>net.java.dev.jna</groupId>
+      <artifactId>jna</artifactId>
+      <version>3.2.2</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+  
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-invoker-plugin</artifactId>
+          <version>1.6</version>
+          <configuration>
+            <debug>true</debug>
+            <extraArtifacts>
+              <extraArtifact>org.apache.maven.plugins:maven-scm-plugin:1.8:maven-plugin</extraArtifact>
+            </extraArtifacts>
+            <projectsDirectory>src/it</projectsDirectory>
+            <pomIncludes>
+              <pomInclude>**/pom.xml</pomInclude>
+            </pomIncludes>
+            <postBuildHookScript>verify</postBuildHookScript>
+            <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+            <goals>
+              <goal>clean</goal>
+              <goal>package</goal>
+            </goals>
+            <settingsFile>src/it/settings.xml</settingsFile>
+             
+            <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+            <cloneAllFiles>true</cloneAllFiles>
+            
+          </configuration>
+          <executions>
+            <execution>
+              <id>integration-test</id>
+              <goals>
+                <goal>install</goal>
+                <goal>run</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+      </plugins>
+    </pluginManagement>
+    
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-changes-plugin</artifactId>
+        <version>2.4</version>
+      </plugin>
+    </plugins>
+  </build>
+  
+  <profiles>
+    <profile>
+      <id>run-its</id>
+      <activation>
+        <property>
+          <name>skipTests</name>
+          <value>!true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-invoker-plugin</artifactId>
+            <configuration>
+              <debug>true</debug>
+              <projectsDirectory>src/it</projectsDirectory>
+              <pomIncludes>
+                <pomInclude>*/pom.xml</pomInclude>
+              </pomIncludes>
+              <postBuildHookScript>verify</postBuildHookScript>
+              <localRepositoryPath>${project.build.directory}/local repository</localRepositoryPath>
+              <extraArtifacts>
+                <extraArtifact>org.apache.maven.plugins:maven-scm-plugin:1.8:maven-plugin</extraArtifact>
+              </extraArtifacts>
+              <goals>
+                <goal>clean</goal>
+                <goal>integration-test</goal>
+              </goals>
+              <settingsFile>src/it/settings.xml</settingsFile>
+              <cloneProjectsTo>src/it</cloneProjectsTo>
+            </configuration>
+            <executions>
+              <execution>
+                <id>integration-test</id>
+                <goals>
+                  <goal>install</goal>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    
+    <profile>
+      <id>devlocal</id>
+      <build>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>buildnumber-maven-plugin</artifactId>
+          <version>${project.version}</version>
+          <executions>
+            <execution>
+              <id>useLastCommittedRevision</id>
+              <phase>compile</phase>
+              <goals>
+                <goal>create</goal>
+              </goals>
+              <configuration>
+                <providerImplementations>
+                  <svn>javasvn</svn>
+                </providerImplementations>
+                <useLastCommittedRevision>true</useLastCommittedRevision>
+                <doUpdate>true</doUpdate>
+              </configuration>
+            </execution>
+            <execution>
+              <id>timestampFormat</id>
+              <phase>test</phase>
+              <goals>
+                <goal>create</goal>
+              </goals>
+              <configuration>
+                <providerImplementations>
+                  <svn>javasvn</svn>
+                </providerImplementations>            
+                <useLastCommittedRevision>true</useLastCommittedRevision>
+                <timestampFormat>{0,date,yyyy-MM-dd}</timestampFormat>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>      
+      </plugins>      
+      </build>
+    </profile>
+
+  </profiles>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-changes-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <fixVersionIds>16003</fixVersionIds>
+          <component>13030</component>
+          <resolutionIds>Closed</resolutionIds>
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>jira-report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+
+  <!--repositories>
+    <repository>
+      <id>apache.snapshots</id>
+      <url>https://repository.apache.org/content/groups/snapshots-group/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>oss.sonatype.snapshots</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>maven.tmatesoft.com.releases</id>
+      <url>http://maven.tmatesoft.com/content/repositories/releases</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories-->
+  
+</project>

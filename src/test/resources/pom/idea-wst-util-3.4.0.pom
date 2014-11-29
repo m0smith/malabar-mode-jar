@@ -1,0 +1,145 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.ihc.idea.wst</groupId>
+	<artifactId>idea-wst-util</artifactId>
+	<packaging>jar</packaging>
+	<name>IDEA WST Util</name>
+	<version>3.4.0</version>
+	<scm>
+      <developerConnection>scm:svn:https://subversion.co.ihc.com/idea/trunk/idea-wst-util</developerConnection>
+   </scm>
+    <description>
+    An infrastructure library to support different security related utility features.&lt;br/>   
+    3.3.0 Changes - Added utility method to extract LTPA Token from HttpServletRequest.
+    3.3.1 Changes - Fixed code to reload Security EJB if the CDR-EJB in the backend is rebounced.
+    3.4.0 Changes - Fixed code to call interceptors before service method calls.
+    </description>
+     <organization>
+      <name>Intermountain Healthcare - IDEA</name>
+    </organization>
+    <developers>
+       <developer>
+         <id>vshah</id>
+         <name>Viral Shah</name>
+         <organization>IDEA Services</organization>
+         <email>viral.shah@imail.org</email>
+      </developer>
+      <developer>
+      	 <id>idea</id>
+         <name>Idea Services</name>
+         <organization>IDEA Services</organization>
+         <email>ideasupport@imail.org</email>
+      </developer>
+   </developers>
+   <distributionManagement>
+     <repository>
+         <id>archiva-deployment</id>
+         <url>http://maven.co.ihc.com/archiva/repository/ihc/</url>
+      </repository>
+      <snapshotRepository>
+         <id>archiva-deployment</id>
+         <url>http://maven.co.ihc.com/archiva/repository/ihc/</url>
+      </snapshotRepository>
+      <site>
+         <id>lpv-ideaappdev01</id>
+         <url>scp://lpv-ideaappdev01.co.ihc.com/home/ideadocs/idea-wst/</url>
+      </site>
+   </distributionManagement>
+  	<dependencies>
+		<dependency>
+	      <groupId>junit</groupId>
+	      <artifactId>junit</artifactId>
+	      <version>4.10</version>
+	      <scope>test</scope>
+	    </dependency>
+		<dependency>
+			<groupId>org.ihc.cdr</groupId>
+			<artifactId>CDRClientEJB</artifactId>
+			<version>2.14.73</version>
+			<type>jar</type>
+			<scope>compile</scope>
+			<optional>true</optional>
+		</dependency>
+		
+		<dependency>
+		<groupId>com.bea</groupId>
+		<artifactId>wlclient</artifactId>
+		<version>10.3.3.0</version>
+		<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>javax.j2ee</groupId>
+			<artifactId>j2ee</artifactId>
+			<version>1.4</version>
+			<scope>provided</scope>
+		</dependency>
+			
+		<dependency>
+		   <groupId>org.ihc.idea.wst</groupId>
+		   <artifactId>idea-wst</artifactId>
+		   <version>3.3.0</version>
+		   <scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.9.0</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-core</artifactId>
+			<version>${cxf.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+			<version>${cxf.version}</version>	
+			<scope>provided</scope>		
+		</dependency>
+  	</dependencies>
+	<build>
+		<finalName>idea-wst-util</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*IntegTest.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+		</plugins>
+	</build>	
+	<properties>        
+    	<cxf.version>2.2.9</cxf.version>
+    </properties>
+</project>

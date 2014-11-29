@@ -1,0 +1,10 @@
+  1  this.getClass().classLoader.rootLoader.addURL(new File("c:/Users/lpmsmith/project/malabar-mode-jar/target/classes").toURL)
+   2  this.getClass().classLoader.rootLoader.addURL(new File("c:/Users/lpmsmith/project/malabar-mode-jar/target/classes").toURL())
+   3  import com.software_ninja.malabar.D
+   4  this.getClass().classLoader.rootLoader.addURL(new File("c:/Users/lpmsmith/projects/malabar-mode-jar/target/classes").toURL())
+   5  import com.software_ninja.malabar.D
+   6  f = projectInfo("c:/Users/lpmsmith/.m2/repository", "pom.xml");
+   7  f = new D().projectInfo("c:/Users/lpmsmith/.m2/repository", "pom.xml");
+   8  f = new D().projectInfo("c:/Users/lpmsmith/.m2/repository", "c:/Users/lpmsmith/projects/malabar-mode-jar/pom.xml");
+   9  :history
+  10   f = new D().projectInfo("c:/Users/lpmsmith/.m2/repository", "c:/Users/lpmsmith/projects/malabar-mode-jar/pom.xml");

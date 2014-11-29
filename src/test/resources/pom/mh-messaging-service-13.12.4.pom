@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.ihc.framework</groupId>
+        <artifactId>java6-pom</artifactId>
+        <version>1.1.5</version>
+    </parent>
+
+    <groupId>org.ihc.service</groupId>
+    <artifactId>mh-messaging-service</artifactId>
+    <version>13.12.4</version>
+    <packaging>jar</packaging>
+    <name>mh-messaging-service</name>
+    <description>Services to interact with Help2 messaging</description>
+    <url>http://maven.co.ihc.com/${project.artifactId}</url>
+    <issueManagement>
+    	<system>Jira</system>
+    	<url>http://jira.co.ihc.com/browse/PHC</url>
+    </issueManagement>
+    <ciManagement>
+    	<system>Jenkins</system>
+    	<url>http://lpv-webjenkprd01.co.ihc.com/job/mh-messaging-service</url>
+    </ciManagement>
+    <inceptionYear>2010</inceptionYear>
+    <scm>
+        <url>https://subversion.co.ihc.com/webdev/ewd/intermountainpatientportal/lib/${project.artifactId}/tags/mh-messaging-service-13.12.4</url>
+        <connection>scm:svn:https://subversion.co.ihc.com/webdev/ewd/intermountainpatientportal/lib/${project.artifactId}/tags/mh-messaging-service-13.12.4</connection>
+        <developerConnection>scm:svn:https://subversion.co.ihc.com/webdev/ewd/intermountainpatientportal/lib/${project.artifactId}/tags/mh-messaging-service-13.12.4</developerConnection>
+    </scm>
+   <developers>
+        <developer>
+        	<id>lpmsmith</id>
+        	<name>Matthew Smith</name>
+        	<email>Matthew.Smith@imail.org</email>
+        	<url>http://prtlmy.intermountain.net/Person.aspx?accountname=CO\lpmsmith</url>
+        	<organization>Enterprise Web Development</organization>
+        	<organizationUrl>https://teamspace.intermountain.net/ewd</organizationUrl>
+        	<timezone>-7</timezone>
+        </developer>
+    </developers>
+    <dependencies>
+        <dependency>
+        	<groupId>org.springframework</groupId>
+        	<artifactId>spring-core</artifactId>
+        	<version>3.0.5.RELEASE</version>
+        	<type>jar</type>
+        	<scope>compile</scope>
+        </dependency>
+        <dependency>
+        	<groupId>org.ihc.service</groupId>
+        	<artifactId>mh-cdr-service</artifactId>
+        	<version>13.12.6</version>
+        </dependency>
+        <dependency>
+        	<groupId>junit</groupId>
+        	<artifactId>junit</artifactId>
+        	<version>4.8.2</version>
+        	<type>jar</type>
+        	<scope>test</scope>
+        </dependency>
+        <dependency>
+        	<groupId>org.ihc.mh</groupId>
+        	<artifactId>mh-util</artifactId>
+        	<version>13.12.5</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins />
+        <finalName>${project.artifactId}</finalName>
+        <pluginManagement>
+        	<plugins>
+        		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+        		<plugin>
+        			<groupId>org.eclipse.m2e</groupId>
+        			<artifactId>lifecycle-mapping</artifactId>
+        			<version>1.0.0</version>
+        			<configuration>
+        				<lifecycleMappingMetadata>
+        					<pluginExecutions>
+        						<pluginExecution>
+        							<pluginExecutionFilter>
+        								<groupId>org.ihc.mojo</groupId>
+        								<artifactId>ihc</artifactId>
+        								<versionRange>
+        									[1.4.1,)
+        								</versionRange>
+        								<goals>
+        									<goal>genprops</goal>
+        								</goals>
+        							</pluginExecutionFilter>
+        							<action>
+        								<ignore />
+        							</action>
+        						</pluginExecution>
+        					</pluginExecutions>
+        				</lifecycleMappingMetadata>
+        			</configuration>
+        		</plugin>
+        	</plugins>
+        </pluginManagement>
+    </build>
+</project>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.projectreactor.spring</groupId>
+  <artifactId>reactor-spring-webmvc</artifactId>
+  <version>1.1.3.RELEASE</version>
+  <name>Reactor Spring MVC Components</name>
+  <description>Reactor Spring MVC Components</description>
+  <url>https://github.com/reactor/reactor-spring</url>
+  <organization>
+    <name>reactor</name>
+    <url>http://github.com/reactor</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>smaldini</id>
+      <name>Stephane Maldini</name>
+      <email>smaldini@gopivotal.com</email>
+    </developer>
+    <developer>
+      <id>jbrisbin</id>
+      <name>Jon Brisbin</name>
+      <email>jbrisbin@gopivotal.com</email>
+    </developer>
+    <developer>
+      <id>awilkinson</id>
+      <name>Andy Wilkinson</name>
+      <email>awilkinson@gopivotal.com</email>
+    </developer>
+  </developers>
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/reactor/reactor-spring/issues</url>
+  </issueManagement>
+  <scm>
+    <connection>scm:git:git://github.com/reactor/reactor-spring.git</connection>
+    <developerConnection>scm:git:git://github.com/reactor/reactor-spring.git</developerConnection>
+    <url>https://github.com/reactor/reactor-spring.git</url>
+  </scm>
+  <dependencies>
+    <dependency>
+      <groupId>com.google.code.findbugs</groupId>
+      <artifactId>jsr305</artifactId>
+      <version>2.0.0</version>
+      <scope>compile</scope>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.projectreactor.spring</groupId>
+      <artifactId>reactor-spring-context</artifactId>
+      <version>1.1.3.RELEASE</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.7</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+      <version>4.0.3.RELEASE</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.1.0</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+</project>

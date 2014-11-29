@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>quil</artifactId>
+  <groupId>quil</groupId>
+  <version>1.6.0</version>
+  <name>quil</name>
+  <description>(mix Processing Clojure)</description>
+  <dependencies>
+    <dependency>
+      <groupId>org.clojure</groupId>
+      <artifactId>clojure</artifactId>
+      <version>1.4.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.clojars.processing-core</groupId>
+      <artifactId>org.processing.core</artifactId>
+      <version>1.5.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.clojars.processing-core</groupId>
+      <artifactId>org.processing.gluegen-rt</artifactId>
+      <version>1.5.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.clojars.processing-core</groupId>
+      <artifactId>org.processing.jogl</artifactId>
+      <version>1.5.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.clojars.processing-core</groupId>
+      <artifactId>org.processing.opengl</artifactId>
+      <version>1.5.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.clojars.processing-core</groupId>
+      <artifactId>org.processing.itext</artifactId>
+      <version>1.5.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.clojars.processing-core</groupId>
+      <artifactId>org.processing.pdf</artifactId>
+      <version>1.5.1</version>
+    </dependency>
+  </dependencies>
+</project>

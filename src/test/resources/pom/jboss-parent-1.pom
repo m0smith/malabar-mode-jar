@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  A parent pom with default settings for jboss projects.
+  Each jboss project should have something similar to the following lines in their pom file.
+	<parent>
+		<groupId>jboss</groupId>
+		<artifactId>jboss-parent</artifactId>
+		<version>1</version>
+	</parent>
+
+  To build this project maven 2 should be installed and "mvn" should be in the system path.  From the command line
+  run "mvn".  This will run the default build goal "install".
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>jboss</groupId>
+  <version>1</version>
+  <artifactId>jboss-parent</artifactId>
+  <packaging>pom</packaging>
+  <name>JBoss Parent POM</name>
+  <description>Parent POM for all JBoss Projects.  Provides default project build configuration.</description>
+  <url>http://www.jboss.org</url>
+  <prerequisites>
+    <maven>2.0</maven>
+  </prerequisites>
+  <issueManagement>
+    <system>jira</system>
+    <url>http://jira.jboss.com/</url>
+  </issueManagement>  
+  <licenses>
+   <license>
+      <name>lgpl</name>
+      <url>http://repository.jboss.com/licenses/lgpl.txt</url>
+   </license>
+  </licenses>
+  <organization>
+    <name>JBoss Inc.</name>
+    <url>http://www.jboss.org</url>
+  </organization>
+  <build>
+    <defaultGoal>install</defaultGoal>
+    <plugins>
+      <!-- define how we want compilation to take place
+           here, we accept most of the defaults but say that we want the
+           optimization flag set, and define the source and target to be 1.5,
+           these setting will be inherited by child projects -->
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.0</version>
+          <configuration>
+              <optimize>true</optimize>
+              <source>1.5</source>
+              <target>1.5</target>
+          </configuration>
+      </plugin>
+      <!-- define that we wish to create src jars -->
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+        <inherited>true</inherited>
+         <executions>
+          <execution>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin> 
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.1</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <distributionManagement>
+    <repository>
+      <!-- Copy the distribution jar file to a local checkout of the maven repository -->
+      <id>cvs-file-repository</id>
+      <url>file://${maven.cvs.root}</url>
+    </repository>
+  </distributionManagement>
+</project>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<groupId>com.liferay.maven</groupId>
+		<artifactId>maven-support</artifactId>
+		<version>6.1.1</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>plugins</artifactId>
+	<packaging>pom</packaging>
+	<name>Liferay Maven 2 Plugins</name>
+	<description>Parent project to support Liferay plugins.</description>
+	<modules>
+		<module>liferay-maven-plugin</module>
+	</modules>
+</project>

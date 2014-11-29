@@ -1,0 +1,122 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.ihc.provider</groupId>
+  <artifactId>providersearchclient</artifactId>
+  <packaging>jar</packaging>
+  <version>1.2</version>
+  <name>providersearchclient</name>
+  <description>Provider search client for use with PHC</description>
+  <url>http://maven.co.ihc.com/providersearchclient</url>
+  <parent>
+  	<artifactId>java5-pom</artifactId>
+  	<groupId>org.ihc.framework</groupId>
+  	<version>1.0.1</version>
+  </parent>
+  <ciManagement>
+  	<system>Bamboo</system>
+  	<url>http://maven.co.ihc.com/bamboo/browse/PRVDR-PSC</url>
+  </ciManagement>
+  <developers>
+  	<developer>
+  		<id>mjmorman</id>
+  		<name>Mike Mormando</name>
+  		<email>Mike.Mormando@imail.org</email>
+  		<url>https://teamspace.intermountain.net/ewd</url>
+  		<organization>Intermountain Healthcare, Inc.</organization>
+  		<organizationUrl>http://www.intermountainhealthcare.org</organizationUrl>
+  		<roles>
+  		</roles>
+  	</developer>
+  	<developer>
+  		<id>lpmsmith</id>
+  		<name>Matthew Smith</name>
+  		<email>Matthew.Smith@imail.org</email>
+  		<url>https://teamspace.intermountain.net/ewd</url>
+  		<organization>Intermountain Healthcare, Inc.</organization>
+  		<organizationUrl>http://www.intermountainhealthcare.org</organizationUrl>
+  	</developer>
+  </developers>
+  <contributors>
+  	<contributor>
+  		<name>Balaji Vananasi</name>
+  		<email>Balaji.Varanasi@imail.org</email>
+  		<url>https://teamspace.intermountain.net/ewd</url>
+  		<organization>Intermountain Healthcare, Inc.</organization>
+  		<organizationUrl>http://www.intermountainhealthcare.org</organizationUrl>
+  	</contributor>
+  </contributors>
+  <scm>
+    <connection>scm:svn:https://subversion.co.ihc.com/webdev/general/web/providerjar/</connection>
+    <developerConnection>scm:svn:https://subversion.co.ihc.com/webdev/general/web/providerjar/</developerConnection>
+    <url>https://subversion.co.ihc.com/webdev/general/web/providerjar/</url>
+  </scm>
+  <organization>
+  	<name>Intermountain Healthcare, Inc.</name>
+  	<url>http://www.intermountainhealthcare.org</url>
+  </organization>
+  <build>
+    <finalName>providersearchclient</finalName>
+    <plugins>
+      <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-compiler-plugin</artifactId>
+		<configuration>
+			<source>1.5</source>
+			<target>1.5</target>
+			<enableAssertions>false</enableAssertions>
+		</configuration>
+	 </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.4.3</version>
+      </plugin>
+    </plugins>  
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <version>5.9</version>
+      <classifier>jdk15</classifier>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring</artifactId>
+		<version>2.5.6</version>
+		<scope>compile</scope>
+	</dependency>
+	<dependency>
+	  <groupId>log4j</groupId>
+	  <artifactId>log4j</artifactId>
+	  <version>1.2.15</version>
+	  <scope>compile</scope>
+		<exclusions>
+		  <exclusion>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+		  </exclusion>
+		  <exclusion>
+			<groupId>javax.jms</groupId>
+			<artifactId>jms</artifactId>
+		  </exclusion>
+		  <exclusion>
+			<groupId>com.sun.jdmk</groupId>
+			<artifactId>jmxtools</artifactId>
+		  </exclusion>
+		  <exclusion>
+			<groupId>com.sun.jmx</groupId>
+			<artifactId>jmxri</artifactId>
+			</exclusion>
+		</exclusions>
+	</dependency>
+	<dependency>
+      <groupId>com.oracle.driver</groupId>
+      <artifactId>ojdbc14</artifactId>     
+      <version>10.2.0.1</version>
+      <scope>provided</scope>
+    </dependency>    
+  </dependencies>
+</project>

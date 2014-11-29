@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.clojars.processing-core</groupId>
+  <artifactId>org.processing.gluegen-rt</artifactId>
+  <version>1.5.1</version>
+  <name>org.processing.gluegen-rt</name>
+  <description>Native gluegen-rt libraries from Processing</description>
+  <url></url>
+  <licenses>
+    <license />
+  </licenses>
+  <build>
+    <sourceDirectory>/Users/sam/Development/native-jvm-libs/gluegen-rt/src</sourceDirectory>
+    <testSourceDirectory></testSourceDirectory>
+    <resources>
+      <resource>
+        <directory>/Users/sam/Development/native-jvm-libs/gluegen-rt/resources</directory>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory>/Users/sam/Development/native-jvm-libs/gluegen-rt/resources</directory>
+      </testResource>
+    </testResources>
+  </build>
+  <repositories>
+    <repository>
+      <id>central</id>
+      <url>http://repo1.maven.org/maven2</url>
+    </repository>
+    <repository>
+      <id>clojars</id>
+      <url>http://clojars.org/repo/</url>
+    </repository>
+  </repositories>
+</project>

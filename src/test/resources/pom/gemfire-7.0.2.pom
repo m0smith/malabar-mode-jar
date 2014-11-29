@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.gemstone.gemfire</groupId>
+  <artifactId>gemfire</artifactId>
+  <name>GemFire</name>
+  <version>7.0.2</version>
+  <description>Pivotal GemFire</description>
+  <url>http://gopivotal.com/products/pivotal-gemfire</url>
+
+  <issueManagement>
+    <system>Pivotal Support Services</system>
+    <url>http://gopivotal.com/support</url>
+  </issueManagement>
+
+  <organization>
+    <name>Pivotal Software, Inc.</name>
+    <url>http://www.gopivotal.com/</url>
+  </organization>
+
+  <dependencies>
+    <dependency>
+      <groupId>antlr</groupId>
+      <artifactId>antlr</artifactId>
+      <version>2.7.7</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-modeler</groupId>
+      <artifactId>commons-modeler</artifactId>
+      <version>2.0.1</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
+  </dependencies>
+</project>

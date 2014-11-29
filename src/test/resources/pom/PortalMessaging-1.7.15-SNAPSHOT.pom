@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.ihc.portalmessaging</groupId>
+	<artifactId>PortalMessaging</artifactId>
+	<version>1.7.15-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>PortalMessaging</name>
+	<inceptionYear>2002</inceptionYear>
+	<parent>
+		<groupId>org.ihc.framework</groupId>
+		<artifactId>java6-pom</artifactId>
+		<version>1.1.8</version>
+	</parent>
+	<modules>
+		<module>PortalMessaging-EJB</module>
+		<module>ear</module>
+		<!-- <module>primary-source</module> -->
+		<!-- <module>projects</module> -->
+		<!-- <module>servlets</module> -->
+		<!-- <module>site</module> -->
+	</modules>
+	<scm>
+	  <url>https://subversion.co.ihc.com/webdev/ewd/intermountainpatientportal/webapp/PortalMessaging/trunk/</url>
+	  <connection>scm:svn:https://subversion.co.ihc.com/webdev/ewd/intermountainpatientportal/webapp/PortalMessaging/trunk/</connection>
+	  <developerConnection>scm:svn:https://subversion.co.ihc.com/webdev/ewd/intermountainpatientportal/webapp/PortalMessaging/trunk/</developerConnection>
+	</scm>
+	<issueManagement>
+		<url>http://jira.co.ihc.com/browse/PHR/component/10229</url>
+		<system>Jira</system>
+	</issueManagement>
+	<developers>
+		<developer>
+			<id>lpmsmith</id>
+			<name>Matthew Smith</name>
+			<email>Matthew.Smith@imail.org</email>
+			<url>http://prtlmy.intermountain.net/Person.aspx?accountname=CO\lpmsmith</url>
+			<organization>Enterprise Web Development</organization>
+			<organizationUrl>https://teamspace.intermountain.net/ewd</organizationUrl>
+			<timezone>-7</timezone>
+		</developer>
+	</developers>
+	<contributors>
+		<contributor>
+			<name>Traci Hastings</name>
+			<email>Traci.Hastings@imail.com</email>
+			<organization>Enterprise Web Development</organization>
+			<organizationUrl>https://teamspace.intermountain.net/ewd/default.aspx</organizationUrl>
+			<url>http://prtlmy.intermountain.net/Person.aspx?accountname=CO\tlhastin</url>
+			<timezone>-7</timezone>
+			<roles>
+				<role>Business Analyst</role>
+				<role>Quality Assurance</role>
+			</roles>
+		</contributor>
+		<contributor>
+			<name>Belle Rowan</name>
+			<email>belle.rowan@imail.org</email>
+			<url>http://prtlmy.intermountain.net/Person.aspx?accountname=CO\cobrowan</url>
+			<organization>e-Business</organization>
+			<organizationUrl>https://teamspace.intermountain.net/ebusiness</organizationUrl>
+			<timezone>-7</timezone>
+			<roles>
+				<role>Business Owner</role>
+			</roles>
+		</contributor>
+	</contributors>
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<configuration>
+						<unzipCommand>/usr/bin/unzip -o &gt; err.txt</unzipCommand>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-scm-plugin</artifactId>
+					<version>1.6</version>
+					<configuration>
+						<connectionType>connection</connectionType>
+						<tag>${tag.value}</tag>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>buildnumber-maven-plugin</artifactId>
+					<version>1.0-beta-4</version>
+					<executions>
+						<execution>
+							<phase>validate</phase>
+							<goals>
+								<goal>create</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<doCheck>false</doCheck>
+						<doUpdate>false</doUpdate>
+						<timestampFormat>{0,date,yyyy-MM-dd HH:mm:ss}</timestampFormat>
+						<revisionOnScmFailure>DEVELOPER</revisionOnScmFailure>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>build-classpath</id>
+							<phase>generate-sources</phase>
+							<goals>
+								<goal>build-classpath</goal>
+							</goals>
+							<configuration>
+								<outputFile>target/cp.txt</outputFile>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.ihc.mojo</groupId>
+										<artifactId>ihc</artifactId>
+										<versionRange>
+											[1.4.1,)
+										</versionRange>
+										<goals>
+											<goal>genprops</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.maven.plugins
+										</groupId>
+										<artifactId>
+											maven-dependency-plugin
+										</artifactId>
+										<versionRange>
+											[2.1,)
+										</versionRange>
+										<goals>
+											<goal>build-classpath</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+	<dependencyManagement>
+	  <dependencies>
+	    <dependency>
+	      <groupId>${project.groupId}</groupId>
+	      <artifactId>PortalMesaging-ejb</artifactId>
+	      <version>${project.version}</version>
+	      <type>ejb</type>
+	    </dependency>
+	    <dependency>
+	      <groupId>${project.groupId}</groupId>
+	      <artifactId>PortalMesaging-ear</artifactId>
+	      <version>${project.version}</version>
+	      <type>ear</type>
+	    </dependency>
+	    <dependency>
+	      <groupId>log4j</groupId>
+	      <artifactId>log4j</artifactId>
+	      <version>1.2.17</version>
+	    </dependency>
+	  </dependencies>
+	</dependencyManagement>
+	<dependencies>
+	  <dependency>
+	    <groupId>com.bea</groupId>
+	    <artifactId>wlthint3client</artifactId>
+	    <version>10.3.3.0</version>
+	    <scope>provided</scope>
+	  </dependency>
+	</dependencies>
+	<properties>
+		<netbeans.hint.deploy.server>liferay</netbeans.hint.deploy.server>
+		<tag.value>REL-${project.version}.${buildNumber}</tag.value>
+	</properties>
+
+	<ciManagement>
+		<system>Bamboo</system>
+		<url>http://maven.co.ihc.com/bamboo/browse/MH-PORTALMESSAGING</url>
+	</ciManagement>
+	<url>http://maven.co.ihc.com/PortalMessaging</url>
+	<description>Secure Portal Messaging for communicating between patient, doctors and whomever else.</description>
+</project>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.ihc.framework</groupId>
+        <artifactId>java6-pom</artifactId>
+        <version>1.1.7</version>
+    </parent>
+    <groupId>org.ihc.framework.archetype</groupId>
+    <artifactId>web-archetype</artifactId>
+    <version>1.0.5-SNAPSHOT</version>
+    <packaging>maven-archetype</packaging>
+    <name>Framework Web Project Archetype</name>
+    <description>
+        Maven Archetype for creating a new war project based on the framework
+    </description>
+    <url>http://maven.co.ihc.com/doc/${project.artifactId}</url>
+    <inceptionYear>2008</inceptionYear>
+    <scm>
+        <url>https://subversion/webdev/ewd/framework/web-archetype/trunk/</url>
+        <connection>
+	  scm:svn:https://subversion/webdev/ewd/framework/web-archetype/trunk/
+	</connection>
+        <developerConnection>
+            scm:svn:https://subversion/webdev/ewd/framework/web-archetype/trunk/
+        </developerConnection>
+    </scm>
+    <developers>
+        <developer>
+            <id>sbelida</id>
+            <name>Sudha Belida</name>
+            <email>sudha.belida@imail.org</email>
+        </developer>
+    </developers>
+    
+    <dependencies>
+    	<dependency>
+    		<groupId>org.ihc.util</groupId>
+    		<artifactId>log4j-util</artifactId>
+   		    <version>1.0.1</version>
+    	</dependency>
+    	<dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+    
+    
+    <build>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.archetype</groupId>
+                <artifactId>archetype-packaging</artifactId>
+                <version>2.0-alpha-4</version>
+            </extension>
+        </extensions>
+        <plugins>
+            <plugin>
+                <artifactId>maven-archetype-plugin</artifactId>
+                <version>2.0-alpha-4</version>
+                <extensions>true</extensions>
+            </plugin>
+        </plugins>
+  </build>
+</project>

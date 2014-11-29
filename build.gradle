@@ -1,0 +1,48 @@
+
+apply plugin: 'groovy'
+
+
+repositories {
+  mavenCentral()   
+  maven {
+    name "ihc-nexus"
+    url 'http://artifacts.co.ihc.com/repomgr/content/groups/combined/'
+  }
+
+}
+
+configurations {
+    ivy
+}
+
+dependencies {
+  ivy "org.apache.ivy:ivy:2.3.0"
+  testCompile  "org.apache.ivy:ivy:2.3.0"
+  compile 'org.codehaus.groovy:groovy-all:2.3.7'
+  compile 'org.apache.maven:maven-embedder:3.0.5'
+  compile 'org.apache.maven:maven-core:3.0.5'
+  compile 'org.apache.maven:maven-compat:3.0.5'
+  compile 'org.apache.maven:maven-aether-provider:3.0.5'
+  compile 'org.sonatype.aether:aether-connector-wagon:1.13.1'
+  compile 'jline:jline:2.11'
+  compile 'org.fusesource.jansi:jansi:1.11'
+
+  testCompile 'junit:junit:4.11'
+  testCompile 'net.java.quickcheck:quickcheck:0.6'
+
+  // imports below here are grabbed via Grape at runtime
+  testCompile 'com.jcabi:jcabi-aether:0.10.1'
+  
+}
+
+tasks.withType(GroovyCompile) {
+    groovyClasspath += configurations.ivy
+}
+
+tasks.withType(Test) {
+  sourceSets.test.runtimeClasspath += configurations.ivy
+}
+
+
+
+

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.springframework</groupId>
+  <artifactId>springloaded</artifactId>
+  <version>1.2.1.RELEASE</version>
+  <name>Springloaded</name>
+  <description>JVM reloading agent</description>
+  <url>https://github.com/spring-projects/spring-loaded</url>
+  <organization>
+    <name>Spring IO</name>
+    <url>http://projects.spring.io/spring-loaded</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>aclement</id>
+      <name>Andy Clement</name>
+      <email>aclement@gopivotal.com</email>
+    </developer>
+  </developers>
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/spring-projects/spring-loaded/issues</url>
+  </issueManagement>
+  <scm>
+    <connection>scm:git:git://github.com/spring-projects/spring-loaded</connection>
+    <developerConnection>scm:git:git://github.com/spring-projects/spring-loaded</developerConnection>
+    <url>https://github.com/spring-projects/spring-loaded</url>
+  </scm>
+</project>

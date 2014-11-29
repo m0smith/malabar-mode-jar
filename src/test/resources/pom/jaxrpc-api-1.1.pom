@@ -1,0 +1,14 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>javax.xml</groupId>
+  <artifactId>jaxrpc-api</artifactId>
+  <version>1.1</version>
+  <name>Java API for XML Based RPC</name>
+  <description>
+    Part of the Java Web Services Developer Pack 1.6
+  </description>
+  <url>http://java.sun.com/webservices/jaxrpc/index.jsp</url>
+  <distributionManagement>
+    <downloadUrl>http://java.sun.com/webservices/downloads/webservicespack.html</downloadUrl>
+  </distributionManagement>
+</project>

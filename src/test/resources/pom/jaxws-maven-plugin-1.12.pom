@@ -1,0 +1,116 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.jvnet.jax-ws-commons</groupId>
+    <artifactId>pom</artifactId>
+    <version>1.2</version>
+    <relativePath>../pom/pom.xml</relativePath>
+  </parent>
+
+  <groupId>org.codehaus.mojo</groupId>
+  <artifactId>jaxws-maven-plugin</artifactId>
+  <packaging>maven-plugin</packaging>
+  <name>Maven JAXWS 2.x Plugin</name>
+  <version>1.12</version>
+  <url>https://jax-ws-commons.dev.java.net/jaxws-maven-plugin/</url>
+  
+  <developers>
+    <developer>
+      <id>ramapulavarthi</id>
+      <name>Rama Pulavarthi</name>
+      <email>rama.pulavarthi@sun.com</email>
+      <roles>
+        <role>Maintainer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>kohsuke</id>
+      <name>Kohsuke Kawaguchi</name>
+      <email>kohsuke.kawaguchi@sun.com</email>
+      <roles>
+        <role>Maintainer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>gnt</id>
+      <name>Guillaume Nodet</name>
+      <email>gnodet@apache.org</email>
+      <organization>LogicBlaze, Inc</organization>
+      <organizationUrl>http://www.logicblaze.com</organizationUrl>
+      <roles>
+        <role>Previous maintainer</role>
+      </roles>
+      <timezone>+1</timezone>
+    </developer>
+    <developer>
+      <id>dantran</id>
+      <name>Dan Tran</name>
+      <email>dtran@gmail.com</email>
+      <roles>
+        <role>Previous maintainer</role>
+      </roles>
+    </developer>
+  </developers>
+  
+  <licenses>
+    <license>
+    <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+    
+  <dependencies>
+    <dependency>
+      <groupId>com.sun.xml.ws</groupId>
+      <artifactId>jaxws-tools</artifactId>
+      <version>2.1.7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+      <version>2.0.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+      <version>2.0.4</version>
+    </dependency>
+  </dependencies>
+
+  <scm>
+    <connection>scm:svn:https://svn.dev.java.net/svn/jax-ws-commons/tags/jaxws-maven-plugin-1.12</connection>
+    <developerConnection>scm:svn:https://svn.dev.java.net/svn/jax-ws-commons/tags/jaxws-maven-plugin-1.12</developerConnection>
+    <url>https://jax-ws-commons.dev.java.net/source/browse/jax-ws-commons/tags/jaxws-maven-plugin-1.12</url>
+  </scm>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <artifactId>maven-plugin-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
+
+  <profiles>
+    <profile>
+        <!-- This is only for non MAC OS X builds, hence the property below -->
+      <id>default-tools.jar</id>
+      <activation>
+       <file>
+        <exists>${java.home}/../lib/tools.jar</exists>
+       </file>
+     </activation>
+      <dependencies>
+        <dependency>
+          <groupId>com.sun</groupId>
+          <artifactId>tools</artifactId>
+          <version>1.5.0</version>
+          <scope>system</scope>
+          <systemPath>${java.home}/../lib/tools.jar</systemPath>
+       </dependency>
+     </dependencies>
+   </profile>
+ </profiles>
+</project>

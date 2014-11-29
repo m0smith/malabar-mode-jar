@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.ihc.mh.example.portlet</groupId>
+  <artifactId>myhealth-portletapp-archetype</artifactId>
+  <version>14.5.1</version>
+  <packaging>maven-archetype</packaging>
+
+  <name>myhealth-portletapp-archetype</name>
+
+  <build>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.archetype</groupId>
+        <artifactId>archetype-packaging</artifactId>
+        <version>2.2</version>
+      </extension>
+    </extensions>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-archetype-plugin</artifactId>
+          <version>2.2</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <description>
+  	The My Health Portlet Application Archetype generates a portlet application to be used in the My Health
+  	environment.  To use execute: 
+  	mvn archetype:generate -DarchetypeCatalog=http://maven.co.ihc.com/archiva/repository/ihc/archetype-catalog.xml
+  </description>
+
+  <url>http://maven.co.ihc.com/myhealth-portletapp-archetype</url>
+
+  <developers>
+    <developer>
+      <id>lpmsmith</id>
+      <name>Matthew Smith</name>
+      <email>Matthew.Smith@imail.org</email>
+      <url>http://prtlmy.intermountain.net/Person.aspx?accountname=CO\lpmsmith</url>
+      <organization>Intermountain Healthcare</organization>
+      <organizationUrl>https://teamspace.intermountain.net</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>-7</timezone>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:svn:https://subversion.co.ihc.com/webdev/ewd/intermountainpatientportal/archetype/myhealth-portletapp-archetype/trunk</connection>
+    <developerConnection>scm:svn:https://subversion.co.ihc.com/webdev/ewd/intermountainpatientportal/archetype/myhealth-portletapp-archetype/tags/REL-1.0.1-SNAPSHOT.${buildNumber}</developerConnection>
+    <tag>REL-1.0.1-SNAPSHOT.${buildNumber}</tag>
+    <url>https://subversion.co.ihc.com/webdev/ewd/intermountainpatientportal/archetype/myhealth-portletapp-archetype/trunk/</url>
+  </scm>
+
+  <distributionManagement>
+    <repository>
+      <id>ihc-deploy</id>
+      <name>Intermountain Healthcare Release Repository, Deployment Definition</name>
+      <url>file:///usr/local/maven/repos/ihc</url>
+    </repository>
+    <snapshotRepository>
+      <uniqueVersion>false</uniqueVersion>
+      <id>ihc-deploy</id>
+      <name>Intermountain Healthcare Release Repository, Deployment Definition</name>
+      <url>file:///usr/local/maven/repos/ihc</url>
+    </snapshotRepository>
+    <site>
+      <id>ihc-site-deploy</id>
+      <name>Intermountain Healthcare Site Deployment Location</name>
+      <url>file:///usr/local/maven/webapps/docs/myhealth-portletapp-archetype</url>
+    </site>
+  </distributionManagement>
+</project>

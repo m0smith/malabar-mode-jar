@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.clojars.processing-core</groupId>
+  <artifactId>org.processing.pdf</artifactId>
+  <version>1.5.1</version>
+  <name>org.processing.pdf</name>
+  <description>Processing pdf library</description>
+  <url></url>
+  <licenses>
+    <license />
+  </licenses>
+  <repositories>
+    <repository>
+      <id>central</id>
+      <url>http://repo1.maven.org/maven2</url>
+    </repository>
+    <repository>
+      <id>clojars</id>
+      <url>http://clojars.org/repo/</url>
+    </repository>
+  </repositories>
+</project>

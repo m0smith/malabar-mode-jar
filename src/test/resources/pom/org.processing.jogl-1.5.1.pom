@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.clojars.processing-core</groupId>
+  <artifactId>org.processing.jogl</artifactId>
+  <version>1.5.1</version>
+  <name>org.processing.jogl</name>
+  <description>Native jogl libraries from Processing</description>
+  <url></url>
+  <licenses>
+    <license />
+  </licenses>
+  <build>
+    <sourceDirectory>/Users/sam/Development/native-jvm-libs/jogl/src</sourceDirectory>
+    <testSourceDirectory></testSourceDirectory>
+    <resources>
+      <resource>
+        <directory>/Users/sam/Development/native-jvm-libs/jogl/resources</directory>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory>/Users/sam/Development/native-jvm-libs/jogl/resources</directory>
+      </testResource>
+    </testResources>
+  </build>
+  <repositories>
+    <repository>
+      <id>central</id>
+      <url>http://repo1.maven.org/maven2</url>
+    </repository>
+    <repository>
+      <id>clojars</id>
+      <url>http://clojars.org/repo/</url>
+    </repository>
+  </repositories>
+</project>

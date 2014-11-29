@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.ihc.framework</groupId>
+        <artifactId>java5-pom</artifactId>
+        <version>1.0.1</version>
+    </parent>
+
+    <groupId>org.ihc.service</groupId>
+    <artifactId>mh-messaging-service</artifactId>
+    <version>1.0.12</version>
+    <packaging>jar</packaging>
+    <name>mh-messaging-service</name>
+    <description>Services to interact with Help2 messaging</description>
+    <url>http://maven.co.ihc.com/mh-messaging-service</url>
+    <issueManagement>
+    	<system>Jira</system>
+    	<url>http://jira.co.ihc.com/browse/PHC</url>
+    </issueManagement>
+    <ciManagement>
+    	<system>Bamboo</system>
+    	<url>http://maven.co.ihc.com/bamboo/browse/MH-MESSAGING</url>
+    </ciManagement>
+    <inceptionYear>2010</inceptionYear>
+    <scm>
+        <url>http://subversion.co.ihc.com/svn/webdev/services/mh-messaging-service/trunk</url>
+        <connection>scm:svn:http://subversion.co.ihc.com/svn/webdev/services/mh-messaging-service/trunk</connection>
+        <developerConnection>scm:svn:http://subversion.co.ihc.com/svn/webdev/services/mh-messaging-service/trunk</developerConnection>
+    </scm>
+   <developers>
+        <developer>
+        	<id>lpmsmith</id>
+        	<name>Matthew Smith</name>
+        	<email>Matthew.Smith@imail.org</email>
+        	<url>http://prtlmy.intermountain.net/Person.aspx?accountname=CO\lpmsmith</url>
+        	<organization>Enterprise Web Development</organization>
+        	<organizationUrl>https://teamspace.intermountain.net/ewd</organizationUrl>
+        	<timezone>MST</timezone>
+        </developer>
+    </developers>
+    <dependencies>
+        <dependency>
+        	<groupId>org.springframework</groupId>
+        	<artifactId>spring-core</artifactId>
+        	<version>3.0.5.RELEASE</version>
+        	<type>jar</type>
+        	<scope>compile</scope>
+        </dependency>
+        <dependency>
+        	<groupId>org.ihc.service</groupId>
+        	<artifactId>mh-cdr-service</artifactId>
+        	<version>1.0.14</version>
+        	<type>jar</type>
+        	<scope>compile</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins/>
+        <finalName>${project.artifactId}</finalName>
+    </build>
+</project>

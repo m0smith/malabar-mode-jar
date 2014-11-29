@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>ant</groupId>  
+  <artifactId>ant</artifactId>
+  <name>Ant</name>
+  <version>1.6</version>
+</project>

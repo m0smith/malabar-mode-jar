@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>clj-glob</groupId>
+  <artifactId>clj-glob</artifactId>
+  <version>1.0.0</version>
+  <name>clj-glob</name>
+  <description>Quickly locate files with glob patterns</description>
+  <scm>
+    <connection>scm:git:git://github.com/jkk/clj-glob.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/jkk/clj-glob.git</developerConnection>
+    <tag>2fa923d48eef0352897322e7a8ab3953c964be19</tag>
+    <url>http://github.com/jkk/clj-glob</url>
+  </scm>
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <testSourceDirectory>test</testSourceDirectory>
+    <resources>
+      <resource>
+        <directory>resources</directory>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory>test-resources</directory>
+      </testResource>
+    </testResources>
+  </build>
+  <repositories>
+    <repository>
+      <id>central</id>
+      <url>http://repo1.maven.org/maven2</url>
+    </repository>
+    <repository>
+      <id>clojure</id>
+      <url>http://build.clojure.org/releases</url>
+    </repository>
+    <repository>
+      <id>clojure-snapshots</id>
+      <url>http://build.clojure.org/snapshots</url>
+    </repository>
+    <repository>
+      <id>clojars</id>
+      <url>http://clojars.org/repo/</url>
+    </repository>
+  </repositories>
+  <dependencies>
+    <dependency>
+      <groupId>org.clojure</groupId>
+      <artifactId>clojure</artifactId>
+      <version>1.2.0</version>
+    </dependency>
+  </dependencies>
+</project>

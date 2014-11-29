@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.hibernate</groupId>
+  <artifactId>hibernate-entitymanager</artifactId>
+  <version>4.3.6.Final</version>
+  <dependencies>
+    <dependency>
+      <groupId>org.jboss.logging</groupId>
+      <artifactId>jboss-logging</artifactId>
+      <version>3.1.3.GA</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.logging</groupId>
+      <artifactId>jboss-logging-annotations</artifactId>
+      <version>1.2.0.Beta1</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>4.3.6.Final</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <version>1.6.1</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate.common</groupId>
+      <artifactId>hibernate-commons-annotations</artifactId>
+      <version>4.0.5.Final</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate.javax.persistence</groupId>
+      <artifactId>hibernate-jpa-2.1-api</artifactId>
+      <version>1.0.0.Final</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.spec.javax.transaction</groupId>
+      <artifactId>jboss-transaction-api_1.2_spec</artifactId>
+      <version>1.0.0.Final</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.javassist</groupId>
+      <artifactId>javassist</artifactId>
+      <version>3.18.1-GA</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+  <name>Hibernate JPA Support</name>
+  <description>Hibernate O/RM implementation of the JPA specification</description>
+  <url>http://hibernate.org</url>
+  <organization>
+    <name>Hibernate.org</name>
+    <url>http://hibernate.org</url>
+  </organization>
+  <issueManagement>
+    <system>jira</system>
+    <url>https://hibernate.atlassian.net/browse/HHH</url>
+  </issueManagement>
+  <scm>
+    <url>http://github.com/hibernate/hibernate-orm</url>
+    <connection>scm:git:http://github.com/hibernate/hibernate-orm.git</connection>
+    <developerConnection>scm:git:git@github.com:hibernate/hibernate-orm.git</developerConnection>
+  </scm>
+  <licenses>
+    <license>
+      <name>GNU Lesser General Public License</name>
+      <url>http://www.gnu.org/licenses/lgpl-2.1.html</url>
+      <comments>See discussion at http://hibernate.org/license for more details.</comments>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>hibernate-team</id>
+      <name>The Hibernate Development Team</name>
+      <organization>Hibernate.org</organization>
+      <organizationUrl>http://hibernate.org</organizationUrl>
+    </developer>
+  </developers>
+</project>

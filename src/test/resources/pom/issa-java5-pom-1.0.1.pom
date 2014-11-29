@@ -1,0 +1,88 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>java5-pom</artifactId>
+        <groupId>org.ihc.framework</groupId>
+        <version>1.0.1</version>
+    </parent>
+
+    <groupId>org.ihc.framework</groupId>
+    <artifactId>issa-java5-pom</artifactId>
+    <version>1.0.1</version>
+    <packaging>pom</packaging>
+
+    <name>Intermountain Healthcare ISSA Java 1.5 POM</name>
+    <description>Inherits from java5-pom to add ISSA specific configuration, particularly distribution management settings for the ISSA repository</description>
+    <!-- Without this Maven will add issa-java5-pom to the url of child projects -->
+    <url>http://maven.co.ihc.com/</url>
+
+    <!-- Override the ihc-deploy definitions, pointing them to the ISSA repository -->
+    <distributionManagement>
+        <repository>
+            <id>ihc-issa-deploy</id>
+            <name>Intermountain Healthcare ISSA Release Repository, Deployment Definition</name>
+            <url>file:///usr/local/maven/repos/issa</url>
+        </repository>
+        <snapshotRepository>
+            <id>ihc-issa-deploy</id>
+            <name>Intermountain Healthcare ISSA Release Repository, Deployment Definition</name>
+            <url>file:///usr/local/maven/repos/issa</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+        <!-- Without this Maven will add issa-java5-pom to the site file-path of child projects -->
+        <site>
+            <id>ihc-site-deploy</id>
+            <name>Intermountain Healthcare Site Deployment Location</name>
+            <url>file:///usr/local/maven/webapps/docs</url>
+        </site>
+    </distributionManagement>
+
+    <!--
+        Since ISSA source code is often considered sensitive, we are excluding all files from
+        Cobertura (which effectively turns Cobertura off).
+        It may be enabled in project specific files to run locally but such changes should never 
+        be checked in if the source files are at all sensitive because if the changes were 
+        checked in, the report could be deployed to the site associated with the project.
+    -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <instrumentation>
+                        <excludes>
+                            <exclude>**</exclude>
+                        </excludes>
+                    </instrumentation>
+                </configuration>
+
+            </plugin>
+        </plugins>
+    </build>
+
+    <!--
+        Since ISSA source code is often considered sensitive, exclude all source files in the
+        execution of the source cross-reference plugin so the source isn't deployed or 
+        put on the site.
+    -->
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>2.1</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+
+</project>

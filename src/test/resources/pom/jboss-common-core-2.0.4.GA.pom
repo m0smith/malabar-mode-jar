@@ -1,0 +1,69 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<groupId>jboss</groupId>
+		<artifactId>jboss-common</artifactId>
+		<version>2.0.4.GA</version>
+	  <relativePath>../build/pom.xml</relativePath>
+	</parent>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>jboss-common-core</artifactId>
+  <version>2.0.4.GA</version>
+  <packaging>jar</packaging>
+  <name>JBoss Common Classes</name>
+  <url>http://www.jboss.org</url>
+  <description>JBoss Common Core Utility classes</description>
+  <scm>
+    <connection>scm:svn:https://svn.jboss.org/repos/common/common-core/tags/jboss-common-core-2.0.4.GA</connection>
+  </scm>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <!-- The tagBase property is needed during the release process so that the maven release plugin
+            will create the release tag in the appropriate location. -->
+          <tagBase>https://svn.jboss.org/repos/common/common-core/tags</tagBase>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>apache-xerces</groupId>
+      <artifactId>xml-apis</artifactId>
+      <version>2.7.1</version>
+    </dependency> 
+    <dependency>
+      <groupId>apache-httpclient</groupId>
+      <artifactId>commons-httpclient</artifactId>
+      <version>2.0.2</version>
+    </dependency>      
+    <dependency>
+      <groupId>oswego-concurrent</groupId>
+      <artifactId>concurrent</artifactId>
+      <version>1.3.4</version>
+    </dependency>
+    <dependency>
+      <groupId>apache-slide</groupId>
+      <artifactId>webdavlib</artifactId>
+      <version>2.0</version>
+    </dependency>   
+    <dependency>
+      <groupId>jboss</groupId>
+      <artifactId>jboss-common-logging-spi</artifactId>
+      <version>2.0.4.GA</version>
+    </dependency>
+    <dependency>
+      <groupId>jboss</groupId>
+      <artifactId>jboss-test</artifactId>
+      <version>1.0.3.GA</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>  
+</project>

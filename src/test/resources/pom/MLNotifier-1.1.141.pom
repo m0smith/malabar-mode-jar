@@ -1,0 +1,84 @@
+<project>
+	<parent>
+    	<groupId>org.ihc.framework</groupId>
+    	<artifactId>java5-pom</artifactId>
+    	<version>1.0.1</version>
+	</parent>
+   <modelVersion>4.0.0</modelVersion>
+   <groupId>com.ihc</groupId>
+   <version>1.1.141</version>
+   <artifactId>MLNotifier</artifactId>
+   <packaging>pom</packaging>
+   <name>MLNotifier</name>
+	<scm>
+		<connection>scm:svn:http://scompile:ps3absta@subversion.co.ihc.com/webdev/general/service/MessageLogNotifier/trunk/</connection>
+		<developerConnection>scm:svn:http://scompile:ps3absta@subversion.co.ihc.com/webdev/general/service/MessageLogNotifier/trunk/</developerConnection>
+		<url>http://subversion.co.ihc.com/webdev/general/service/MessageLogNotifier/</url>
+	</scm>
+	<developers>
+		<developer>
+			<id>lpmsmith</id>
+			<name>Matthew O. Smith</name>
+			<email>lpmsmith@ihc.com</email>
+		</developer>
+	</developers>
+   <modules>
+      <module>primary-source</module>
+      <module>ear</module>
+	  <module>ejbs</module>
+      <!-- <module>projects</module> -->
+      <!-- <module>servlets</module> -->     
+   </modules>
+   <build>
+	 <finalName>${project.name}</finalName>
+      <pluginManagement>
+         <plugins>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-site-plugin</artifactId>
+               <configuration>
+                  <unzipCommand>/usr/bin/unzip -o > err.txt</unzipCommand>
+               </configuration>
+            </plugin>
+         </plugins>
+      </pluginManagement>
+   </build>
+  <reporting>
+    <plugins>
+    <plugin>
+      <groupId>org.codehaus.mojo</groupId>
+      <artifactId>findbugs-maven-plugin</artifactId>
+      <configuration>
+		<skip>true</skip>
+	  </configuration>
+	</plugin>
+	</plugins>
+  </reporting>
+
+   <dependencyManagement>
+      <dependencies>
+         <dependency>
+            <groupId>root.project</groupId>
+            <artifactId>primary-source</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>root.project</groupId>
+            <artifactId>MLNotifier-ejbs</artifactId>
+            <version>${project.version}</version>
+            <type>ejb</type>
+         </dependency>
+<!--          <dependency> -->
+<!--             <groupId>root.project.projects</groupId> -->
+<!--             <artifactId>logging</artifactId> -->
+<!--             <version>1.0</version> -->
+<!--          </dependency> -->
+<!--          <dependency> -->
+<!--             <groupId>root.project.servlets</groupId> -->
+<!--             <artifactId>servlet</artifactId> -->
+<!--             <version>1.0</version> -->
+<!--             <type>war</type> -->
+<!--          </dependency> -->
+      </dependencies>
+   </dependencyManagement>
+</project>

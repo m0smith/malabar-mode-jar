@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.apache.maven.archetype</groupId>
+    <artifactId>maven-archetype</artifactId>
+    <version>2.0-alpha-4</version>
+  </parent>
+
+  <!--
+    The purpose of having groupId different from other
+    modules is to call mvn archetype:*
+    w/out the need to add a plugin group in settings
+  -->
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-archetype-plugin</artifactId>
+
+  <name>Maven Archetype Plugin</name>
+  <url>http://maven.apache.org/plugins/maven-archetype-plugin</url>
+  <packaging>maven-plugin</packaging>
+
+  <prerequisites>
+    <maven>2.0.7</maven>
+  </prerequisites>
+  
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-2.0-alpha-4/archetype-plugin</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-2.0-alpha-4/archetype-plugin</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/archetype/tags/maven-archetype-2.0-alpha-4/archetype-plugin</url>
+  </scm>
+
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.maven.archetype</groupId>
+      <artifactId>archetype-common</artifactId>
+      <version>2.0-alpha-4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>maven-invoker</artifactId>
+      <version>2.0.6</version>
+    </dependency>
+    <dependency>
+      <groupId>easymock</groupId>
+      <artifactId>easymock</artifactId>
+      <version>1.2_Java1.3</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.2</version>
+    </dependency>
+  </dependencies>
+
+  <properties>
+      <pluginPluginVersion>2.4.1</pluginPluginVersion>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <version>${pluginPluginVersion}</version>
+        <configuration>
+          <goalPrefix>archetype</goalPrefix>
+        </configuration>
+        <executions>
+          <execution>
+            <id>generated-helpmojo</id>
+            <goals>
+              <goal>helpmojo</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-site-plugin</artifactId>
+        <configuration>
+          <stagingSiteURL>scp://people.apache.org/www/maven.apache.org/plugins/${project.artifactId}-${project.version}</stagingSiteURL>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <version>${pluginPluginVersion}</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+
+  <profiles>
+    <profile>
+      <id>ciProfile</id>
+      <activation>
+        <property>
+          <name>enableCiProfile</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-docck-plugin</artifactId>
+            <version>1.0-beta-2</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+  <distributionManagement>
+    <site>
+      <id>apache.website</id>
+      <!-- The stage plugin don't propagate correctly the menu item's links -->
+      <!--url>scp://people.apache.org/home/rafale/public_html/site/maven-archetype-plugin</url-->
+      <url>scp://people.apache.org/www/maven.apache.org/plugins/maven-archetype-plugin</url>
+    </site>
+  </distributionManagement>
+</project>

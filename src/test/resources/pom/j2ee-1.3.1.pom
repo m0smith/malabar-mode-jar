@@ -1,0 +1,6 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>javax.j2ee</groupId>
+  <artifactId>j2ee</artifactId>
+  <version>1.3.1</version>
+</project>

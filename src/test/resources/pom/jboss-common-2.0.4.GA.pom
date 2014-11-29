@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<!--
+A top level maven pom that expects a structure like: 
+  build/pom.xml
+  common-core/pom.xml
+  common-logging-jdk/pom.xml
+  common-logging-spi/pom.xml
+  common-logging-log4j/pom.xml
+
+This can be done using:  
+svn co https://svn.jboss.org/repos/common/build/trunk/ build
+svn co https://svn.jboss.org/repos/common/common-core/trunk common-core
+svn co https://svn.jboss.org/repos/common/common-logging-spi/trunk/ common-logging-spi
+svn co https://svn.jboss.org/repos/common/common-logging-jdk/trunk/ common-logging-jdk
+svn co https://svn.jboss.org/repos/common/common-logging-log4j/trunk/ common-logging-log4j
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>jboss</groupId>
+    <artifactId>jboss-parent</artifactId>
+    <version>1</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <version>2.0.4.GA</version>
+  <artifactId>jboss-common</artifactId>
+  <name>JBoss Common Build</name>
+  <url>http://www.jboss.org</url>
+  <description>JBoss Common</description>
+  <scm>
+    <connection>scm:svn:https://svn.jboss.org/repos/common/build/trunk/</connection>
+  </scm>
+  <packaging>pom</packaging>
+  <build>
+    <finalName>${artifactId}</finalName>  
+    <plugins>
+      <plugin>
+        <groupId>jboss.maven-plugins</groupId>
+        <artifactId>jboss-retro-maven-plugin</artifactId>
+        <version>0.5-beta2</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>retro-compile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <!-- The tagBase property is needed during the release process so that the maven release plugin
+            will create the release tag in the appropriate location. -->
+          <tagBase>https://svn.jboss.org/repos/common/build/tags</tagBase>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>jboss.maven-plugins</groupId>
+        <artifactId>jboss-deploy-maven-plugin</artifactId>
+        <version>1.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>jboss-deploy</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <!-- In order to use this setting jboss.repository.root must be set on the command line or in
+          settings.xml.  More information can be found here: http://wiki.jboss.org/wiki/Wiki.jsp?page=JBossBuildMaven -->
+          <jbossDeployRoot>${jboss.repository.root}</jbossDeployRoot>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <modules>
+    <module>../common-logging-spi</module>
+    <module>../common-core</module>
+    <module>../common-logging-log4j</module>
+    <module>../common-logging-jdk</module>
+  </modules>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>dependencies</report>
+              <report>issue-tracking</report>
+              <report>license</report>
+              <report>scm</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+  <distributionManagement>
+    <repository>
+      <id>cvs-file-repository</id>
+      <!-- Set maven.cvs.root in your settings.xml
+           See http://wiki.jboss.org/wiki/Wiki.jsp?page=JBossCommonProject
+        -->
+      <url>file://${maven.cvs.root}</url>
+    </repository>
+  </distributionManagement>
+</project>
