@@ -4,6 +4,7 @@ import static net.java.quickcheck.QuickCheck.*
 import static net.java.quickcheck.generator.iterable.Iterables.*
 
 import net.java.quickcheck.Generator;
+import net.java.quickcheck.StatefulGenerator;
 
 import org.junit.Test;
 
@@ -14,6 +15,25 @@ import groovy.io.FileType
 
 class MavenProjectTester {
 
+
+
+  def elementGenerator (coll) {
+    return new StatefulGenerator<File>() {
+
+      private Generator<Integer> ints = integers(0, coll.size() - 1);
+
+      public void reset () {
+	ints = PrimitiveGenerators.integers(0, coll.size() - 1);
+      }
+
+      public File next () {
+	int i = ints.next();
+	println i + " " + coll.size();
+	return coll[i];
+      }
+    }
+  }
+  
   /**
    * Generator of pom files. See src/test/resources/pom.
    *
@@ -31,7 +51,8 @@ class MavenProjectTester {
 	f -> files << f;
       }
     }
-    return ensureValues(files);
+
+    return elementGenerator(files);
     
   }
   
