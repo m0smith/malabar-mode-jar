@@ -2,7 +2,7 @@ package com.software_ninja.malabar.http;
 
 import com.sun.net.httpserver.HttpHandler
 import com.sun.net.httpserver.HttpExchange
-
+import groovy.json.JsonBuilder
 
 
 
@@ -45,7 +45,7 @@ def build (func) {
 	//final String[] param = query.split('=')
 	//assert param.length == 2 && param[0] == 'string'
 	httpExchange.sendResponseHeaders(200, 0)
-	httpExchange.responseBody.write( func(params).toString().bytes )
+	httpExchange.responseBody.write( new JsonBuilder( func(params) ).toPrettyString().bytes )
 	httpExchange.responseBody.close()
       } catch (Throwable ex) {
 	println org.codehaus.groovy.runtime.StackTraceUtils.printSanitizedStackTrace(ex)
