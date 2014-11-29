@@ -56,7 +56,7 @@ def projectInfo(repo, pom) {
   x = new MavenProjectsCreator();
   pjs = x.create(repo, pom)
   return [runtime: x.resolveDependencies(pjs[0], repo, "runtime"),
-	  test:   x.resolveDependencies(pjs[0], repo, "test")]
+	  test:    x.resolveDependencies(pjs[0], repo, "test")]
 }
 
 
@@ -134,7 +134,10 @@ public class MavenProjectsCreator {
       
     }
     
-    [ dependencies : depLists.collect {it.first()},  classpath : depLists.flatten() ]
+    [ dependencies : depLists.collect {it.first()},  classpath : depLists.flatten() ,
+      resources: "test"== scope ? project.getTestResources() : project.getResources() ,
+      sources : "test"== scope ? project.getTestCompileSourceRoots() :project.getCompileSourceRoots() ,
+      elements:  "test"== scope ? project.getTestClasspathElements() : project.getCompileClasspathElements()]
   }
 
 }

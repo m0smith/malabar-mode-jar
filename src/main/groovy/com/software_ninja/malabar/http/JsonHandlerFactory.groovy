@@ -32,7 +32,7 @@ def build (func) {
     {
       try {
 	
-	httpExchange.responseHeaders.set('Content-Type', 'text/plain')
+	httpExchange.responseHeaders.set('Content-Type', 'application/json')
 	final String query = httpExchange.requestURI.rawQuery
 	println query
 	final java.util.Map params = queryMap(query)
