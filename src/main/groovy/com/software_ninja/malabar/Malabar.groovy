@@ -11,12 +11,17 @@ public static void main(String[] args) {
 
 def start (){
     ClassLoader classLoader = new groovy.lang.GroovyClassLoader()
+    start(classLoader);
+}
+
+def startCL (ClassLoader classLoader1){
+
     Map[] grapez = [
 		    [group : 'org.apache.maven', module : 'maven-compat', version :'3.0.5'],
 		    [group : 'com.jcabi', module : 'jcabi-aether', version : '0.10.1']];
-    Grape.grab(classLoader: classLoader, grapez)
+    Grape.grab(classLoader: classLoader1, grapez)
     //println "Class: " + classLoader.loadClass('org.ccil.cowan.tagsoup.jaxp.SAXParserImpl')
-    classLoader.loadClass('com.software_ninja.malabar.http.MalabarServer').newInstance().start();
+    classLoader1.loadClass('com.software_ninja.malabar.http.MalabarServer').newInstance().start();
     
 }
 
