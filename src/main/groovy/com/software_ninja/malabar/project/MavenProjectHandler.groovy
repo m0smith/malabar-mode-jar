@@ -125,10 +125,13 @@ public class MavenProjectsCreator {
     Aether aether = new Aether(project, local);
     List depLists = project.getDependencies().collect { 
       
-    DefaultArtifact  art = new DefaultArtifact(it.getGroupId(), it.getArtifactId(), it.getClassifier(), it.getType(), 
-				it.getVersion());
-      
-      Collection<Artifact> deps = aether.resolve( art, scope );
+    DefaultArtifact  art = new DefaultArtifact(it.getGroupId(), it.getArtifactId(), 
+					       it.getClassifier(), it.getType(),it.getVersion());
+
+    org.sonatype.aether.graph.DependencyFilter filter = new org.sonatype.aether.util.filter.ExclusionsDependencyFilter(['com.springsource.org.hibernate.validator-4.1.0.GA',
+'xerces-impl-2.6.2']);
+
+    Collection<Artifact> deps = aether.resolve( art, scope , filter);
       
       deps.collect{  it.getFile().getAbsolutePath() }
       

@@ -44,15 +44,19 @@ def build (func) {
 	
 	//final String[] param = query.split('=')
 	//assert param.length == 2 && param[0] == 'string'
+	bytes = new JsonBuilder( func(params) ).toPrettyString().bytes;
+	
 	httpExchange.sendResponseHeaders(200, 0)
-	httpExchange.responseBody.write( new JsonBuilder( func(params) ).toPrettyString().bytes )
-	httpExchange.responseBody.close()
+	httpExchange.responseBody.write( bytes )
+	
       } catch (Throwable ex) {
+	httpExchange.sendResponseHeaders(500, 0)
 	println org.codehaus.groovy.runtime.StackTraceUtils.printSanitizedStackTrace(ex)
-	ex.printStackTrace();
+	ex.printStackTrace(new PrintStream(httpExchange.responseBody));
 	
       } finally {
-	println "end of handler"
+	httpExchange.responseBody.close()
+	println "end end end"
       }
     }
   }
