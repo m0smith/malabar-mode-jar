@@ -1,6 +1,9 @@
 
 apply plugin: 'groovy'
+apply plugin: 'maven'
 
+group 'com.software-ninja'
+version '2.0.0-SNAPSHOT'
 
 repositories {
   mavenCentral()   
