@@ -1,9 +1,11 @@
 
 apply plugin: 'groovy'
 apply plugin: 'maven'
+apply plugin:'application'
 
 group 'com.software-ninja'
 version '2.0.0-SNAPSHOT'
+mainClassName = "com.software_ninja.malabar.Malabar"
 
 repositories {
   mavenCentral()   
@@ -20,6 +22,7 @@ configurations {
 
 dependencies {
   ivy "org.apache.ivy:ivy:2.3.0"
+  compile  "org.apache.ivy:ivy:2.3.0"
   testCompile  "org.apache.ivy:ivy:2.3.0"
   compile 'org.codehaus.groovy:groovy-all:2.3.7'
   compile 'org.apache.maven:maven-embedder:3.0.5'
@@ -27,6 +30,7 @@ dependencies {
   compile 'org.apache.maven:maven-compat:3.0.5'
   compile 'org.apache.maven:maven-aether-provider:3.0.5'
   compile 'org.sonatype.aether:aether-connector-wagon:1.13.1'
+  compile 'com.jcabi:jcabi-aether:0.10.1'
   compile 'jline:jline:2.11'
   compile 'org.fusesource.jansi:jansi:1.11'
 
