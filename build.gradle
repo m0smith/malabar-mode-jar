@@ -2,6 +2,7 @@
 apply plugin: 'groovy'
 apply plugin: 'maven'
 apply plugin:'application'
+apply plugin: 'signing'
 
 group 'com.software-ninja'
 version '2.0.1-SNAPSHOT'
@@ -43,6 +44,91 @@ tasks.withType(GroovyCompile) {
 
 tasks.withType(Test) {
   sourceSets.test.runtimeClasspath += configurations.ivy
+}
+
+
+//
+// Deploy to Maven Central 
+// Instructions at:
+// http://jedicoder.blogspot.com/2011/11/automated-gradle-project-deployment-to.html
+//
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from 'build/docs/javadoc'
+}
+ 
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+artifacts {
+  archives jar
+  archives javadocJar
+  archives sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+	  beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+ 
+	  repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+	    authentication(userName: sonatypeUsername, password: sonatypePassword)
+	  }
+ 
+            pom.project {
+               name 'malabar'
+               packaging 'jar'
+               description 'A Maven-enabled Java mode for Emacs'
+               url 'https://github.com/m0smith/malabar-mode-jar'
+ 
+               scm {
+                   url 'https://github.com/m0smith/malabar-mode-jar.git'
+                   connection 'scm:git:git@github.com:m0smith/malabar-mode-jar.git'
+                   developerConnection 'scm:git:git@github.com:m0smith/malabar-mode-jar.git'
+               }
+ 
+               licenses {
+                   license {
+                       name 'The GNU General Public License, Version 2'
+                       url 'http://www.gnu.org/licenses/gpl2.txt'
+                       distribution 'repo'
+                   }
+               }
+ 
+               developers {
+                   developer {
+                       id 'espenhw'
+                       name 'Espen Wiborg'
+		       email 'http://mailhide.recaptcha.net/d?k=01GFbnCG21M-KIunkjRjxWJw==&amp;c=BsOjYVXpToqQKNHwMd0ZRx5XPNMia6agfhzc3Fwtink='
+		       roles {
+			 role 'Evil Mastermind'
+		       }
+                   }
+                   developer {
+                       id 'dstu'
+                       name 'Stu Black'
+		       roles {
+			 role 'Keeper of the flame'
+		       } 
+                   }
+                   developer {
+                       id 'm0smith'
+                       name 'Matthew O. Smith'
+		       roles {
+			 role 'Reanimator'
+		       } 
+                   }
+               }
+           }
+        }
+    }
 }
 
 
