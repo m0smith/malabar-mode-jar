@@ -9,11 +9,6 @@ mainClassName = "com.software_ninja.malabar.Malabar"
 
 repositories {
   mavenCentral()   
-  maven {
-    name "ihc-nexus"
-    url 'http://artifacts.co.ihc.com/repomgr/content/groups/combined/'
-  }
-
 }
 
 configurations {

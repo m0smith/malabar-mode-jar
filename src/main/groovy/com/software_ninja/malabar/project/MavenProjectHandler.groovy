@@ -43,6 +43,8 @@ import org.sonatype.aether.repository.RemoteRepository;
 import org.sonatype.aether.util.artifact.DefaultArtifact;
 import org.sonatype.aether.artifact.Artifact;
 
+import org.sonatype.aether.graph.DependencyNode
+
 
 import java.io.File;
 import java.util.LinkedHashSet;
@@ -125,17 +127,29 @@ public class MavenProjectsCreator {
     Aether aether = new Aether(project, local);
     List depLists = project.getDependencies().collect { 
       
-    DefaultArtifact  art = new DefaultArtifact(it.getGroupId(), it.getArtifactId(), 
+      DefaultArtifact  art = new DefaultArtifact(it.getGroupId(), it.getArtifactId(), 
 					       it.getClassifier(), it.getType(),it.getVersion());
 
-    org.sonatype.aether.graph.DependencyFilter filter = new org.sonatype.aether.util.filter.ExclusionsDependencyFilter(['com.springsource.org.hibernate.validator-4.1.0.GA',
-'xerces-impl-2.6.2']);
-
-    Collection<Artifact> deps = aether.resolve( art, scope , filter);
+      org.sonatype.aether.graph.DependencyFilter filter = new org.sonatype.aether.graph.DependencyFilter() {
+	boolean accept( DependencyNode node, List<DependencyNode> parents )
+	{
+	  String artifactId = node.getDependency().getArtifact().getArtifactId();
+	  boolean optional = node.getDependency().isOptional();
+	  boolean rtnval =  ! optional && ! (['activation',
+					      'com.springsource.org.hibernate.validator-4.1.0.GA',
+					      'xerces-impl-2.6.2'].contains(artifactId));
+	  //println "" + rtnval + " NODE:" + optional + ' ' + artifactId;
+	  
+	  return rtnval;
+	  
+	}
+      }
+      
+      Collection<Artifact> deps = aether.resolve( art, scope , filter);
       
       deps.collect{  it.getFile().getAbsolutePath() }
       
-    }
+    }.grep({it.size() > 0})
     
     [ dependencies : depLists.collect {it.first()},  classpath : depLists.flatten() ,
       resources: "test"== scope ? project.getTestResources() : project.getResources() ,

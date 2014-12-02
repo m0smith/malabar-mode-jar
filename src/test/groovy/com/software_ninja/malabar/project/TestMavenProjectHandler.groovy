@@ -72,6 +72,8 @@ class MavenProjectTester {
 						       pom.absolutePath);
       assertNotNull( map['test']);
       assertNotNull( map['runtime']);
+
+      assertTrue( map['test']['classpath'].size() >= 0)
     }
   }
 }
