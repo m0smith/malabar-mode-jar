@@ -1,6 +1,27 @@
-# malabar-mode-jar :: A support JAR for malabar-mode: better Java mode for Emacs
+# malabar-mode-jar
+ A support JAR for malabar-mode: better Java mode for Emacs
 
 See malabar-mode: https://github.com/m0smith/malabar-mode
+
+# Running
+
+## Standalone
+
+```
+gradle run
+```
+
+## groovysh
+
+
+```
+def malabar = { classLoader = new groovy.lang.GroovyClassLoader();
+Map[] grapez = [[group: 'com.software-ninja' , module:'malabar', version:'2.0.2']]
+groovy.grape.Grape.grab(classLoader: classLoader, grapez)
+classLoader.loadClass('com.software_ninja.malabar.Malabar').newInstance().startCL(classLoader); }; malabar();
+```
+
+Be sure the version in the second line is set to the lastest in central: http://search.maven.org/#search|gav|1|g%3A%22com.software-ninja%22%20AND%20a%3A%22malabar%22
 
 # Hacking
 
