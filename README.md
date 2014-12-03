@@ -16,12 +16,26 @@ gradle run
 
 ```
 def malabar = { classLoader = new groovy.lang.GroovyClassLoader();
-Map[] grapez = [[group: 'com.software-ninja' , module:'malabar', version:'2.0.2']]
-groovy.grape.Grape.grab(classLoader: classLoader, grapez)
-classLoader.loadClass('com.software_ninja.malabar.Malabar').newInstance().startCL(classLoader); }; malabar();
+    Map[] grapez = [[group: 'com.software-ninja' , module:'malabar', version:'2.0.2']]
+    groovy.grape.Grape.grab(classLoader: classLoader, grapez)
+    classLoader.loadClass('com.software_ninja.malabar.Malabar').newInstance().startCL(classLoader); }; 
+malabar();
 ```
 
 Be sure the version in the second line is set to the lastest in central: http://search.maven.org/#search|gav|1|g%3A%22com.software-ninja%22%20AND%20a%3A%22malabar%22
+
+# Services
+malabar-mode-jar provides REST-ish services for interacting with the JVM and package management software (like maven)
+
+## pi
+The pi services returns information from the maven pom.
+### Parameters
+| name | default | desc 
+|------|---------|------
+| repo | none    | The location of the maven repo (something like /home/username/.m2/repository)
+| pom  | none    | The location of the pom to parse
+
+
 
 # Hacking
 
