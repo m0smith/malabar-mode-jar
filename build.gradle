@@ -167,6 +167,7 @@ buildscript {
 }
 apply plugin: 'release'
 
+createReleaseTag.dependsOn uploadArchives
 
 
 
