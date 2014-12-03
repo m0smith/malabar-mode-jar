@@ -1,8 +1,7 @@
 # Releasing to Sonatype
 
 ```
-	mvn release:clean release:prepare
-	mvn release:perform
+	gradle release
 ```
 
 Log into https://oss.sonatype.org/index.html#welcome and do the **Release** and **Close**
