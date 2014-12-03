@@ -14,7 +14,7 @@ gradle run
 ## groovysh
 
 
-```
+```groovy
 def malabar = { classLoader = new groovy.lang.GroovyClassLoader();
     Map[] grapez = [[group: 'com.software-ninja' , module:'malabar', version:'2.0.2']]
     groovy.grape.Grape.grab(classLoader: classLoader, grapez)
