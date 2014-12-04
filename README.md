@@ -11,6 +11,12 @@ See malabar-mode: https://github.com/m0smith/malabar-mode
 gradle run
 ```
 
+or to set the port
+
+```
+gradle -Dexec.args="-p 4429" run
+```
+
 ## groovysh
 
 
