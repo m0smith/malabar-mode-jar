@@ -68,12 +68,13 @@ def expandFile(f) {
 def projectInfo(repo, pom) {
   try {
     x = new MavenProjectsCreator();
-    pjs = x.create(expandFile(repo), expandFile(pom))
-    return [runtime: x.resolveDependencies(pjs[0], repo, "runtime"),
-	    test:    x.resolveDependencies(pjs[0], repo, "test")]
+    repox = (repo == null ? "~/.m2/repository" : repo);
+    pjs = x.create(expandFile(repox), expandFile(pom))
+    return [runtime: x.resolveDependencies(pjs[0], repox, "runtime"),
+            test:    x.resolveDependencies(pjs[0], repox, "test")]
   } catch (Exception ex) {
-    throw new Exception( ex.getMessage() + " repo:" + repo + " pom:" + pom, 
-			 ex);
+    throw new Exception( ex.getMessage() + " repo:" + repox + " pom:" + pom, 
+                         ex);
   }
 }
 

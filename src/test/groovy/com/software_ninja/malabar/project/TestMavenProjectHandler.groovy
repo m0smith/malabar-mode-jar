@@ -88,14 +88,17 @@ class MavenProjectTester {
    **/
   @Test
   void testMavenImport() {
-    for (File pom : toIterable( pomGenerator("src/test/resources/pom/",~/.*\.pom/ ))) {
-      println "processing " + pom;
-      Map map = new MavenProjectHandler().projectInfo( System.getProperty("user.home") +  "/.m2/repository",
-						       pom.absolutePath);
-      assertNotNull( map['test']);
-      assertNotNull( map['runtime']);
-
-      assertTrue( map['test']['classpath'].size() >= 0)
-    }
+      String defaultRepo =  System.getProperty("user.home") +  "/.m2/repository";
+      for (Pair pair : toIterable( pairs( ensureValues(null , defaultRepo),
+                                         pomGenerator("src/test/resources/pom/",~/.*\.pom/ )))) {
+          File pom = pair.getSecond();
+          println "processing " + pom;
+          Map map = new MavenProjectHandler().projectInfo(pair.getFirst(),
+                                                          pom.absolutePath);
+          assertNotNull( map['test']);
+          assertNotNull( map['runtime']);
+          
+          assertTrue( map['test']['classpath'].size() >= 0);
+      }
   }
 }
