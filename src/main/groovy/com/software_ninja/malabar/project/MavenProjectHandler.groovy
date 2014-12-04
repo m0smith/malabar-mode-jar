@@ -55,7 +55,9 @@ import java.util.Set;
 
 
 
-
+/**
+ * Expand a file name.  Replaces ~ at the begining of the string to $HOME
+ */
 def expandFile(f) {
   if(f.startsWith('~')) {
     return System.getProperty("user.home") + f.substring(1);
@@ -152,7 +154,7 @@ public class MavenProjectsCreator {
 	  boolean rtnval =  ! optional && ! (['activation', 'xerces-impl', 'ant', 
 					      'com.springsource.org.hibernate.validator-4.1.0.GA',
 					      'xerces-impl-2.6.2'].contains(artifactId));
-	  println "" + rtnval + " NODE:" + optional + ' ' + artifactId + " " + parents;
+	  //println "" + rtnval + " NODE:" + optional + ' ' + artifactId + " " + parents;
 	  
 	  return rtnval;
 	  
