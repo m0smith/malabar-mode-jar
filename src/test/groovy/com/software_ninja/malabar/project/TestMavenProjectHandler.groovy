@@ -5,6 +5,7 @@ import static net.java.quickcheck.generator.iterable.Iterables.*
 
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.StatefulGenerator;
+import net.java.quickcheck.collection.Pair;
 
 import org.junit.Test;
 
@@ -16,7 +17,9 @@ import groovy.io.FileType
 class MavenProjectTester {
 
 
-
+  /**
+   * A generator that takes a list and returns the elements in random order
+   */
   def elementGenerator (coll) {
     return new StatefulGenerator<File>() {
 
@@ -56,6 +59,25 @@ class MavenProjectTester {
     
   }
   
+  /**
+   * 
+   */
+  @Test
+  void testExpandFile() {
+    MavenProjectHandler mph = new MavenProjectHandler();
+    String home = System.getProperty("user.home");
+    for (Pair p : toIterable( pairs( characters("~./asdfghghkyiu456") ,nonEmptyStrings()))) {
+        String s = "" + p.getFirst() + p.getSecond();
+        if(s.startsWith("~")) {
+            assertEquals(home + s.substring(1), mph.expandFile(s));
+        }
+        else {
+            assertEquals(s, mph.expandFile(s));
+        }
+    }
+  }
+    
+
   
   /**
    * Properties:

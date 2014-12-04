@@ -54,10 +54,19 @@ import java.util.Set;
 
 
 
+
+
+def expandFile(f) {
+  if(f.startsWith('~')) {
+    return System.getProperty("user.home") + f.substring(1);
+  }
+  return f;
+}
+
 def projectInfo(repo, pom) {
   try {
     x = new MavenProjectsCreator();
-    pjs = x.create(repo, pom)
+    pjs = x.create(expandFile(repo), expandFile(pom))
     return [runtime: x.resolveDependencies(pjs[0], repo, "runtime"),
 	    test:    x.resolveDependencies(pjs[0], repo, "test")]
   } catch (Exception ex) {
