@@ -12,6 +12,9 @@ mainClassName = "com.software_ninja.malabar.Malabar"
 
 repositories {
   mavenCentral()   
+  maven {
+    url "http://artifacts.co.ihc.com/repomgr/content/groups/combined/"
+  }
 }
 
 configurations {
@@ -50,6 +53,23 @@ tasks.withType(Test) {
 
 
 //
+// Running
+//
+
+run {    
+    /* Can pass all the properties: */
+    //systemProperties System.getProperties()
+
+    /* Or just each by name: */
+    //systemProperty "myvariable", System.getProperty("myvariable")
+
+    /* Need to split the space-delimited value in the exec.args */
+  if(System.getProperty("exec.args") != null) {
+    args System.getProperty("exec.args").split()    
+  }
+}
+
+//
 // Deploy to Maven Central 
 // Instructions at:
 // http://jedicoder.blogspot.com/2011/11/automated-gradle-project-deployment-to.html
@@ -84,8 +104,10 @@ gradle.taskGraph.whenReady { taskGraph ->
                        "\n\nPlease enter your signing details.\n\n"
 
         def password = console.readPassword("PGP Private Key Password: ")
+        def ossrhPassword = console.readPassword("Sonatype password: ")
 
 	allprojects { ext."signing.password" = password }
+	allprojects { ext."ossrhPassword" = ossrhPassword }
 
         console.printf "\nThanks.\n\n"
     }
@@ -158,8 +180,10 @@ uploadArchives {
 
 buildscript {
    repositories {
+     maven {   url "http://artifacts.co.ihc.com/repomgr/content/groups/combined/" }
       mavenCentral()
       maven { url "https://oss.sonatype.org/content/groups/public"}
+      
    }
    dependencies {
       classpath 'com.github.townsfolk:gradle-release:1.2'

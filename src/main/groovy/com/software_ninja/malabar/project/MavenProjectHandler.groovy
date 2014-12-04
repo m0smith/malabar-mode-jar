@@ -55,10 +55,15 @@ import java.util.Set;
 
 
 def projectInfo(repo, pom) {
-  x = new MavenProjectsCreator();
-  pjs = x.create(repo, pom)
-  return [runtime: x.resolveDependencies(pjs[0], repo, "runtime"),
-	  test:    x.resolveDependencies(pjs[0], repo, "test")]
+  try {
+    x = new MavenProjectsCreator();
+    pjs = x.create(repo, pom)
+    return [runtime: x.resolveDependencies(pjs[0], repo, "runtime"),
+	    test:    x.resolveDependencies(pjs[0], repo, "test")]
+  } catch (Exception ex) {
+    throw new Exception( ex.getMessage() + " repo:" + repo + " pom:" + pom, 
+			 ex);
+  }
 }
 
 
@@ -135,10 +140,10 @@ public class MavenProjectsCreator {
 	{
 	  String artifactId = node.getDependency().getArtifact().getArtifactId();
 	  boolean optional = node.getDependency().isOptional();
-	  boolean rtnval =  ! optional && ! (['activation',
+	  boolean rtnval =  ! optional && ! (['activation', 'xerces-impl', 'ant', 
 					      'com.springsource.org.hibernate.validator-4.1.0.GA',
 					      'xerces-impl-2.6.2'].contains(artifactId));
-	  //println "" + rtnval + " NODE:" + optional + ' ' + artifactId;
+	  println "" + rtnval + " NODE:" + optional + ' ' + artifactId + " " + parents;
 	  
 	  return rtnval;
 	  
