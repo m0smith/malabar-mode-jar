@@ -45,6 +45,11 @@ import org.sonatype.aether.artifact.Artifact;
 
 import org.sonatype.aether.graph.DependencyNode
 
+import com.software_ninja.malabar.MalabarUtil
+
+import org.codehaus.groovy.control.ErrorCollector;
+import org.codehaus.groovy.control.CompilerConfiguration
+import org.codehaus.groovy.control.customizers.ASTTransformationCustomizer
 
 import java.io.File;
 import java.util.LinkedHashSet;
@@ -53,29 +58,140 @@ import java.util.Properties;
 import java.util.Set;
 
 
+public class MavenProjectHandler {
 
-
-/**
- * Expand a file name.  Replaces ~ at the begining of the string to $HOME
- */
-def expandFile(f) {
-  if(f.startsWith('~')) {
-    return System.getProperty("user.home") + f.substring(1);
+  /**
+   *  cache path [this.getClass().getName()]
+   *             [pom]
+   *  cache keys [timestamp projectInfo cloassLoader]
+   */
+  public Map cache;
+  
+  public MavenProjectHandler(config) {
+    this.cache = config['cache'];
   }
-  return f;
-}
 
-def projectInfo(repo, pom) {
-  try {
-    x = new MavenProjectsCreator();
-    repox = (repo == null ? "~/.m2/repository" : repo);
-    pjs = x.create(expandFile(repox), expandFile(pom))
-    return [runtime: x.resolveDependencies(pjs[0], repox, "runtime"),
-            test:    x.resolveDependencies(pjs[0], repox, "test")]
-  } catch (Exception ex) {
-    throw new Exception( ex.getMessage() + " repo:" + repox + " pom:" + pom, 
-                         ex);
+  /**
+   * with static compiler
+   */
+  def createClassLoader(paths) {
+    def config = new CompilerConfiguration();
+    def acz = new ASTTransformationCustomizer( groovy.transform.CompileStatic );
+    config.addCompilationCustomizers(acz);
+    
+    def rtnval = new GroovyClassLoader(Thread.currentThread().getContextClassLoader() ,config);
+    paths.each( { path ->  rtnval.addURL(new File(path).toURL()); });
+    return rtnval;
   }
+
+  def createCacheEntry(mod, func) {
+    def projectInfo = func();
+    def classpath = projectInfo['test']['classpath'];
+    println classpath
+    def rtnval = [timestamp : mod,
+	      projectInfo : projectInfo,
+	      classLoader : createClassLoader(classpath)];
+    return rtnval;
+  }
+  
+  def lookInCache(pom, func) {
+    def name = this.getClass().getName();
+    def pomFile = new File(pom);
+    def mod = pomFile.lastModified();
+    def cache1 = cache[name];
+    if(cache1 == null) {
+      cache1 = [:]
+      cache.put(name, cache1);
+    }
+    
+    def rtnval = cache1[pom];
+  
+    if(rtnval == null || rtnval['timestamp'] != mod) {
+      rtnval = createCacheEntry(mod , func); 
+      cache[name].put( pom , rtnval);
+    }
+    return rtnval;
+  }
+
+  //
+  // Parsing
+  //
+
+  def handleException(org.codehaus.groovy.control.messages.SyntaxErrorMessage ex) {
+    def cause = ex.getCause();
+    return [endColumn : cause.endColumn,
+	    endLine : cause.endLine,
+	    line : cause.line,
+	    message : cause.message,
+	    sourceLocator : cause.sourceLocator,
+	    startColumn : cause.startColumn,
+	    startLine : cause.startLine];
+  }
+
+  def handleException(org.codehaus.groovy.control.messages.ExceptionMessage ex) {
+    def regex = /.*At \[(\d+):(\d+)\] (.*)/
+    def message = ex.cause.message;
+    def matcher = ( message =~ regex );
+    println matcher.matches()
+    println matcher[0]
+    if (matcher.groupCount() > 0) {
+      def line = matcher[0][1];
+      def col =  matcher[0][2];
+      def source =  matcher[0][3];
+      return [endColumn : (col as int) + 1 + "",
+	      endLine : line,
+	      line : line,
+	      message : message,
+	      sourceLocator : source,
+	      startColumn : col,
+	      startLine : line];
+    }
+    return [message : message];
+  }
+  
+  /**
+   * Parse the script on disk.  Return errors as a list
+   */
+  def parse(repo, pom, scriptIn) {
+    def script = MalabarUtil.expandFile(scriptIn);
+    def cached = lookInCache( pom, { fecthProjectInfo(repo, pom)});
+    try{
+      def classLoader = cached.get('classLoader');
+      classLoader.clearCache();
+      classLoader.parseClass(new File(script));
+      println "parsed fine";
+      return [];
+    } catch (org.codehaus.groovy.control.MultipleCompilationErrorsException ex){
+      println ex
+      def rtnval = [];
+      ErrorCollector collector = ex.getErrorCollector();
+      collector.getErrors().collect( { handleException(it) });
+    }
+    
+    
+  }
+
+  //
+  // Project Info
+  //
+
+  def fecthProjectInfo = { repo, pom -> 
+    try {
+      def x = new MavenProjectsCreator();
+      def repox = (repo == null ? "~/.m2/repository" : repo);
+      def pjs = x.create(MalabarUtil.expandFile(repox), MalabarUtil.expandFile(pom))
+      return [runtime: x.resolveDependencies(pjs[0], repox, "runtime"),
+	      test:    x.resolveDependencies(pjs[0], repox, "test")]
+    } catch (Exception ex) {
+      throw new Exception( ex.getMessage() + " repo:" + repox + " pom:" + pom, 
+			   ex);
+    }
+  }
+  
+  def projectInfo(repo, pom) {
+    return lookInCache(pom, { fecthProjectInfo(repo, pom)} )['projectInfo'];
+  }
+		       
 }
 
 

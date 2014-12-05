@@ -6,13 +6,17 @@ package com.software_ninja.malabar;
 import groovy.grape.Grape
 
 public static void main(String[] args) {
-  new MalabarStart().startArgs(args);
+  new MalabarStart('4429').startArgs(args);
 }
 
 
 class MalabarStart {
 
-  private static String defaultPort = '4428';
+  private String defaultPort = '4428';
+  
+  public MalabarStart() {}
+
+  public MalabarStart(port) { this.defaultPort = port;}
   
   def startArgs(String[] args) {
     println "ARGS: " + args
