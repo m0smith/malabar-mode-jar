@@ -1,3 +1,5 @@
+package com.software_ninja.malabar.project;
+
 import static net.java.quickcheck.generator.PrimitiveGenerators.*
 import static net.java.quickcheck.generator.CombinedGenerators.*
 import static net.java.quickcheck.QuickCheck.*
@@ -8,14 +10,18 @@ import net.java.quickcheck.StatefulGenerator;
 import net.java.quickcheck.collection.Pair;
 
 import org.junit.Test;
+import org.junit.Before;
 
 import static org.junit.Assert.*
 
+import com.software_ninja.malabar.MalabarUtil
 import com.software_ninja.malabar.project.MavenProjectHandler;
+
 import groovy.io.FileType
 
 class MavenProjectTester {
 
+  private Map config;
 
   /**
    * A generator that takes a list and returns the elements in random order
@@ -43,7 +49,7 @@ class MavenProjectTester {
    * Returns a generator that returns the list of pom files.
    **/
   
-  def pomGenerator (rootPath, pattern) { 
+  def pomGenerator (String rootPath, pattern) { 
     List<File> files = [];
     File root = new File(rootPath);
     root.eachFileMatch(pattern) {
@@ -59,20 +65,24 @@ class MavenProjectTester {
     
   }
   
+  @Before
+  public void init() {
+    config = [ cache : [:] ];
+  }
   /**
    * 
    */
   @Test
   void testExpandFile() {
-    MavenProjectHandler mph = new MavenProjectHandler();
+    MavenProjectHandler mph = new MavenProjectHandler( config );
     String home = System.getProperty("user.home");
     for (Pair p : toIterable( pairs( characters("~./asdfghghkyiu456") ,nonEmptyStrings()))) {
-        String s = "" + p.getFirst() + p.getSecond();
+      String s = "" + p.getFirst() + p.getSecond();
         if(s.startsWith("~")) {
-            assertEquals(home + s.substring(1), mph.expandFile(s));
+            assertEquals(home + s.substring(1), MalabarUtil.expandFile(s));
         }
         else {
-            assertEquals(s, mph.expandFile(s));
+            assertEquals(s, MalabarUtil.expandFile(s));
         }
     }
   }
@@ -93,7 +103,7 @@ class MavenProjectTester {
                                          pomGenerator("src/test/resources/pom/",~/.*\.pom/ )))) {
           File pom = pair.getSecond();
           println "processing " + pom;
-          Map map = new MavenProjectHandler().projectInfo(pair.getFirst(),
+          Map map = new MavenProjectHandler(config).projectInfo(pair.getFirst(),
                                                           pom.absolutePath);
           assertNotNull( map['test']);
           assertNotNull( map['runtime']);

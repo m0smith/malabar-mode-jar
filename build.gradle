@@ -34,8 +34,8 @@ dependencies {
   compile 'com.jcabi:jcabi-aether:0.10.1'
   compile 'jline:jline:2.11'
   compile 'org.fusesource.jansi:jansi:1.11'
+  compile 'junit:junit:4.11'
 
-  testCompile 'junit:junit:4.11'
   testCompile 'net.java.quickcheck:quickcheck:0.6'
 
   // imports below here are grabbed via Grape at runtime

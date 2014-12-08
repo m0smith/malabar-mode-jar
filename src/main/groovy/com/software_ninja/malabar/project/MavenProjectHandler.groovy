@@ -51,6 +51,10 @@ import org.codehaus.groovy.control.ErrorCollector;
 import org.codehaus.groovy.control.CompilerConfiguration
 import org.codehaus.groovy.control.customizers.ASTTransformationCustomizer
 
+import org.junit.runner.Result;
+import org.junit.runner.Request;
+import org.junit.runner.JUnitCore;
+
 import java.io.File;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -74,7 +78,7 @@ public class MavenProjectHandler {
   /**
    * with static compiler
    */
-  def createClassLoader(paths) {
+  def createClassLoaderStatic(paths) {
     def config = new CompilerConfiguration();
     def acz = new ASTTransformationCustomizer( groovy.transform.CompileStatic );
     config.addCompilationCustomizers(acz);
@@ -84,13 +88,23 @@ public class MavenProjectHandler {
     return rtnval;
   }
 
+  /**
+   * without static compiler
+   */
+  def createClassLoader(paths) {
+    def rtnval = new GroovyClassLoader(Thread.currentThread().getContextClassLoader());
+    paths.each( { path ->  rtnval.addURL(new File(path).toURL()); });
+    return rtnval;
+  }
+
   def createCacheEntry(mod, func) {
     def projectInfo = func();
     def classpath = projectInfo['test']['classpath'];
     println classpath
     def rtnval = [timestamp : mod,
-	      projectInfo : projectInfo,
-	      classLoader : createClassLoader(classpath)];
+		  projectInfo : projectInfo,
+		  classLoader : createClassLoader(classpath),
+		  classLoaderStatic : createClassLoaderStatic(classpath)];
     return rtnval;
   }
   
@@ -153,11 +167,11 @@ public class MavenProjectHandler {
   /**
    * Parse the script on disk.  Return errors as a list
    */
-  def parse(repo, pom, scriptIn) {
+  def parse(repo, pom, scriptIn, strict) {
     def script = MalabarUtil.expandFile(scriptIn);
     def cached = lookInCache( pom, { fecthProjectInfo(repo, pom)});
     try{
-      def classLoader = cached.get('classLoader');
+      def classLoader = cached.get( Boolean.parseBoolean(strict) ? 'classLoaderStatic':'classLoader');
       classLoader.clearCache();
       classLoader.parseClass(new File(script));
       println "parsed fine";
@@ -171,6 +185,35 @@ public class MavenProjectHandler {
     
     
   }
+
+  /**
+   * Run a unit test
+   */
+
+  def unitTest (repo, pm, scriptIn, method) {    
+    String script = MalabarUtil.expandFile(scriptIn);
+    def cached = lookInCache( pm, { fecthProjectInfo(repo, pm)});
+    try{
+      def classLoader = cached.get('classLoader');
+      def clazz = classLoader.parseClass(new File(script));
+      def request = Request.method(clazz,method);
+      println "UnitTest ..."
+      Result result = new JUnitCore().run(request);
+      println "UnitTest ... Complete:" + result.getFailureCount()
+      return result.getFailureCount();
+    } catch (org.codehaus.groovy.control.MultipleCompilationErrorsException ex){
+      println ex
+      def rtnval = [];
+      ErrorCollector collector = ex.getErrorCollector();
+      collector.getErrors().collect( { handleException(it) });
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      ex.getMessage();
+    }
+    
+
+  }
+
 
   //
   // Project Info
