@@ -15,17 +15,17 @@ class MalabarServer {
     def httpServer = com.sun.net.httpserver.HttpServer.create(addr, 0)
     httpServer.with {
 
-      createContext('/pi/', new JsonHandlerFactory(config).build({params ->
-	def pomIn = params["pom"];
-	def pom = (pomIn == null ? null : MalabarUtil.expandFile(pomIn));
-	mph.projectInfo(params["repo"], pom);}));
-
-      createContext('/parse/', new JsonHandlerFactory(config).build({params ->
-	def pomIn = params["pom"];
-	def pom = (pomIn == null ? null : MalabarUtil.expandFile(pomIn));
-	mph.parse(params["repo"], pom, params["script"]);}));
-      
-      createContext('/stop/', new JsonHandlerFactory(config).build({params ->  httpServer.stop(1); System.exit(0); }));
+        createContext('/pi/', new JsonHandlerFactory(config).build({params ->
+                                                                    def pmIn = params["pm"];
+                                                                    def pm = (pmIn == null ? null : MalabarUtil.expandFile(pmIn));
+                                                                    mph.projectInfo(params["repo"], pm);}));
+        
+        createContext('/parse/', new JsonHandlerFactory(config).build({params ->
+                        def pmIn = params["pm"];
+                    def pm = (pmIn == null ? null : MalabarUtil.expandFile(pmIn));
+                    mph.parse(params["repo"], pm, params["script"]);}));
+        
+        createContext('/stop/', new JsonHandlerFactory(config).build({params ->  httpServer.stop(1); System.exit(0); }));
       
       setExecutor(Executors.newCachedThreadPool())
       start()

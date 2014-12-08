@@ -39,7 +39,7 @@ The pi services returns information from the maven pom.
 | name | default | desc 
 |------|---------|------
 | repo | none    | The location of the maven repo (something like /home/username/.m2/repository)
-| pom  | none    | The location of the pom to parse
+| pm  | none    | The location of the pm to parse
 
 
 
