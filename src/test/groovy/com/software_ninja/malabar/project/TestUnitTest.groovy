@@ -24,10 +24,12 @@ public class TestUnitTestImpl {
 
   @Test
   public void testUnitTest() {
-    String simple = 'src/test/resources/projects/simple/';
+    String simple = 'src/test/projects/simple/';
     String scriptIn = simple + '/src/test/java/com/software_ninja/test/project/AppTest.java';
     String pm = simple + "pom.xml";
     String method = "testApp";
+    println 'http://localhost:4429/test/?pm=' + pm +'&script=' + scriptIn + '&method=' + method;
+    println mph.unitTest (defaultRepo, pm, scriptIn, null);
     println mph.unitTest (defaultRepo, pm, scriptIn, method);
   }
 

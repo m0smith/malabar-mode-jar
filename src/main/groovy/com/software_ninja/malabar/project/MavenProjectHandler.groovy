@@ -187,7 +187,7 @@ public class MavenProjectHandler {
   }
 
   /**
-   * Run a unit test
+   * Run a unit test.  Return a list of failures.
    */
 
   def unitTest (repo, pm, scriptIn, method) {    
@@ -196,11 +196,21 @@ public class MavenProjectHandler {
     try{
       def classLoader = cached.get('classLoader');
       def clazz = classLoader.parseClass(new File(script));
-      def request = Request.method(clazz,method);
+      Request request = Request.method(clazz,method);
       println "UnitTest ..."
+      
+      if( method == null ) {
+	request = Request.aClass(clazz);
+      } else {
+	request = Request.method(clazz,method);
+      }
+
       Result result = new JUnitCore().run(request);
       println "UnitTest ... Complete:" + result.getFailureCount()
-      return result.getFailureCount();
+      return result.getFailures().collect( { [ it.getTestHeader(),
+					       it.getMessage(),
+					       it.getException().getMessage(),
+					       it.getTrace()]} );
     } catch (org.codehaus.groovy.control.MultipleCompilationErrorsException ex){
       println ex
       def rtnval = [];
