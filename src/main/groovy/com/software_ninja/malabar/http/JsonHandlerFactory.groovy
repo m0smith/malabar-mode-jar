@@ -41,9 +41,11 @@ class JsonHandlerFactory {
 	try {
 
 	  httpExchange.responseHeaders.set('Content-Type', 'application/json')
-	  final String query = httpExchange.requestURI.rawQuery
-	  //println query
-	  final java.util.Map params = queryMap(query)
+	  java.util.Map params = httpExchange.getAttribute("parameters");;
+	
+	  //final String query = httpExchange.requestURI.rawQuery
+	  println params
+	   
 	  //println params["repo"]
 	  // if(!query || !query.contains('string')){
 	  // 	httpExchange.sendResponseHeaders(400,0)

@@ -74,7 +74,7 @@ class MavenProjectTester {
    */
   @Test
   void testExpandFile() {
-    MavenProjectHandler mph = new MavenProjectHandler( config );
+
     String home = System.getProperty("user.home");
     for (Pair p : toIterable( pairs( characters("~./asdfghghkyiu456") ,nonEmptyStrings()))) {
       String s = "" + p.getFirst() + p.getSecond();
