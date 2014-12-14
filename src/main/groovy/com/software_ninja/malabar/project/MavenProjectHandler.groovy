@@ -46,6 +46,7 @@ import org.sonatype.aether.artifact.Artifact;
 import org.sonatype.aether.graph.DependencyNode
 
 import com.software_ninja.malabar.MalabarUtil
+import com.software_ninja.malabar.ResourceCache;
 
 import org.codehaus.groovy.control.ErrorCollector;
 import org.codehaus.groovy.control.CompilerConfiguration
@@ -106,20 +107,23 @@ public class MavenProjectHandler {
     def relPaths  =relative.collect({new File (parent, it).getAbsolutePath()});
     println "RELPATHS" + relPaths;
     def classpath = relPaths + 
-      absolute + 
-      projectInfo['test']['resources'].collect({it.directory}) +
+    absolute + 
+    projectInfo['test']['resources'].collect({it.directory}) +
       projectInfo['runtime']['resources'].collect({it.directory}) +
       projectInfo['test']['sources'] +
       projectInfo['runtime']['sources'] +
       projectInfo['test']['elements'] +
       projectInfo['runtime']['elements'] +
       projectInfo['test']['classpath'];
-    println classpath
-    def rtnval = [timestamp : mod,
-		  projectInfo : projectInfo,
-		  classLoader : createClassLoader(classpath),
-		  classLoaderStatic : createClassLoaderStatic(classpath)];
-    return rtnval;
+      def resourceCache = new ResourceCache();
+      classpath.each({resourceCache.submit(it)});
+      //println classpath
+      def rtnval = [timestamp : mod,
+		    projectInfo : projectInfo,
+		    resourceCache : resourceCache,
+		    classLoader : createClassLoader(classpath),
+		    classLoaderStatic : createClassLoaderStatic(classpath)];
+      return rtnval;
   }
   
   def lookInCache(pom, func) {
@@ -291,6 +295,25 @@ public class MavenProjectHandler {
     
 
   }
+
+
+  /**
+   * Get info on a class or resource
+   *
+   *   @param isClass If null or true, look for only class names
+   *   @param useRegex If null or true, treat pattern as a regex
+   */
+  def resource(repo, pm, pattern, max, isClass, useRegex){
+    def cached = lookInCache( pm, { fecthProjectInfo(repo, pm)});
+    def resourceCache = cached['resourceCache'];
+    if( isClass == null || isClass ){
+      resourceCache.findClass(pattern, max);
+    } else if(useRegex == null || useRegex) {
+      resourceCache.find(pattern, max);
+    } else {
+      resourceCache.findExact(pattern, max);
+    }
+  } 
 
 
   //
