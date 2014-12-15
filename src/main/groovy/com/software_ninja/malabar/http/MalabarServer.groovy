@@ -35,6 +35,13 @@ class MalabarServer {
 	mph.unitTest(params["repo"], pm, params["script"], params["method"]);}));
     context.getFilters().add(new ParameterFilter());
         
+    context = httpServer.createContext('/resource/', new JsonHandlerFactory(config).build({params ->
+	def pmIn = params["pm"];
+	def pm = (pmIn == null ? null : MalabarUtil.expandFile(pmIn));
+	mph.resource(params["repo"], pm, params["pattern"], params["max"] as int, params['isClass'] as boolean,
+		     params['useRegex'] as boolean);}));
+    context.getFilters().add(new ParameterFilter());
+        
     context = httpServer.createContext('/add/', new JsonHandlerFactory(config).build({params ->
       println "ADD: " + params
       mph.additionalClasspath(params["relative"], params["abosulte"]);}));

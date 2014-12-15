@@ -116,7 +116,7 @@ public class MavenProjectHandler {
       projectInfo['runtime']['elements'] +
       projectInfo['test']['classpath'];
       def resourceCache = new ResourceCache();
-      classpath.each({resourceCache.submit(it)});
+      classpath.each({if(it != null) resourceCache.submit(it)});
       //println classpath
       def rtnval = [timestamp : mod,
 		    projectInfo : projectInfo,
@@ -306,7 +306,9 @@ public class MavenProjectHandler {
   def resource(repo, pm, pattern, max, isClass, useRegex){
     def cached = lookInCache( pm, { fecthProjectInfo(repo, pm)});
     def resourceCache = cached['resourceCache'];
+    println "RESOURCE:" + resourceCache + " " + isClass + " " + useRegex + " " + max;
     if( isClass == null || isClass ){
+
       resourceCache.findClass(pattern, max);
     } else if(useRegex == null || useRegex) {
       resourceCache.find(pattern, max);

@@ -7,6 +7,7 @@ import static net.java.quickcheck.generator.iterable.Iterables.*
 
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.StatefulGenerator;
+import net.java.quickcheck.collection.Triple;
 import net.java.quickcheck.collection.Pair;
 
 import org.junit.Test;
@@ -111,4 +112,38 @@ class MavenProjectTester {
           assertTrue( map['test']['classpath'].size() >= 0);
       }
   }
+
+  @Test
+  void  testResource(){
+
+    File pomFile = new File(this.getClass().getClassLoader().getResource( "pom/jdom-1.0.pom").toURI());
+    String pom = pomFile.getAbsolutePath();
+    String defaultRepo =  System.getProperty("user.home") +  "/.m2/repository";
+    def mph = new MavenProjectHandler(config);
+    for (Triple data : toIterable( triples(integers(), booleans(), booleans()))){
+      int max = data.getFirst();
+      boolean isClass = data.getSecond();
+      boolean useRegex = data.getThird();
+      def pattern = /S*/;
+      def result =  mph.resource(defaultRepo, pom, pattern, max, isClass, useRegex);
+      int size = result.size();
+      assertTrue( "Size should be <= than max size:" + size + " max:" + max, size <= Math.max(max, 0));
+      //if( size > 0) println result.first();
+    }
+  }
+  @Test
+  void  testResourceFullClass(){
+
+    File pomFile = new File(this.getClass().getClassLoader().getResource( "pom/jdom-1.0.pom").toURI());
+    String pom = pomFile.getAbsolutePath();
+    String defaultRepo =  System.getProperty("user.home") +  "/.m2/repository";
+    def mph = new MavenProjectHandler(config);
+    int max = 10
+    boolean isClass = true;
+    boolean useRegex = false;
+    def pattern = "org.apache.xalan.xsltc.compiler.util.ResultTreeType"
+    def result =  mph.resource(defaultRepo, pom, pattern, max, isClass, useRegex);
+  }
+
+
 }

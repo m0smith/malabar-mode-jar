@@ -12,12 +12,15 @@ class ResourceCache {
   def cache = [];
    
   def submit( String path ) {
-    def ce = new CacheEntry(path);
-    ZipFile file = new ZipFile(path)
-    file.entries().each { entry ->  
-      ce.add(entry.name);
-    }  
-    cache.add(ce);
+    if( path != null && (path.toLowerCase().endsWith(".jar") || path.toLowerCase().endsWith(".zip")) && 
+	new File(path).canRead()) {
+      def ce = new CacheEntry(path);
+      ZipFile file = new ZipFile(path as String)
+      file.entries().each { entry ->  
+	ce.add(entry.name);
+      }  
+      cache.add(ce);
+    }
   }
 
   def findInternal (pattern, max, asRegex, exclude) { 
@@ -120,4 +123,5 @@ class CacheEntryEntry {
 
   public String getKey() { return key;}
   public String getValue() { return value;}
+  public String toString() { return key + "=" + value;}
 }
