@@ -24,7 +24,7 @@ public class TestUnitTestImpl {
 
   @Test
   public void testUnitTest() {
-    String simple = 'src/test/projects/simple/';
+    String simple = 'src/test/resources/projects/simple/';
     String scriptIn = simple + '/src/test/java/com/software_ninja/test/project/AppTest.java';
     String pm = simple + "pom.xml";
     String method = "testApp";

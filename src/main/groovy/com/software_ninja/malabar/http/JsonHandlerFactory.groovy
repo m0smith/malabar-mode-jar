@@ -38,13 +38,16 @@ class JsonHandlerFactory {
     return new HttpHandler(){
       public void handle(HttpExchange httpExchange) throws IOException
       {
+	java.util.Map params = httpExchange.getAttribute("parameters");;
+	  
 	try {
 
 	  httpExchange.responseHeaders.set('Content-Type', 'application/json')
-	  java.util.Map params = httpExchange.getAttribute("parameters");;
 	
 	  //final String query = httpExchange.requestURI.rawQuery
-	  println params
+	  println "QUERY:" +  httpExchange.requestURI.rawQuery
+	  println "METHOD:" +  httpExchange.requestMethod
+	  println "PARAMS:" + params
 	   
 	  //println params["repo"]
 	  // if(!query || !query.contains('string')){
@@ -61,8 +64,15 @@ class JsonHandlerFactory {
 	
 	} catch (Throwable ex) {
 	  httpExchange.sendResponseHeaders(500, 0)
-	  println org.codehaus.groovy.runtime.StackTraceUtils.printSanitizedStackTrace(ex)
-	  ex.printStackTrace(new PrintStream(httpExchange.responseBody));
+	  try {
+	    throw new Exception( "Error handlinfg URL:" + httpExchange.requestURI.rawQuery +
+				 " Method:" + httpExchange.requestMethod + 
+				 " Params:" + params +
+				 " Message: " + ex.getMessage(), ex);
+	  } catch (Exception ex2) {
+	    ex2.printStackTrace(new PrintStream(httpExchange.responseBody));
+	    ex2.printStackTrace();x
+	  }
 	
 	} finally {
 	  httpExchange.close()
