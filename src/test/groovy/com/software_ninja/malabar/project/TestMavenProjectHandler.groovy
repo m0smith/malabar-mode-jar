@@ -145,5 +145,16 @@ class MavenProjectTester {
     def result =  mph.resource(defaultRepo, pom, pattern, max, isClass, useRegex);
   }
 
+  @Test
+  void  testTags(){
+
+    File pomFile = new File(this.getClass().getClassLoader().getResource( "pom/jdom-1.0.pom").toURI());
+    String pom = pomFile.getAbsolutePath();
+    String defaultRepo =  System.getProperty("user.home") +  "/.m2/repository";
+    def mph = new MavenProjectHandler(config);
+    def className = "org.apache.xalan.xsltc.compiler.util.ResultTreeType"
+    def result =  mph.tags(defaultRepo, pom, className);
+  }
+
 
 }

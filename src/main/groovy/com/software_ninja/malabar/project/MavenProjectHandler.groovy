@@ -47,6 +47,7 @@ import org.sonatype.aether.graph.DependencyNode
 
 import com.software_ninja.malabar.MalabarUtil
 import com.software_ninja.malabar.ResourceCache;
+import com.software_ninja.malabar.SemanticReflector;
 
 import org.codehaus.groovy.control.ErrorCollector;
 import org.codehaus.groovy.control.CompilerConfiguration
@@ -316,6 +317,22 @@ public class MavenProjectHandler {
       resourceCache.findExact(pattern, max);
     }
   } 
+
+
+  /**
+   * Get info on a class or resource
+   *
+   *   @param isClass If null or true, look for only class names
+   *   @param useRegex If null or true, treat pattern as a regex
+   */
+  def tags(repo, pm, className){
+    def cached = lookInCache( pm, { fecthProjectInfo(repo, pm)});
+    def classLoader = cached.get('classLoader');
+    new SemanticReflector().asSemanticTag(classLoader.loadClass(className));
+
+  } 
+
+
 
 
   //
