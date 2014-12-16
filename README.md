@@ -1,5 +1,5 @@
 # malabar-mode-jar
- A support JAR for malabar-mode: better Java mode for Emacs
+ A support JAR for malabar-mode: JVM Integration minor mode for EMACS
 
 See malabar-mode: https://github.com/m0smith/malabar-mode
 
@@ -7,11 +7,13 @@ See malabar-mode: https://github.com/m0smith/malabar-mode
 
 ## Standalone
 
+
 ```
 gradle run
 ```
 
 or to set the port
+
 
 ```
 gradle -Dexec.args="-p 4429" run
@@ -22,7 +24,7 @@ gradle -Dexec.args="-p 4429" run
 
 ```groovy
 def malabar = { classLoader = new groovy.lang.GroovyClassLoader();
-    Map[] grapez = [[group: 'com.software-ninja' , module:'malabar', version:'2.0.2']]
+    Map[] grapez = [[group: 'com.software-ninja' , module:'malabar', version:'2.0.4']]
     groovy.grape.Grape.grab(classLoader: classLoader, grapez)
     classLoader.loadClass('com.software_ninja.malabar.Malabar').newInstance().startCL(classLoader); }; 
 malabar();
@@ -30,22 +32,106 @@ malabar();
 
 Be sure the version in the second line is set to the lastest in central: http://search.maven.org/#search|gav|1|g%3A%22com.software-ninja%22%20AND%20a%3A%22malabar%22
 
+## Ports
+
+These are the ports used by default for each mode of running:
+
+- unit test: 4426
+- groovysh: 4428
+- standalone: 4429
+
+
 # Services
 malabar-mode-jar provides REST-ish services for interacting with the JVM and package management software (like maven)
 
+## add
+The add services adds additional classpath entries to the project's classloader
+
+### Parameters
+
+| name | default | desc 
+|------|---------|------
+| repo | none    | The location of the maven repo (something like /home/username/.m2/repository)
+| pm  | none    | The location of the pm to parse
+| relative  | none    | classpath entries relative to the project root dir, as a JSON list of strings
+| absolute  | none    | absolute path classpath entries  as a JSON list of strings
+
 ## pi
 The pi services returns information from the maven pom.
+
 ### Parameters
+
 | name | default | desc 
 |------|---------|------
 | repo | none    | The location of the maven repo (something like /home/username/.m2/repository)
 | pm  | none    | The location of the pm to parse
 
 
+## parse
+The parse services parses a source file or block of source code and returns a list of errors
+
+### Parameters
+
+| name | default | desc 
+|------|---------|------
+| repo | ~/.m2/repository    | The location of the maven repo (something like /home/username/.m2/repository)
+| pm  | none    | The location of the pm to parse
+| script  | none    | The path on disk to the script to parse
+| scriptBody  | none    | The actual script to parse
+| strict  | none    | If true, force the parse to strict/static compilation
+
+## resource
+The resource services provides access to classes and other resources on the project classpath
+
+### Parameters
+
+| name | default | desc 
+|------|---------|------
+| repo | ~/.m2/repository    | The location of the maven repo (something like /home/username/.m2/repository)
+| pm  | none    | The location of the pm to parse
+| pattern  | none    | The pattern to search for
+| max  | none    | The maximum number of results to return
+| isClass  | true   | If true, only search for classes, If false, also return files. 
+| useRegex  | true    | If true, treat pattern as a regex.  Otherwise, just treat it as a substring
+
+## stop
+The tags service shutsdown the http server and the JVM using System.exit.
+
+### Parameters
+
+| name | default | desc 
+|------|---------|------
+
+## tags
+The tags service returns the semantic tags for a class
+
+### Parameters
+
+| name | default | desc 
+|------|---------|------
+| repo | ~/.m2/repository    | The location of the maven repo (something like /home/username/.m2/repository)
+| pm  | none    | The location of the pm to parse
+| class  | none    | The binary or fully-qualified class name to reflect
+
+
+## test
+The test service runs a unit test on either a whole class or just a single method
+
+### Parameters
+
+| name | default | desc 
+|------|---------|------
+| repo | ~/.m2/repository    | The location of the maven repo (something like /home/username/.m2/repository)
+| pm  | none    | The location of the pm to parse
+| script  | none    | The path on disk to the script to parse
+| method  | none    | If not null, the name of the method to run.  If null, null all tests in the class
+
 
 # Hacking
 
-All development is done on the 'master' branch in as part of a SNAPSHOP.  When a release needs to happen, the maven release plugin is used to tag the build and push it to maven central.
+All development is done on the 'master' branch in as part of a
+SNAPSHOT.  When a release needs to happen, the maven release plugin is
+used to tag the build and push it to maven central.
 
 # Boring legal stuff
 
