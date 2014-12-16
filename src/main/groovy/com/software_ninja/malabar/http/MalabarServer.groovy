@@ -50,7 +50,7 @@ class MalabarServer {
         
     context = httpServer.createContext('/add/', new JsonHandlerFactory(config).build({params ->
       println "ADD: " + params
-      mph.additionalClasspath(params["relative"], params["abosulte"]);}));
+      mph.additionalClasspath(params["relative"], params["absolute"]);}));
     context.getFilters().add(new ParameterFilter());
         
     context = httpServer.createContext('/stop/', new JsonHandlerFactory(config).build({params ->  httpServer.stop(1); System.exit(0); }));

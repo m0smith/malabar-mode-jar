@@ -150,7 +150,7 @@ public class MavenProjectHandler {
   // Add extra class path elements
   //
 
-  def additionalClasspath(relativeJson ,abosulteJson) {
+  def additionalClasspath(relativeJson ,absoulteJson) {
     
     this.relative = relativeJson != null ? new groovy.json.JsonSlurper().parseText (relativeJson ) : [];
     this.absolute = absoluteJson != null ? new groovy.json.JsonSlurper().parseText (absoluteJson ) : [];
