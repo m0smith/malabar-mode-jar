@@ -22,15 +22,19 @@ import java.lang.reflect.*;
 
 class Symbol
 {
-    def name;
+  def name;
+  
+  def Symbol(name) {
+    this.name = name;
+  }
+  
+  String toString() {
+    name
+  }
 
-    def Symbol(name) {
-        this.name = name;
-    }
-
-    String toString() {
-        name
-    }
+  String toJson() {
+    name
+  }
 }
 
 
@@ -53,7 +57,7 @@ class SemanticReflector
     def declaringClass = new Symbol(":declaring-class");
 
     def modifierSpec(modifiers) {
-        modifiers ? [ typemodifiers, Modifier.toString(modifiers).tokenize() ] : []
+      modifiers ? [ typemodifiers.name, Modifier.toString(modifiers).tokenize() ] : []
     }
     
     def typeSpec(type, variable=false) {
@@ -71,37 +75,37 @@ class SemanticReflector
                 baseType = baseType.genericComponentType
             }
             if (dim) {
-                extra = [ dereference, dim ]
+	      extra = [ dereference.name, dim ]
             }
         }
 
-        [ this.type, typeString(baseType , true) ] + extra
+        [ this.type.name, typeString(baseType , true) ] + extra
     }
     
     def templateSpec(typeParameters) {
-        typeParameters ? [ this.templateSpecifier, "<" + typeParameters.join(",") + ">" ] : []
+      typeParameters ? [ this.templateSpecifier.name, "<" + typeParameters.join(",") + ">" ] : []
     }
     
     def argumentSpec(arguments) {
         int counter = -1;
-        [ this.arguments, arguments.collect {
+        [ this.arguments.name, arguments.collect {
                 counter++;
                 variable("arg${counter}", it)
             } ]
     }
 
     def throwSpec(exceptions) {
-        exceptions ? [ this.throwsSym, exceptions.collect {
+      exceptions ? [ this.throwsSym.name, exceptions.collect {
                 typeString(it, true)
             }.sort() ] : []
     }
 
     def declaringSpec(declarer) {
-        declarer ? [ declaringClass, declarer.name ] : []
+      declarer ? [ declaringClass.name, declarer.name ] : []
     }
     
     def variable(name, type, declarer=null, modifiers=null) {
-        [ name, variable,
+      [ name, variable.name,
           modifierSpec(modifiers) +
           typeSpec(type, true) +
           declaringSpec(declarer) ]
@@ -110,8 +114,8 @@ class SemanticReflector
     def function(name, parameterTypes, declarer,
                  modifiers=null, type=null, typeParameters=null, exceptions=null,
                  constructor=false) {
-        [ name, function,
-          (constructor ? [ constructorFlag, t ] : []) +
+      [ name, function.name,
+	(constructor ? [ constructorFlag.name, t.name ] : []) +
           modifierSpec(modifiers) +
           argumentSpec(parameterTypes) +
           typeSpec(type) +
@@ -196,17 +200,17 @@ class SemanticReflector
                 classMembers << item
         }
 
-        [ c.name, typeSym,
+        [ c.name, typeSym.name,
           modifierSpec(c.modifiers) +
           (c.superclass ? [ superclasses, typeString(c.genericSuperclass, true) ] : []) +
           (c.interfaces ? [ interfaces, c.genericInterfaces.collect {
                   typeString(it, true)
               } ] : []) +
           templateSpec(c.typeParameters) +
-          [ members, classMembers.collect {
-                  asSemanticTagList(it)
+          [ members.name, classMembers.collect {
+	      asSemanticTagList(it)
               } ] +
-          [ type, tag ] +
+          [ type.name, tag ] +
           declaringSpec(c.declaringClass) ]
     }
 
