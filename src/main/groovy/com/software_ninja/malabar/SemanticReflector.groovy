@@ -105,7 +105,7 @@ class SemanticReflector
     }
     
     def variable(name, type, declarer=null, modifiers=null) {
-      [ name, variable.name,
+      [ name.toString(), variable.name,
           modifierSpec(modifiers) +
           typeSpec(type, true) +
           declaringSpec(declarer) ]
@@ -202,8 +202,8 @@ class SemanticReflector
 
         [ c.name, typeSym.name,
           modifierSpec(c.modifiers) +
-          (c.superclass ? [ superclasses, typeString(c.genericSuperclass, true) ] : []) +
-          (c.interfaces ? [ interfaces, c.genericInterfaces.collect {
+          (c.superclass ? [ superclasses.name, typeString(c.genericSuperclass, true) ] : []) +
+          (c.interfaces ? [ interfaces.name , c.genericInterfaces.collect {
                   typeString(it, true)
               } ] : []) +
           templateSpec(c.typeParameters) +
