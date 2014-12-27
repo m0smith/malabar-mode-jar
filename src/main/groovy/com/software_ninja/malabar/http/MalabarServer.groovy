@@ -41,6 +41,18 @@ class MalabarServer {
 	mph.tags(params["repo"], pm, params["class"]);}));
     context.getFilters().add(new ParameterFilter());
         
+    context = httpServer.createContext('/spawn/', new JsonHandlerFactory(config).build({params ->
+      
+      com.software_ninja.malabar.lang.NewVM.startSecondJVM(params["version"], params["jdk"], 
+							   params["port"], params["cwd"], 
+							   true);
+      [ port : params['port'],
+	jdk  : params['jdk'],
+	version  : params['version'],
+	cwd  : params['cwd'],
+	"class"  : params['class']] }));
+    context.getFilters().add(new ParameterFilter());
+        
     context = httpServer.createContext('/resource/', new JsonHandlerFactory(config).build({params ->
 	def pmIn = params["pm"];
 	def pm = (pmIn == null ? null : MalabarUtil.expandFile(pmIn));
@@ -55,7 +67,8 @@ class MalabarServer {
         
     context = httpServer.createContext('/stop/', new JsonHandlerFactory(config).build({params ->  httpServer.stop(1); System.exit(0); }));
     context.getFilters().add(new ParameterFilter());
-      
+
+
     httpServer.setExecutor(Executors.newCachedThreadPool())
     httpServer.start()
 

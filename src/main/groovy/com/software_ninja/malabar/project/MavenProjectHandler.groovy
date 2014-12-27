@@ -48,6 +48,7 @@ import org.sonatype.aether.graph.DependencyNode
 import com.software_ninja.malabar.MalabarUtil
 import com.software_ninja.malabar.ResourceCache;
 import com.software_ninja.malabar.SemanticReflector;
+import com.software_ninja.malabar.lang.GroovyParser;
 
 import org.codehaus.groovy.control.ErrorCollector;
 import org.codehaus.groovy.control.CompilerConfiguration
@@ -118,12 +119,14 @@ public class MavenProjectHandler {
       projectInfo['test']['classpath'];
       def resourceCache = new ResourceCache();
       classpath.each({if(it != null) resourceCache.submit(it)});
+      def staticClassloader = createClassLoaderStatic(classpath);
       //println classpath
       def rtnval = [timestamp : mod,
 		    projectInfo : projectInfo,
 		    resourceCache : resourceCache,
+		    parsers : [ groovy : new GroovyParser(staticClassloader)],
 		    classLoader : createClassLoader(classpath),
-		    classLoaderStatic : createClassLoaderStatic(classpath)];
+		    classLoaderStatic : staticClassloader];
       return rtnval;
   }
   
@@ -235,11 +238,14 @@ public class MavenProjectHandler {
 
       def classLoader = cached.get( Boolean.parseBoolean(strict) ? 'classLoaderStatic':'classLoader');
       classLoader.clearCache();
+      def parser = cached['parsers']['groovy'];
       if(scriptBody == null) {
 	def script = MalabarUtil.expandFile(scriptIn);
-	classLoader.parseClass(new File(script));
+	parser.parse(new File(script));
+	//classLoader.parseClass(new File(script));
       }  else {
-	classLoader.parseClass(scriptBody as String);
+	parser.parse(scriptBody);
+	//classLoader.parseClass(scriptBody as String);
       }
       println "parsed fine";
       return [];

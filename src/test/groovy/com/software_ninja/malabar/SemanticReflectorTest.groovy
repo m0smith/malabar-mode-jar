@@ -36,12 +36,13 @@ class SemanticReflectorTest
   def function = "function";
   def t = "t";
   def type = "type";
-  String arg0 =   "arg0";
+  String arg0 =   "arg0"; 
 
-  @Before
+  @Before 
   void setup() {
      sr = new SemanticReflector();
   }
+
   
     @Test
     void noFields() {
