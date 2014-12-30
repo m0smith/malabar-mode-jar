@@ -253,7 +253,7 @@ public class MavenProjectHandler {
 	//classLoader.parseClass(scriptBody as String);
       }
       println "parsed fine";
-      return ["class" : rtnval.getName() ];
+      return [ ];
     } catch (org.codehaus.groovy.control.MultipleCompilationErrorsException ex){
       ex.printStackTrace();
       def rtnval = [];

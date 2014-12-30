@@ -24,7 +24,7 @@ class MalabarServer {
     context.getFilters().add(new ParameterFilter());
     
     context = httpServer.createContext('/parse/', new JsonHandlerFactory(config).build({params ->
-	def pmIn = params["pm"];
+	String pmIn = params["pm"];
 	def pm = (pmIn == null ? null : MalabarUtil.expandFile(pmIn));
 	mph.parse(params["repo"], pm, params["script"], params["scriptBody"], params["strict"]);}));
     context.getFilters().add(new ParameterFilter());
@@ -108,6 +108,7 @@ class ParameterFilter extends Filter {
         Map<String, Object> parameters = new HashMap<String, Object>();
         URI requestedUri = exchange.getRequestURI();
         String query = requestedUri.getRawQuery();
+	//println "GET QUERY:" + query;
         parseQuery(query, parameters);
         exchange.setAttribute("parameters", parameters);
     }
@@ -119,10 +120,12 @@ class ParameterFilter extends Filter {
             @SuppressWarnings("unchecked")
             Map<String, Object> parameters =
                 (Map<String, Object>)exchange.getAttribute("parameters");
+	    //println "POST PARAMETERS:" + parameters;
             InputStreamReader isr =
                 new InputStreamReader(exchange.getRequestBody(),"utf-8");
             BufferedReader br = new BufferedReader(isr);
             String query = br.readLine();
+	    //println "POST QUERY:" + query;
             parseQuery(query, parameters);
         }
     }

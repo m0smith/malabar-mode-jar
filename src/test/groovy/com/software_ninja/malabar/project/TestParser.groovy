@@ -32,7 +32,7 @@ public class TestParserImpl {
     println 'http://localhost:4429/parse/?pm=' + pm +'&script=' + scriptIn ;
 
     def actual = mph.parse(defaultRepo, pm, scriptIn, null, "false");
-    assertEquals("Wrong class:" + actual, actual['class'], 'com.software_ninja.test.project.AppTest');
+    assertEquals( [], actual)
 
 
 
