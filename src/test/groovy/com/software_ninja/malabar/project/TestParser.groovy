@@ -24,14 +24,19 @@ public class TestParserImpl {
 
   @Test
   public void testParser() {
-    String simple = 'src/test/projects/simple/';
+    String simple = 'src/test/resources/projects/simple/';
     String scriptIn = simple + '/src/test/java/com/software_ninja/test/project/AppTest.java';
     String pm = simple + "pom.xml";
     String method = "testApp";
+
     println 'http://localhost:4429/parse/?pm=' + pm +'&script=' + scriptIn ;
-    Class<?> actual = mph.parse(defaultRepo, pm, scriptIn, null, false);
-    assertEquals("Wrong class:" + actual.getName(), actual.getName(), "hamster");
-    println mph.parse(defaultRepo, pm, scriptIn, null, true);
+
+    def actual = mph.parse(defaultRepo, pm, scriptIn, null, "false");
+    assertEquals("Wrong class:" + actual, actual['class'], 'com.software_ninja.test.project.AppTest');
+
+
+
+    println mph.parse(defaultRepo, pm, scriptIn, null, "true");
   }
 
 }

@@ -14,11 +14,12 @@ public class NewVM {
     def ii = jdkPath + "bin/javaw.exe"
     //println(classpath);
     ProcessBuilder processBuilder =   new ProcessBuilder(ii, "-cp", 
-							 classpath, 
+							 classpath,
+							 '-Xmx128m',
 							 'com.software_ninja.malabar.Malabar',
 							 "-p", 
 							 port);
-    //    processBuilder.directory(new File(cwd));
+    processBuilder.directory(new File(cwd));
     processBuilder.redirectErrorStream(redirectStream);
     processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
     processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT);

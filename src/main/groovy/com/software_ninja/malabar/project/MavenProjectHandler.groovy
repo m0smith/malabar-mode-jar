@@ -153,7 +153,7 @@ public class MavenProjectHandler {
   // Add extra class path elements
   //
 
-  def additionalClasspath(relativeJson ,absoulteJson) {
+  def additionalClasspath(relativeJson ,absoluteJson) {
     
     this.relative = relativeJson != null ? new groovy.json.JsonSlurper().parseText (relativeJson ) : [];
     this.absolute = absoluteJson != null ? new groovy.json.JsonSlurper().parseText (absoluteJson ) : [];
@@ -239,16 +239,19 @@ public class MavenProjectHandler {
       def classLoader = cached.get( Boolean.parseBoolean(strict) ? 'classLoaderStatic':'classLoader');
       classLoader.clearCache();
       def parser = cached['parsers']['groovy'];
+      def rtnval = null;
       if(scriptBody == null) {
 	def script = MalabarUtil.expandFile(scriptIn);
-	parser.parse(new File(script));
+	println "PArsing script:" + script + " with parser:" + parser;
+	rtnval = parser.parse(new File(script));
 	//classLoader.parseClass(new File(script));
       }  else {
-	parser.parse(scriptBody);
+	println "PArsing scriptBody: with parser:" + parser;
+	rtnval = parser.parse(scriptBody);
 	//classLoader.parseClass(scriptBody as String);
       }
       println "parsed fine";
-      return [];
+      return ["class" : rtnval.getName() ];
     } catch (org.codehaus.groovy.control.MultipleCompilationErrorsException ex){
       ex.printStackTrace();
       def rtnval = [];
@@ -270,9 +273,10 @@ public class MavenProjectHandler {
     def cached = lookInCache( pm, { fecthProjectInfo(repo, pm)});
     try{
       def classLoader = cached.get('classLoader');
+      classLoader.clearCache();
       def clazz = classLoader.parseClass(new File(script));
       Request request = Request.method(clazz,method);
-      println "UnitTest ..."
+      println "UnitTest "+ clazz.getName() + " ..."
       
       if( method == null ) {
 	request = Request.aClass(clazz);

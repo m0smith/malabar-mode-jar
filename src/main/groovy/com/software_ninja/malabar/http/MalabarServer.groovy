@@ -45,11 +45,11 @@ class MalabarServer {
       
       com.software_ninja.malabar.lang.NewVM.startSecondJVM(params["version"], params["jdk"], 
 							   params["port"], params["cwd"], 
-							   true);
+							   true); 
       [ port : params['port'],
 	jdk  : params['jdk'],
-	version  : params['version'],
-	cwd  : params['cwd'],
+	version : params['version'],
+	cwd  : System.getProperty("user.dir"),
 	"class"  : params['class']] }));
     context.getFilters().add(new ParameterFilter());
         
