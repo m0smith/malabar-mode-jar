@@ -107,6 +107,7 @@ public class MavenProjectHandler {
     def projectInfo = func();
     def parent = pomFile.getParent();
     def relPaths  =relative.collect({new File (parent, it).getAbsolutePath()});
+    def bootClasspath = System.getProperty("sun.boot.class.path");
     println "RELPATHS" + relPaths;
     def classpath = relPaths + 
     absolute + 
@@ -119,6 +120,7 @@ public class MavenProjectHandler {
       projectInfo['test']['classpath'];
       def resourceCache = new ResourceCache();
       classpath.each({if(it != null) resourceCache.submit(it)});
+      bootClasspath.split(System.getProperty("path.separator")).each({if(it != null) resourceCache.submit(it)});
       def staticClassloader = createClassLoaderStatic(classpath);
       //println classpath
       def rtnval = [timestamp : mod,
