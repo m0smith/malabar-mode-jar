@@ -5,7 +5,7 @@ import  com.software_ninja.test.project.App;
 
 import org.junit.Test;
 import static org.junit.Assert.*; 
-
+ 
 /**
  * Unit test for simple App.
  */
@@ -15,7 +15,7 @@ public class AppTest
      * Rigourous Test :-)
      */
 
-    App app = new App();
+    App app = new App();  
     
     @Test
     public void testApp()

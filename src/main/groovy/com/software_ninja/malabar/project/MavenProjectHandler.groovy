@@ -52,6 +52,7 @@ import com.software_ninja.malabar.MalabarUtil
 import com.software_ninja.malabar.ResourceCache;
 import com.software_ninja.malabar.SemanticReflector;
 import com.software_ninja.malabar.lang.GroovyParser;
+import com.software_ninja.malabar.lang.JavaParser;
 
 import org.codehaus.groovy.control.ErrorCollector;
 import org.codehaus.groovy.control.CompilerConfiguration
@@ -132,7 +133,8 @@ public class MavenProjectHandler {
 		    projectInfo : projectInfo,
 		    resourceCache : resourceCache,
 		    parsers : [ "groovy-strict" : new GroovyParser(staticClassloader),
-				groovy          : new GroovyParser(classloader)],
+				groovy          : new GroovyParser(classloader),
+				java            : new JavaParser(classloader)],
 		    classLoader : classloader,
 		    classLoaderStatic : staticClassloader];
       return rtnval;
@@ -172,38 +174,7 @@ public class MavenProjectHandler {
   // Parsing
   //
 
-  def handleException(org.codehaus.groovy.control.messages.SyntaxErrorMessage ex) {
-    def cause = ex.getCause();
-    return [endColumn : cause.endColumn,
-	    endLine : cause.hasProperty('endLine')? cause.endLine :cause.line,
-	    line : cause.line,
-	    message : cause.message,
-	    sourceLocator : cause.sourceLocator,
-	    startColumn : cause.startColumn,
-	    column : cause.startColumn,
-	    startLine : cause.hasProperty('startLine')? cause.startLine :cause.line];
-  }
 
-  def handleException(org.codehaus.groovy.control.messages.ExceptionMessage ex) {
-    def regex = /.*At \[(\d+):(\d+)\] (.*)/
-    def message = ex.cause.message;
-    def matcher = ( message =~ regex );
-    println matcher.matches()
-    println matcher[0]
-    if (matcher.groupCount() > 0) {
-      def line = matcher[0][1];
-      def col =  matcher[0][2];
-      def source =  matcher[0][3];
-      return [endColumn : (col as int) + 1 + "",
-	      endLine : line,
-	      line : line,
-	      message : message,
-	      sourceLocator : source,
-	      startColumn : col,
-	      startLine : line];
-    }
-    return [message : message];
-  }
   def handleUnitTestCompileException(org.codehaus.groovy.control.messages.SyntaxErrorMessage ex) {
     def cause = ex.getCause();
     return [ "Compile Error (" + cause.line +',' + cause.startColumn +")", 
@@ -257,12 +228,8 @@ public class MavenProjectHandler {
 
       }
       println "parsed fine";
-      return [ ];
-    } catch (org.codehaus.groovy.control.MultipleCompilationErrorsException ex){
-      ex.printStackTrace();
-      def rtnval = [];
-      ErrorCollector collector = ex.getErrorCollector();
-      collector.getErrors().collect( { handleException(it) });
+      rtnval['class'] == null ? rtnval['errors'] : [];
+
     } catch (Exception ex){
       ex.printStackTrace();
     }
@@ -279,7 +246,14 @@ public class MavenProjectHandler {
     def cached = lookInCache( pm, { fecthProjectInfo(repo, pm)});
     try{
       def parser = cached['parsers'][parserName];
-      def clazz = parser.parse(new File(script));
+      def parseResult = parser.parse(new File(script));
+      def clazz = parseResult['class'];
+      if(clazz == null) {
+	return parseResult['errors'].collect( { [it['header'],
+						 it['message'],
+						 it['exceptionMessage'],
+						 it['stackTrace']]});
+      }
       Request request = Request.method(clazz,method);
       println "UnitTest "+ clazz.getName() + " ..."
       
@@ -295,11 +269,6 @@ public class MavenProjectHandler {
 					       it.getMessage(),
 					       it.getException().getMessage(),
 					       it.getTrace()]} );
-    } catch (org.codehaus.groovy.control.MultipleCompilationErrorsException ex){
-      println ex
-      def rtnval = [];
-      ErrorCollector collector = ex.getErrorCollector();
-      collector.getErrors().collect( { handleUnitTestCompileException(it) });
     } catch (Exception ex) {
       ex.printStackTrace();
       [[ "Compile Error",
