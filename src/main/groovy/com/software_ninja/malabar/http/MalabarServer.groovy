@@ -26,13 +26,15 @@ class MalabarServer {
     context = httpServer.createContext('/parse/', new JsonHandlerFactory(config).build({params ->
 	String pmIn = params["pm"];
 	def pm = (pmIn == null ? null : MalabarUtil.expandFile(pmIn));
-	mph.parse(params["repo"], pm, params["script"], params["scriptBody"], params["strict"]);}));
+	mph.parse(params["repo"], pm, params["script"], params["scriptBody"],
+		  params['parser']);}));
     context.getFilters().add(new ParameterFilter());
     
     context = httpServer.createContext('/test/', new JsonHandlerFactory(config).build({params ->
 	def pmIn = params["pm"];
 	def pm = (pmIn == null ? null : MalabarUtil.expandFile(pmIn));
-	mph.unitTest(params["repo"], pm, params["script"], params["method"]);}));
+	mph.unitTest(params["repo"], pm, params["script"], params["method"],
+		     params['parser']);}));
     context.getFilters().add(new ParameterFilter());
         
     context = httpServer.createContext('/tags/', new JsonHandlerFactory(config).build({params ->

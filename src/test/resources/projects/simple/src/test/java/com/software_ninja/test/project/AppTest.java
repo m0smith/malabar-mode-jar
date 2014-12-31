@@ -1,4 +1,5 @@
 package com.software_ninja.test.project;
+
 import  com.software_ninja.test.project.App;
 //import  com.software_ninja.test.project.App2;
 
@@ -13,6 +14,8 @@ public class AppTest
     /**
      * Rigourous Test :-)
      */
+
+    App app = new App();
     
     @Test
     public void testApp()
@@ -24,5 +27,10 @@ public class AppTest
     public void failApp()  
     {
         fail( "This always fails" );
+    }
+
+    @Test
+    public void testBoolean() throws Exception {
+	assertEquals(true, app.getTrue());
     }
 }

@@ -10,7 +10,9 @@ public class GroovyParser implements Parser {
   }
   
   Class<?> parse(File f) {
-    classloader.parseClass(f);
+    def code = new GroovyCodeSource(f);
+    code.setCachable(false);
+    classloader.parseClass(code);
   }
   
   Class<?> parse(String s) {

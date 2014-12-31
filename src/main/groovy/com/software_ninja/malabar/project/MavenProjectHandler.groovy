@@ -25,6 +25,9 @@ package com.software_ninja.malabar.project;
 //import com.google.common.collect.ImmutableList;
 //import org.gradle.api.Transformer;
 //import org.gradle.internal.SystemProperties;
+
+
+
 import org.apache.maven.execution.*;
 import org.apache.maven.project.*;
 import org.apache.maven.settings.Settings;
@@ -121,13 +124,16 @@ public class MavenProjectHandler {
       def resourceCache = new ResourceCache();
       classpath.each({if(it != null) resourceCache.submit(it)});
       bootClasspath.split(System.getProperty("path.separator")).each({if(it != null) resourceCache.submit(it)});
+
       def staticClassloader = createClassLoaderStatic(classpath);
+      def classloader = createClassLoader(classpath);
       //println classpath
       def rtnval = [timestamp : mod,
 		    projectInfo : projectInfo,
 		    resourceCache : resourceCache,
-		    parsers : [ groovy : new GroovyParser(staticClassloader)],
-		    classLoader : createClassLoader(classpath),
+		    parsers : [ "groovy-strict" : new GroovyParser(staticClassloader),
+				groovy          : new GroovyParser(classloader)],
+		    classLoader : classloader,
 		    classLoaderStatic : staticClassloader];
       return rtnval;
   }
@@ -232,25 +238,23 @@ public class MavenProjectHandler {
   /**
    * Parse the script on disk.  Return errors as a list
    */
-  def parse(repo, pom, scriptIn, scriptBody, strict) {
+  def parse(repo, pom, scriptIn, scriptBody, parserName) {
     println "Start Parse";
     try{
 
       def cached = lookInCache( pom, { fecthProjectInfo(repo, pom)});
 
-      def classLoader = cached.get( Boolean.parseBoolean(strict) ? 'classLoaderStatic':'classLoader');
-      classLoader.clearCache();
-      def parser = cached['parsers']['groovy'];
+      def parser = cached['parsers'][parserName];
       def rtnval = null;
       if(scriptBody == null) {
 	def script = MalabarUtil.expandFile(scriptIn);
 	println "PArsing script:" + script + " with parser:" + parser;
 	rtnval = parser.parse(new File(script));
-	//classLoader.parseClass(new File(script));
+
       }  else {
 	println "PArsing scriptBody: with parser:" + parser;
 	rtnval = parser.parse(scriptBody);
-	//classLoader.parseClass(scriptBody as String);
+
       }
       println "parsed fine";
       return [ ];
@@ -270,13 +274,12 @@ public class MavenProjectHandler {
    * Run a unit test.  Return a list of failures.
    */
 
-  def unitTest (repo, pm, scriptIn, method) {    
+  def unitTest (repo, pm, scriptIn, method, parserName) {    
     String script = MalabarUtil.expandFile(scriptIn);
     def cached = lookInCache( pm, { fecthProjectInfo(repo, pm)});
     try{
-      def classLoader = cached.get('classLoader');
-      classLoader.clearCache();
-      def clazz = classLoader.parseClass(new File(script));
+      def parser = cached['parsers'][parserName];
+      def clazz = parser.parse(new File(script));
       Request request = Request.method(clazz,method);
       println "UnitTest "+ clazz.getName() + " ..."
       

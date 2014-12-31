@@ -10,4 +10,9 @@ public class App
     {
         System.out.println( "Hello World!" );
     }
+
+    
+    public boolean getTrue() {
+	return true;
+    }
 }

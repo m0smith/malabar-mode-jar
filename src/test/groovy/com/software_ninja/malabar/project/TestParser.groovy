@@ -31,12 +31,12 @@ public class TestParserImpl {
 
     println 'http://localhost:4429/parse/?pm=' + pm +'&script=' + scriptIn ;
 
-    def actual = mph.parse(defaultRepo, pm, scriptIn, null, "false");
+    def actual = mph.parse(defaultRepo, pm, scriptIn, null, "groovy");
     assertEquals( [], actual)
 
 
 
-    println mph.parse(defaultRepo, pm, scriptIn, null, "true");
+    println mph.parse(defaultRepo, pm, scriptIn, null, "groovy-strict");
   }
 
 }
