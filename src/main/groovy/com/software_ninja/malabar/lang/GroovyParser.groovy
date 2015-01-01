@@ -68,9 +68,19 @@ public class GroovyParser implements Parser {
     }
   }
 
-  
-  Class<?> parse(String s) {
-    classloader.parseClass(s);
+   
+  def parse(String s) {
+    try {
+      return ["class": classloader.parseClass(s),
+	      "errors" : []]
+    } catch (org.codehaus.groovy.control.MultipleCompilationErrorsException ex){
+      ex.printStackTrace();
+      def rtnval = [];
+      ErrorCollector collector = ex.getErrorCollector();
+      ["class" : null,
+       "errors" : collector.getErrors().collect( { handleException(it) }) ];
+    }
+
   }
 
 }
