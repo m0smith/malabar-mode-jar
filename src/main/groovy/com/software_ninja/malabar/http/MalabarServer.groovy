@@ -43,6 +43,12 @@ class MalabarServer {
 	mph.tags(params["repo"], pm, params["class"]);}));
     context.getFilters().add(new ParameterFilter());
         
+    context = httpServer.createContext('/debug/', new JsonHandlerFactory(config).build({params ->
+	def pmIn = params["pm"];
+	def pm = (pmIn == null ? null : MalabarUtil.expandFile(pmIn));
+	mph.debug(params["repo"], pm)}));
+    context.getFilters().add(new ParameterFilter());
+        
     context = httpServer.createContext('/spawn/', new JsonHandlerFactory(config).build({params ->
       
       com.software_ninja.malabar.lang.NewVM.startSecondJVM(params["version"], params["jdk"], 

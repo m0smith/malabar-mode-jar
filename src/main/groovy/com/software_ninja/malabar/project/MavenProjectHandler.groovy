@@ -134,7 +134,7 @@ public class MavenProjectHandler {
 		    resourceCache : resourceCache,
 		    parsers : [ "groovy-strict" : new GroovyParser(staticClassloader),
 				groovy          : new GroovyParser(classloader),
-				java            : new JavaParser(classloader)],
+				java            : new JavaParser(classloader, projectInfo['runtime']['elements'][0])],
 		    classLoader : classloader,
 		    classLoaderStatic : staticClassloader];
       return rtnval;
@@ -313,6 +313,21 @@ public class MavenProjectHandler {
     def cached = lookInCache( pm, { fecthProjectInfo(repo, pm)});
     def classLoader = cached.get('classLoader');
     new SemanticReflector().asSemanticTag(classLoader.loadClass(className));
+
+  } 
+
+
+  /**
+   * Return current status of a project.
+   *
+   */
+
+  def debug(repo, pm){
+    def cached = lookInCache( pm, { fecthProjectInfo(repo, pm)});
+    def classLoader = cached.get('classLoader');
+    [ classpath   : classLoader.classPath,
+      projectInfo : cached['projectInfo'],
+      timestamp   : cached['mod'] ];
 
   } 
 

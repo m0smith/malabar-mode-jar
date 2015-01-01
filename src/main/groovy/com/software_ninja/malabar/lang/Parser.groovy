@@ -6,7 +6,7 @@ public interface Parser {
    * is the class that is created by parsing file.  "errors" is the list
    * of error information for all compilation errors.
    */
-  def parse(File f);
+  def parse(File f); 
 
   Class<?> parse(String s);
 

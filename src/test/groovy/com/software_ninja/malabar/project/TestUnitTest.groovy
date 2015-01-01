@@ -29,8 +29,8 @@ public class TestUnitTestImpl {
     String pm = simple + "pom.xml";
     String method = "testApp";
     println 'http://localhost:4429/test/?pm=' + pm +'&script=' + scriptIn + '&method=' + method;
-    println mph.unitTest (defaultRepo, pm, scriptIn, null);
-    println mph.unitTest (defaultRepo, pm, scriptIn, method);
+    println mph.unitTest (defaultRepo, pm, scriptIn, null, "java");
+    println mph.unitTest (defaultRepo, pm, scriptIn, method, "java");
   }
 
 }
