@@ -1,10 +1,21 @@
 # Releasing to Sonatype
 
+To perform a SNAPSHOT release, do:
+
 ```
-	gradle release
+	gradle -Pprofile=release uploadArchives
+
 ```
 
-Log into https://oss.sonatype.org/index.html#welcome and do the **Release** and **Close**
+To perform an actual release do:
+
+```
+
+        gradle -Pprofile=release release
+
+```
+
+Log into https://oss.sonatype.org/index.html#welcome and do the **Close** and **Release**
 
 
 
