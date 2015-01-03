@@ -3,8 +3,9 @@ package com.software_ninja.malabar.http;
 import com.sun.net.httpserver.HttpHandler
 import com.sun.net.httpserver.HttpExchange
 import groovy.json.JsonBuilder
+import groovy.util.logging.*
 
-
+@Log
 class JsonHandlerFactory {
 
   private Map cache;
@@ -45,11 +46,11 @@ class JsonHandlerFactory {
 	  httpExchange.responseHeaders.set('Content-Type', 'application/json')
 	
 	  //final String query = httpExchange.requestURI.rawQuery
-	  println "QUERY:" +  httpExchange.requestURI.rawQuery
-	  println "METHOD:" +  httpExchange.requestMethod
-	  println "PARAMS:" + params
+	  log.fine "QUERY:" +  httpExchange.requestURI.rawQuery
+	  log.fine "METHOD:" +  httpExchange.requestMethod
+	  log.fine "PARAMS:" + params
 	   
-	  //println params["repo"]
+	  //log.fine params["repo"]
 	  // if(!query || !query.contains('string')){
 	  // 	httpExchange.sendResponseHeaders(400,0)
 	  // 	return
@@ -76,7 +77,7 @@ class JsonHandlerFactory {
 	
 	} finally {
 	  httpExchange.close()
-	  println "end end end"
+	  log.fine "end end end"
 	}
       }
     }

@@ -67,8 +67,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import groovy.util.logging.*
 
-
+@Log
 public class MavenProjectHandler {
 
   /**
@@ -112,7 +113,7 @@ public class MavenProjectHandler {
     def parent = pomFile.getParent();
     def relPaths  =relative.collect({new File (parent, it).getAbsolutePath()});
     def bootClasspath = System.getProperty("sun.boot.class.path");
-    println "RELPATHS" + relPaths;
+    log.fine "RELPATHS" + relPaths;
     def classpath = relPaths + 
     absolute + 
     projectInfo['test']['resources'].collect({it.directory}) +
@@ -128,7 +129,7 @@ public class MavenProjectHandler {
 
       def staticClassloader = createClassLoaderStatic(classpath);
       def classloader = createClassLoader(classpath);
-      //println classpath
+      //log.fine classpath
       def rtnval = [timestamp : mod,
 		    projectInfo : projectInfo,
 		    resourceCache : resourceCache,
@@ -188,8 +189,8 @@ public class MavenProjectHandler {
     def regex = /.*At \[(\d+):(\d+)\] (.*)/
     def message = ex.cause.message;
     def matcher = ( message =~ regex );
-    println matcher.matches()
-    println matcher[0]
+    log.fine matcher.matches().toString()
+    log.fine matcher[0].toString()
     if (matcher.groupCount() > 0) {
       def line = matcher[0][1];
       def col =  matcher[0][2];
@@ -210,7 +211,7 @@ public class MavenProjectHandler {
    * Parse the script on disk.  Return errors as a list
    */
   def parse(repo, pom, scriptIn, scriptBody, parserName) {
-    println "Start Parse";
+    log.fine "Start Parse";
     try{
 
       def cached = lookInCache( pom, { fecthProjectInfo(repo, pom)});
@@ -219,15 +220,15 @@ public class MavenProjectHandler {
       def rtnval = null;
       if(scriptBody == null) {
 	def script = MalabarUtil.expandFile(scriptIn);
-	println "PArsing script:" + script + " with parser:" + parser;
+	log.fine "PArsing script:" + script + " with parser:" + parser;
 	rtnval = parser.parse(new File(script));
 
       }  else {
-	println "PArsing scriptBody: with parser:" + parser;
+	log.fine "PArsing scriptBody: with parser:" + parser;
 	rtnval = parser.parse(scriptBody);
 
       }
-      println "parsed fine";
+      log.fine "parsed fine";
       rtnval['class'] == null ? rtnval['errors'] : [];
 
     } catch (Exception ex){
@@ -255,7 +256,7 @@ public class MavenProjectHandler {
 						 it['stackTrace']]});
       }
       Request request = Request.method(clazz,method);
-      println "UnitTest "+ clazz.getName() + " ..."
+      log.fine "UnitTest "+ clazz.getName() + " ..."
       
       if( method == null ) {
 	request = Request.aClass(clazz);
@@ -291,7 +292,7 @@ public class MavenProjectHandler {
   def resource(repo, pm, pattern, max, isClass, useRegex){
     def cached = lookInCache( pm, { fecthProjectInfo(repo, pm)});
     def resourceCache = cached['resourceCache'];
-    println "RESOURCE:" + resourceCache + " " + isClass + " " + useRegex + " " + max;
+    log.fine "RESOURCE:" + resourceCache + " " + isClass + " " + useRegex + " " + max;
     if( isClass == null || isClass ){
 
       resourceCache.findClass(pattern, max);
@@ -434,7 +435,7 @@ public class MavenProjectsCreator {
 	  boolean rtnval =  ! optional && ! (['activation', 'xerces-impl', 'ant', 
 					      'com.springsource.org.hibernate.validator-4.1.0.GA',
 					      'xerces-impl-2.6.2'].contains(artifactId));
-	  //println "" + rtnval + " NODE:" + optional + ' ' + artifactId + " " + parents;
+	  //log.fine "" + rtnval + " NODE:" + optional + ' ' + artifactId + " " + parents;
 	  
 	  return rtnval;
 	  

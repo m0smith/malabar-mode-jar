@@ -7,12 +7,19 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.Filter;
 import com.sun.net.httpserver.Filter.Chain;
+import groovy.util.logging.*
+import java.util.logging.Handler
+import java.util.logging.Logger
+import java.util.logging.Level
+import java.util.logging.LogManager
 
+@Log
 class MalabarServer {
   def cache = [:];
   def config = [ cache :cache ];
     
   def start(String port) {
+
     def mph = new MavenProjectHandler(config); 
     def addr = new InetSocketAddress(Integer.parseInt(port))
     def httpServer = com.sun.net.httpserver.HttpServer.create(addr, 0)
@@ -40,13 +47,18 @@ class MalabarServer {
     context = httpServer.createContext('/tags/', new JsonHandlerFactory(config).build({params ->
 	def pmIn = params["pm"];
 	def pm = (pmIn == null ? null : MalabarUtil.expandFile(pmIn));
-	mph.tags(params["repo"], pm, params["class"]);}));
+	mph.tags(params["repo"], pm, params["class"]);})); 
     context.getFilters().add(new ParameterFilter());
         
     context = httpServer.createContext('/debug/', new JsonHandlerFactory(config).build({params ->
-	def pmIn = params["pm"];
-	def pm = (pmIn == null ? null : MalabarUtil.expandFile(pmIn));
-	mph.debug(params["repo"], pm)}));
+      def jmx = LogManager.getLoggingMXBean()
+      jmx.loggerNames.each({ if( it.startsWith("com.software_ninja")) {
+			       jmx.setLoggerLevel( it,  "FINEST")}});
+
+      
+      def pmIn = params["pm"];
+      def pm = (pmIn == null ? null : MalabarUtil.expandFile(pmIn));
+      mph.debug(params["repo"], pm)}));
     context.getFilters().add(new ParameterFilter());
         
     context = httpServer.createContext('/spawn/', new JsonHandlerFactory(config).build({params ->
@@ -69,7 +81,7 @@ class MalabarServer {
     context.getFilters().add(new ParameterFilter());
         
     context = httpServer.createContext('/add/', new JsonHandlerFactory(config).build({params ->
-      println "ADD: " + params
+      log.fine "ADD: " + params
       mph.additionalClasspath(params["relative"], params["absolute"]);}));
     context.getFilters().add(new ParameterFilter());
         
@@ -80,14 +92,14 @@ class MalabarServer {
     httpServer.setExecutor(Executors.newCachedThreadPool())
     httpServer.start()
 
-    println "running on " + port;
+    log.fine "running on " + port;
     return httpServer;
   }
 
 
 }
 
-
+@Log
 class ParameterFilter extends Filter {
 
     @Override
@@ -98,11 +110,11 @@ class ParameterFilter extends Filter {
     @Override
     public void doFilter(HttpExchange exchange, Chain chain)
         throws IOException {
-	  println exchange;
+	  log.fine exchange.toString();
 	  try {
 	    parseGetParameters(exchange);
 	    parsePostParameters(exchange);
-	    println exchange.getAttribute("parameters");
+	    log.fine exchange.getAttribute("parameters").toString();
 	  } catch (Exception ex) {
 	    ex.printStackTrace();
 	  } finally {
@@ -116,7 +128,7 @@ class ParameterFilter extends Filter {
         Map<String, Object> parameters = new HashMap<String, Object>();
         URI requestedUri = exchange.getRequestURI();
         String query = requestedUri.getRawQuery();
-	//println "GET QUERY:" + query;
+	//log.fine "GET QUERY:" + query;
         parseQuery(query, parameters);
         exchange.setAttribute("parameters", parameters);
     }
@@ -128,12 +140,12 @@ class ParameterFilter extends Filter {
             @SuppressWarnings("unchecked")
             Map<String, Object> parameters =
                 (Map<String, Object>)exchange.getAttribute("parameters");
-	    //println "POST PARAMETERS:" + parameters;
+	    //log.fine "POST PARAMETERS:" + parameters;
             InputStreamReader isr =
                 new InputStreamReader(exchange.getRequestBody(),"utf-8");
             BufferedReader br = new BufferedReader(isr);
             String query = br.readLine();
-	    //println "POST QUERY:" + query;
+	    //log.fine "POST QUERY:" + query;
             parseQuery(query, parameters);
         }
     }

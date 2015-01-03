@@ -10,7 +10,9 @@ import javax.tools.StandardLocation;
 import java.nio.CharBuffer;
 
 import java.lang.reflect.Modifier;
- 
+import groovy.util.logging.*
+
+@Log
 public class JavaParser implements Parser {
 
   def classloader;
@@ -22,7 +24,7 @@ public class JavaParser implements Parser {
   }
 
   def parse(File f) { 
-    println "FILE:" + f.toURI();
+    log.fine "FILE:" + f.toURI();
     def fileObjects = new FileJavaFileObject(f);
     parseInternal( [ fileObjects ]);
   }
@@ -49,7 +51,7 @@ public class JavaParser implements Parser {
 
     if(result) {
       def m = output.toString() =~ /\[checking (.*)\]/
-      println output.toString();
+      //log.fine output.toString();
       def clazzes = m.collect({classloader.loadClass(it[1])});
       def clazz = null;
       if(clazzes.size > 0 ) {

@@ -19,7 +19,7 @@ class MalabarStart {
   public MalabarStart(port) { this.defaultPort = port;}
   
   def startArgs(String[] args) {
-    println "ARGS: " + args
+    //println "ARGS: " + args
     def argMap = new SpreadMap(args);
     String port = defaultPort;
     if(argMap["-p"] != null) port = argMap["-p"];

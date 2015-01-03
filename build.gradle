@@ -35,6 +35,7 @@ dependencies {
   compile 'jline:jline:2.11'
   compile 'org.fusesource.jansi:jansi:1.11'
   compile 'junit:junit:4.11'
+  compile 'org.slf4j:slf4j-jdk14:1.7.5'
 
   testCompile 'net.java.quickcheck:quickcheck:0.6'
 

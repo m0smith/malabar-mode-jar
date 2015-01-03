@@ -1,5 +1,6 @@
 package com.software_ninja.malabar.lang;
 
+import groovy.util.logging.*
 
 public class NewVM {
 
@@ -12,7 +13,7 @@ public class NewVM {
     String separator = System.getProperty("path.separator");
     String classpath = classLoader.classPath.join(separator)
     def ii = jdkPath + "bin/javaw.exe"
-    //println(classpath);
+    //log.fine(classpath);
     ProcessBuilder processBuilder =   new ProcessBuilder(ii, "-cp", 
 							 classpath,
 							 '-Xmx128m',

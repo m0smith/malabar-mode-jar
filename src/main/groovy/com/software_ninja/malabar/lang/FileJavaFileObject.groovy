@@ -39,6 +39,7 @@ import javax.lang.model.element.NestingKind;
 import javax.tools.JavaFileObject.Kind;
 import java.nio.CharBuffer;
 import javax.tools.JavaFileObject;
+import groovy.util.logging.*
 
 /**
  * Provides simple implementations for most methods in JavaFileObject.
@@ -52,7 +53,7 @@ import javax.tools.JavaFileObject;
  */
 
 
-
+@Log
 public class FileJavaFileObject implements JavaFileObject {
   /**
    * A URI for this file object.
@@ -97,7 +98,7 @@ public class FileJavaFileObject implements JavaFileObject {
     FileReader fr =  new FileReader(file);
     fr.read(rtnval);
     rtnval.flip();
-    println rtnval
+    log.fine rtnval.toString()
     rtnval;
   }
 

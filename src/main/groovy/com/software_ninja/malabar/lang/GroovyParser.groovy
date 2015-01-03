@@ -1,6 +1,7 @@
 package com.software_ninja.malabar.lang;
 
 import org.codehaus.groovy.control.ErrorCollector;
+import groovy.util.logging.*
 
 public class GroovyParser implements Parser {
 
@@ -25,8 +26,8 @@ public class GroovyParser implements Parser {
     def regex = /.*At \[(\d+):(\d+)\] (.*)/
     def message = ex.cause.message;
     def matcher = ( message =~ regex );
-    println matcher.matches()
-    println matcher[0]
+    log.fine matcher.matches().toString()
+    log.fine matcher[0].toString()
     if (matcher.groupCount() > 0) {
       def line = matcher[0][1];
       def col =  matcher[0][2];
