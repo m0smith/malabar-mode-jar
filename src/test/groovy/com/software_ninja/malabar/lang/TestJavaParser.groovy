@@ -22,9 +22,17 @@ public class TestJavaParser {
   @Test
   public void testFileParser() throws Exception {
   
+    def rtnval = javaParser.parse(new File(scriptIn));
+    assertEquals([], rtnval['errors']);
+    assertNotNull(rtnval['class']);
+    assertEquals("com.software_ninja.test.project.AppTest", rtnval['class'].getName());
+  }
+  @Test
+  public void testStringParser() throws Exception {
+    String code = "class HamsterTest {} ";
 
-    assertEquals([], javaParser.parse(new File(scriptIn))['errors']);
-    assertEquals("com.software_ninja.test.project.AppTest", javaParser.parse(new File(scriptIn))['class'].getName());
+    assertEquals([], javaParser.parse(code)['errors']);
+    assertEquals("HamsterTest", javaParser.parse(code)['class'].getName());
   }
 
 }

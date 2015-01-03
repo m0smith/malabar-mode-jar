@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.tools.*;
 import javax.tools.JavaCompiler.*;
 import javax.tools.StandardLocation;
+import java.nio.CharBuffer;
 
 import java.lang.reflect.Modifier;
  
@@ -20,24 +21,29 @@ public class JavaParser implements Parser {
     this.classesDir = classesDir;
   }
 
+  def parse(File f) { 
+    println "FILE:" + f.toURI();
+    def fileObjects = new FileJavaFileObject(f);
+    parseInternal( [ fileObjects ]);
+  }
 
-  def parse(File f) {
-    List rtnval = new ArrayList();
+  def parseInternal(Iterable units) {
     JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+    List rtnval = new ArrayList();
     MyDiagnosticListener listener = new MyDiagnosticListener(rtnval); 
     StandardJavaFileManager fileManager  = compiler.getStandardFileManager(listener, null, null);
  
     fileManager.setLocation(StandardLocation.CLASS_PATH, classloader.classPath.collect({ new File(it)})); 
     fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(new File(classesDir)));
 
-    Iterable fileObjects = fileManager.getJavaFileObjectsFromStrings(Arrays.asList(f.getAbsolutePath()));
+
     //String separator = System.getProperty("path.separator");
     //String classpath = classloader.classPath.join(separator)
     def options = ["-g", "-verbose"];
 
     StringWriter output = new StringWriter();
     JavaCompiler.CompilationTask task = compiler.getTask(output, fileManager, listener, 
-							options, null, fileObjects);
+							options, null, units);
     Boolean result = task.call();
     //fileManager.list( StandardLocation.CLASS_OUTPUT, "", new HashSet(Arrays.asList(JavaFileObject.Kind.CLASS)), true).each ({println it});
 
@@ -63,8 +69,8 @@ public class JavaParser implements Parser {
 
   }
   
-  Class<?> parse(String s) {
-    return null;
+  def parse(String s) {
+    parseInternal( [ new StringJavaFileObject(s) ]);
   }
 }
 
@@ -103,3 +109,5 @@ class MyDiagnosticListener implements DiagnosticListener{
     // System.out.println("\n");
   }
 }
+
+
