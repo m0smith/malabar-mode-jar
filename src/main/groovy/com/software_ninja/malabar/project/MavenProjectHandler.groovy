@@ -345,6 +345,7 @@ public class MavenProjectHandler {
       def repox = (repo == null ? "~/.m2/repository" : repo);
       def pjs = x.create(MalabarUtil.expandFile(repox), MalabarUtil.expandFile(pom))
       return [runtime: x.resolveDependencies(pjs[0], repox, "runtime"),
+	      systemProperties : System.getProperties(), 
 	      test:    x.resolveDependencies(pjs[0], repox, "test")]
     } catch (Exception ex) {
       throw new Exception( ex.getMessage() + " repo:" + repo + " pom:" + pom, 

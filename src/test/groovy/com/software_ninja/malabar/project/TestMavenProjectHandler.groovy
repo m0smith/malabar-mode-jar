@@ -107,7 +107,8 @@ class MavenProjectTester {
           Map map = new MavenProjectHandler(config).projectInfo(pair.getFirst(),
                                                           pom.absolutePath);
           assertNotNull( map['test']);
-          assertNotNull( map['runtime']);
+          assertNotNull( map['runtime']);          
+	  assertNotNull( map['systemProperties']);
           
           assertTrue( map['test']['classpath'].size() >= 0);
       }
