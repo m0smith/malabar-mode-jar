@@ -6,13 +6,21 @@ public class NewVM {
 
   public static void startSecondJVM(String version, String jdkPath, String port, String cwd, boolean redirectStream) throws Exception {
     //System.out.println(clazz.getCanonicalName());
+    def executables = ["javaw.exe", "java.exe" , "java"];
     def grapez = [group: 'com.software-ninja' , module:'malabar', version:version]; 
     def classLoader = new groovy.lang.GroovyClassLoader(); 
     groovy.grape.Grape.grab(classLoader: classLoader, grapez);
 
     String separator = System.getProperty("path.separator");
     String classpath = classLoader.classPath.join(separator)
-    def ii = jdkPath + "bin/javaw.exe"
+    def ii = executables.collect( {def rtnval = jdkPath + "bin/" + it;
+				    def f = new File(rtnval);
+				    if(f.exists()){
+				      return rtnval;
+				    } else {
+				      return null;
+				    }}).grep()[0];
+
     //log.fine(classpath);
     ProcessBuilder processBuilder =   new ProcessBuilder(ii, "-cp", 
 							 classpath,
