@@ -22,7 +22,7 @@ public class AppTest
     {
         assertTrue( true );
     }
-
+    
     @Test
     public void failApp()  
     {
@@ -33,4 +33,7 @@ public class AppTest
     public void testBoolean() throws Exception {
 	assertEquals(true, app.getTrue());
     }
+
+
 }
+  

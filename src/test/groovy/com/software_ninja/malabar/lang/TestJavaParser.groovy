@@ -27,6 +27,7 @@ public class TestJavaParser {
     assertNotNull(rtnval['class']);
     assertEquals("com.software_ninja.test.project.AppTest", rtnval['class'].getName());
   }
+
   @Test
   public void testStringParser() throws Exception {
     String code = "class HamsterTest {} ";
@@ -34,5 +35,7 @@ public class TestJavaParser {
     assertEquals([], javaParser.parse(code)['errors']);
     assertEquals("HamsterTest", javaParser.parse(code)['class'].getName());
   }
+
+
 
 }

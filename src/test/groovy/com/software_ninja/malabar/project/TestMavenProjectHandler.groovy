@@ -157,5 +157,16 @@ class MavenProjectTester {
     def result =  mph.tags(defaultRepo, pom, className);
   }
 
+  @Test
+  public void testFileUnitTest() throws Exception {
+    String simple = 'src/test/resources/projects/simple/';
+    String scriptIn = simple + '/src/test/java/com/software_ninja/test/project/AppTest.java';
+    String pm = simple + "pom.xml";
+    String repo = "~/.m2/repository";
+    new File(simple + "target").deleteDir();
+    def mph = new MavenProjectHandler(config);
+    def rtnval = mph.unitTest(repo, pm, scriptIn, null, "java");
+    assertEquals("This always fails", rtnval[0][1]);
+  }
 
 }

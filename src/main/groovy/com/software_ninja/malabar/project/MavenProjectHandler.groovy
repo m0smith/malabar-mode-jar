@@ -48,7 +48,7 @@ import org.sonatype.aether.artifact.Artifact;
 
 import org.sonatype.aether.graph.DependencyNode
 
-import com.software_ninja.malabar.MalabarUtil
+import com.software_ninja.malabar.MalabarUtil 
 import com.software_ninja.malabar.ResourceCache;
 import com.software_ninja.malabar.SemanticReflector;
 import com.software_ninja.malabar.lang.GroovyParser;
@@ -111,7 +111,7 @@ public class MavenProjectHandler {
   def createCacheEntry(pomFile, mod, func) {
     def projectInfo = func();
     def parent = pomFile.getParent();
-    def relPaths  =relative.collect({new File (parent, it).getAbsolutePath()});
+    def relPaths = relative.collect({new File (parent, it).getAbsolutePath()});
     def bootClasspath = System.getProperty("sun.boot.class.path");
     log.fine "RELPATHS" + relPaths;
     def classpath = relPaths + 
@@ -135,12 +135,18 @@ public class MavenProjectHandler {
 		    resourceCache : resourceCache,
 		    parsers : [ "groovy-strict" : new GroovyParser(staticClassloader),
 				groovy          : new GroovyParser(classloader),
-				java            : new JavaParser(classloader, projectInfo['runtime']['elements'][0])],
+				java            : new JavaParser(classloader, projectInfo['test']['elements'][0])],
 		    classLoader : classloader,
 		    classLoaderStatic : staticClassloader];
       return rtnval;
   }
   
+  def clearCache() {
+    def name = this.getClass().getName();
+    def f = cache[name];
+    if( f != null )   f.clear();
+  }
+
   def lookInCache(pom, func) {
     def name = this.getClass().getName();
     def pomFile = new File(MalabarUtil.expandFile(pom as String));
@@ -166,8 +172,14 @@ public class MavenProjectHandler {
 
   def additionalClasspath(relativeJson ,absoluteJson) {
     
-    this.relative = relativeJson != null ? new groovy.json.JsonSlurper().parseText (relativeJson ) : [];
-    this.absolute = absoluteJson != null ? new groovy.json.JsonSlurper().parseText (absoluteJson ) : [];
+    def newRelative = relativeJson != null ? new groovy.json.JsonSlurper().parseText (relativeJson ) : [];
+    def newAbsolute = absoluteJson != null ? new groovy.json.JsonSlurper().parseText (absoluteJson ) : [];
+
+    if( relative != newRelative || absolute != newAbsolute) {
+      this.relative = newRelative;
+      this.absolute = newAbsolute;
+      clearCache();
+    }
     
   }
   

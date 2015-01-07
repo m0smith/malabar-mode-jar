@@ -34,10 +34,18 @@ public class JavaParser implements Parser {
     List rtnval = new ArrayList();
     MyDiagnosticListener listener = new MyDiagnosticListener(rtnval); 
     StandardJavaFileManager fileManager  = compiler.getStandardFileManager(listener, null, null);
- 
-    fileManager.setLocation(StandardLocation.CLASS_PATH, classloader.classPath.collect({ new File(it)})); 
-    fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(new File(classesDir)));
+    File outputDir = new File(classesDir);
+    def localClassloader = new GroovyClassLoader( classloader );
+    
+    if(! outputDir.exists()) {
+      outputDir.mkdirs();
+    }
+    
+    localClassloader.addURL(outputDir.toURL());
 
+    fileManager.setLocation(StandardLocation.CLASS_PATH, classloader.classPath.collect({ new File(it)})); 
+    fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(outputDir));
+    def fmClassloader = fileManager.getClassLoader(StandardLocation.CLASS_PATH);
 
     //String separator = System.getProperty("path.separator");
     //String classpath = classloader.classPath.join(separator)
@@ -51,11 +59,13 @@ public class JavaParser implements Parser {
 
     if(result) {
       def m = output.toString() =~ /\[checking (.*)\]/
-      //log.fine output.toString();
-      def clazzes = m.collect({classloader.loadClass(it[1])});
+      log.info output.toString();
+      //log.info classloader.getParent().getClass().toString();
+      def clazzes = m.collect({  fmClassloader.loadClass(it[1])});
       def clazz = null;
       if(clazzes.size > 0 ) {
 	clazz = clazzes[0];
+	println "WHICH:" + fmClassloader.getResource("com/software_ninja/test/project/AppTest.class");
 	def publicClasses = clazzes.grep( {  Modifier.isPublic(it.getModifiers())} );
 	if(publicClasses.size > 0) {
 	  clazz = publicClasses[0];
