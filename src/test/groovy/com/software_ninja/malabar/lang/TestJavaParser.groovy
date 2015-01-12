@@ -10,6 +10,7 @@ public class TestJavaParser {
 
   String simple = 'src/test/resources/projects/simple/';
   String scriptIn = simple + '/src/test/java/com/software_ninja/test/project/AppTest.java';
+  String errorScriptIn = simple + '/src/test/java/com/software_ninja/test/project/ParserTargetWithError.java';
   String pm = simple + "pom.xml";
   String repo = "~/.m2/repository";
   
@@ -35,6 +36,16 @@ public class TestJavaParser {
     assertEquals([], javaParser.parse(code)['errors']);
     assertEquals("HamsterTest", javaParser.parse(code)['class'].getName());
   }
+
+  @Test
+  public void testFileParserWithError() throws Exception {
+  
+    def rtnval = javaParser.parse(new File(errorScriptIn));
+    assertEquals(new File(errorScriptIn).getAbsolutePath(), new File(rtnval['errors'][0]['sourceLocator']).getAbsolutePath());
+    assertNull(rtnval['class']);
+
+  }
+
 
 
 

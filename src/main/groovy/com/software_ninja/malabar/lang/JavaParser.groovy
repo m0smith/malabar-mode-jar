@@ -98,16 +98,21 @@ class MyDiagnosticListener implements DiagnosticListener{
     return rtnval;
   }
 
+  public String getSourceLocator(Diagnostic diagnostic) {
+    JavaFileObject jfo = diagnostic.getSource();
+    return (jfo != null) ? new File(jfo.toUri()) : "";
+  }
+
   public void report(Diagnostic diagnostic) {
     
-    rtnval.add( [endColumn : diagnostic.getColumnNumber(),
-		 endLine : diagnostic.getLineNumber(),
-		 line : diagnostic.getLineNumber(),
-		 message : diagnostic.getMessage(Locale.ENGLISH),
-		 sourceLocator : "",
-		 startColumn : diagnostic.getColumnNumber(),
-		 column : diagnostic.getColumnNumber(),
-		 startLine : diagnostic.getLineNumber()]);
+    rtnval.add( [endColumn     : diagnostic.getColumnNumber(),
+		 endLine       : diagnostic.getLineNumber(),
+		 line          : diagnostic.getLineNumber(),
+		 message       : diagnostic.getMessage(Locale.ENGLISH),
+		 sourceLocator : getSourceLocator(diagnostic),
+		 startColumn   : diagnostic.getColumnNumber(),
+		 column        : diagnostic.getColumnNumber(),
+		 startLine     : diagnostic.getLineNumber()]);
     
     // System.out.println("Code->" +  diagnostic.getCode());
     // System.out.println("Column Number->" + diagnostic.getColumnNumber());
