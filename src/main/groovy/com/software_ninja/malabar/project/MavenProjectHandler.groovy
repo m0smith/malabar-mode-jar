@@ -219,6 +219,33 @@ public class MavenProjectHandler {
 	       ex.getStackTrace()];
   }
   
+  def fixArgs(args) {
+    if(args == null) return new String[0];
+    if(args instanceof String) { def r = new String[1]; r[0] = args; return r;};
+    return args as String[];
+  }
+
+
+  
+  /**
+   * Load and execute the class.  Assumes the class has been compiled/parsed already.
+   */
+  def exec(repo, pom, clazzName, args) { 
+    log.fine "Start Exec of " + clazzName;
+
+    try{
+
+      def cached = lookInCache( pom, { fecthProjectInfo(repo, pom)});
+
+      def cl = cached['classLoader'];
+      def clazz = Class.forName(clazzName, true, cl);
+      clazz.main(fixArgs(args));
+
+    } catch (Exception ex){
+      ex.printStackTrace();
+    }
+  }
+
   /**
    * Parse the script on disk.  Return errors as a list
    */
@@ -484,5 +511,3 @@ public class MavenProjectsCreator {
 
 
 //:load  file:/c:/Users/lpmsmith/projects/malabar-mode-jar/src/main/groovy/com/software_ninja/malabar/D.groovy
-
-

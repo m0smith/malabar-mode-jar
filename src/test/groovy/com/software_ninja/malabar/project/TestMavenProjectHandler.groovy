@@ -1,3 +1,4 @@
+
 package com.software_ninja.malabar.project;
 
 import static net.java.quickcheck.generator.PrimitiveGenerators.*
