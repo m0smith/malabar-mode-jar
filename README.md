@@ -5,9 +5,11 @@ See malabar-mode: https://github.com/m0smith/malabar-mode
 
 # Configuration
 
-It may be necessary to configure grape `~/`:
+It may be necessary to configure grape `~/.groovy/grapeConfig.xml` (see gh):
 
-```<ivysettings>
+```
+
+<ivysettings>
     <settings defaultResolver="downloadGrapes"/>
     <resolvers>
         <chain name="downloadGrapes">
