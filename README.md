@@ -5,7 +5,7 @@ See malabar-mode: https://github.com/m0smith/malabar-mode
 
 # Configuration
 
-It may be necessary to configure grape `~/.groovy/grapeConfig.xml` (see gh):
+It may be necessary to configure grape `~/.groovy/grapeConfig.xml` (see gh-30):
 
 ```
 
