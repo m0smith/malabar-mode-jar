@@ -1,10 +1,14 @@
+
 package com.software_ninja.malabar.lang;
 
 import org.junit.Test;
+import org.junit.Before;
 import static org.junit.Assert.*; 
 
-import com.software_ninja.malabar.lang.JavaParser;
+import com.software_ninja.malabar.MalabarUtil;
 import com.software_ninja.malabar.project.MavenProjectHandler;
+
+import java.util.logging.Level;
  
 public class TestJavaParser {
 
@@ -20,6 +24,11 @@ public class TestJavaParser {
   
   def javaParser = cacheEntry['parsers']['java'];
  
+  @Before
+  public void before() {
+    MalabarUtil.setLevel( "com.software_ninja.malabar.lang.JavaParser", Level.FINEST);
+  }
+
   @Test
   public void testFileParser() throws Exception {
   

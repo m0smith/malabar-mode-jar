@@ -95,8 +95,9 @@ class MavenProjectTester {
    * Properties:
    *  # Not throw an exception
    *  # Returns a map
-   *  # the map has a runtime key
-   *  # the map has a test key
+   *  # the projectInfo has a runtime key
+   *  # the projectInfo has a test key
+   *  # the cacheEntry has a timestamp
    **/
   @Test
   void testMavenImport() {
@@ -105,13 +106,18 @@ class MavenProjectTester {
                                          pomGenerator("src/test/resources/pom/",~/.*\.pom/ )))) {
           File pom = pair.getSecond();
           println "processing " + pom;
-          Map map = new MavenProjectHandler(config).projectInfo(pair.getFirst(),
+	  MavenProjectHandler mph = new MavenProjectHandler(config);
+	  Map cacheEntry = mph.lookInCache(pom, { mph.fecthProjectInfo(pair.getFirst(), pom.absolutePath )} )
+          Map projectInfo = mph.projectInfo(pair.getFirst(),
                                                           pom.absolutePath);
-          assertNotNull( map['test']);
-          assertNotNull( map['runtime']);          
-	  assertNotNull( map['systemProperties']);
-          
-          assertTrue( map['test']['classpath'].size() >= 0);
+	  println "CacheEntry: " + cacheEntry;
+	  projectInfo.each { k,v -> println " KEY:" + k; }
+          assertNotNull( projectInfo['test']);
+          assertNotNull( projectInfo['runtime']);          
+	  assertNotNull( projectInfo['systemProperties']);
+          assertNotNull( cacheEntry['timestamp']);
+
+          assertTrue( projectInfo['test']['classpath'].size() >= 0);
       }
   }
 

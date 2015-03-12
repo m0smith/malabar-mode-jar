@@ -2,7 +2,9 @@ package com.software_ninja.malabar.lang;
 
 import org.codehaus.groovy.control.ErrorCollector;
 import groovy.util.logging.*
+import java.util.logging.Level;
 
+@Log
 public class GroovyParser implements Parser {
 
   def classloader;
@@ -61,7 +63,7 @@ public class GroovyParser implements Parser {
       return ["class": classloader.parseClass(code),
 	      "errors" : []]
     } catch (org.codehaus.groovy.control.MultipleCompilationErrorsException ex){
-      ex.printStackTrace();
+      log.log(Level.FINEST, "Failed to parse file" + f.toString(), ex);
       def rtnval = [];
       ErrorCollector collector = ex.getErrorCollector();
       ["class" : null,
@@ -75,7 +77,7 @@ public class GroovyParser implements Parser {
       return ["class": classloader.parseClass(s),
 	      "errors" : []]
     } catch (org.codehaus.groovy.control.MultipleCompilationErrorsException ex){
-      ex.printStackTrace();
+      log.log(Level.FINEST, "Failed to parse string " + s, ex);
       def rtnval = [];
       ErrorCollector collector = ex.getErrorCollector();
       ["class" : null,

@@ -9,9 +9,10 @@ import com.sun.net.httpserver.Filter;
 import com.sun.net.httpserver.Filter.Chain;
 import groovy.util.logging.*
 import java.util.logging.Handler
-import java.util.logging.Logger
+import java.util.logging.Logger 
 import java.util.logging.Level
 import java.util.logging.LogManager
+import java.util.logging.ConsoleHandler;
 
 @Log
 class MalabarServer {
@@ -53,18 +54,23 @@ class MalabarServer {
     context = httpServer.createContext('/tags/', new JsonHandlerFactory(config).build({params ->
 	def pmIn = params["pm"];
 	def pm = (pmIn == null ? null : MalabarUtil.expandFile(pmIn));
-	mph.tags(params["repo"], pm, params["class"]);})); 
+ 	mph.tags(params["repo"], pm, params["class"]);})); 
     context.getFilters().add(new ParameterFilter());
         
     context = httpServer.createContext('/debug/', new JsonHandlerFactory(config).build({params ->
-      def jmx = LogManager.getLoggingMXBean()
-      jmx.loggerNames.each({ if( it.startsWith("com.software_ninja")) {
-			       jmx.setLoggerLevel( it,  "FINEST")}});
+      def lm = LogManager.getLogManager();
+      lm.loggerNames.each( { if( it.startsWith("com.software_ninja")) {
+			       def l = lm.getLogger(it);
+			       MalabarUtil.setLevel(l, Level.FINEST);
+			     }});
+			    
+
 
       
       def pmIn = params["pm"];
       def pm = (pmIn == null ? null : MalabarUtil.expandFile(pmIn));
       mph.debug(params["repo"], pm)}));
+
     context.getFilters().add(new ParameterFilter());
         
     context = httpServer.createContext('/spawn/', new JsonHandlerFactory(config).build({params ->

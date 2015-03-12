@@ -67,6 +67,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.logging.Level;
 import groovy.util.logging.*
 
 @Log
@@ -304,7 +305,7 @@ public class MavenProjectHandler {
       }
 
       Result result = new JUnitCore().run(request);
-      println "UnitTest ... Complete:" + result.getFailureCount()
+      log.fine "UnitTest ... Complete:" + result.getFailureCount()
       return result.getFailures().collect( { [ it.getTestHeader(),
 					       it.getMessage(),
 					       it.getException().getMessage(),
@@ -379,16 +380,22 @@ public class MavenProjectHandler {
   //
 
   def fecthProjectInfo = { repo, pom -> 
+    def repox = (repo == null ? "~/.m2/repository" : repo);
+
     try {
       def x = new MavenProjectsCreator();
-      def repox = (repo == null ? "~/.m2/repository" : repo);
       def pjs = x.create(MalabarUtil.expandFile(repox), MalabarUtil.expandFile(pom))
       return [runtime: x.resolveDependencies(pjs[0], repox, "runtime"),
 	      systemProperties : System.getProperties(), 
 	      test:    x.resolveDependencies(pjs[0], repox, "test")]
+
+
+
     } catch (Exception ex) {
-      throw new Exception( ex.getMessage() + " repo:" + repo + " pom:" + pom, 
-			   ex);
+      ex.printStackTrace();
+      throw new Exception( ex.getMessage() + " repo:" + 
+			   MalabarUtil.expandFile(repox) + 
+			   " pom:" + MalabarUtil.expandFile(pom), ex);
     }
   }
   
@@ -398,7 +405,7 @@ public class MavenProjectHandler {
 		       
 }
 
-
+@Log
 public class MavenProjectsCreator {
   public List<MavenProject> create(String repo, String pom) {
     Settings mavenSettings = new Settings();
@@ -414,6 +421,7 @@ public class MavenProjectsCreator {
       throw new Exception(String.format("Unable to create Maven project model using POM %s.", pomFile), e);
     }
   }
+
   private List<MavenProject> createNow(Settings settings, File pomFile) throws PlexusContainerException, PlexusConfigurationException, ComponentLookupException, MavenExecutionRequestPopulationException, ProjectBuildingException {
     //using jarjar for maven3 classes affects the contents of the effective pom
     //references to certain Maven standard plugins contain jarjar in the fqn
@@ -458,9 +466,10 @@ public class MavenProjectsCreator {
   }
 
 
-  public Map resolveDependencies(project, repo, scope) {
+  public Map resolveDependencies(MavenProject project, repo, scope) {
 
     File local = new File(repo);
+    Aether.class.getClassLoader().findResources("com/jcabi/aether/Aether.class").each({log.fine it.toString() });
     Aether aether = new Aether(project, local);
     List depLists = project.getDependencies().collect { 
       
@@ -475,16 +484,27 @@ public class MavenProjectsCreator {
 	  boolean rtnval =  ! optional && ! (['activation', 'xerces-impl', 'ant', 
 					      'com.springsource.org.hibernate.validator-4.1.0.GA',
 					      'xerces-impl-2.6.2'].contains(artifactId));
-	  //log.fine "" + rtnval + " NODE:" + optional + ' ' + artifactId + " " + parents;
+	  log.fine "" + rtnval + " NODE:" + optional + ' ' + artifactId + " " + parents;
 	  
 	  return rtnval;
 	  
 	}
       }
-      
-      Collection<Artifact> deps = aether.resolve( art, scope , filter);
-      
-      deps.collect{  it.getFile().getAbsolutePath() }
+      try {
+
+
+
+
+	Collection<Artifact> deps = aether.resolve( art, scope , filter);
+	
+	deps.collect{  it.getFile().getAbsolutePath() }
+      } catch (  org.sonatype.aether.resolution.DependencyResolutionException ex) {
+	log.log(Level.WARNING, ex.getResult().toString(), ex);
+	[];
+      } catch (Exception ex) {
+	log.log(Level.WARNING, ex.getMessage(), ex);
+	[];
+    }
       
     }.grep({it.size() > 0})
     

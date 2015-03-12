@@ -1,8 +1,8 @@
-
 package com.software_ninja.malabar.lang;
 
 import java.util.List;
 import java.util.ArrayList;
+
  
 import javax.tools.*;
 import javax.tools.JavaCompiler.*;
@@ -11,6 +11,7 @@ import java.nio.CharBuffer;
 
 import java.lang.reflect.Modifier;
 import groovy.util.logging.*
+import java.util.logging.Level;
 
 @Log
 public class JavaParser implements Parser {
@@ -49,7 +50,13 @@ public class JavaParser implements Parser {
 
     //String separator = System.getProperty("path.separator");
     //String classpath = classloader.classPath.join(separator)
-    def options = ["-g", "-verbose"];
+    
+    def options = ["-g"];
+
+    if( log.isLoggable(Level.FINE) || log.isLoggable(Level.FINER) || log.isLoggable(Level.FINEST)) {
+      options = ["-g", "-verbose"];
+    }
+    
 
     StringWriter output = new StringWriter();
     JavaCompiler.CompilationTask task = compiler.getTask(output, fileManager, listener, 
@@ -65,7 +72,7 @@ public class JavaParser implements Parser {
       def clazz = null;
       if(clazzes.size > 0 ) {
 	clazz = clazzes[0];
-	println "WHICH:" + fmClassloader.getResource("com/software_ninja/test/project/AppTest.class");
+	
 	def publicClasses = clazzes.grep( {  Modifier.isPublic(it.getModifiers())} );
 	if(publicClasses.size > 0) {
 	  clazz = publicClasses[0];

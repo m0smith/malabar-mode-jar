@@ -4,12 +4,14 @@
 package com.software_ninja.malabar;
 
 import groovy.grape.Grape
+import groovy.util.logging.*
+
 
 public static void main(String[] args) {
   new MalabarStart('4429').startArgs(args);
 }
 
-
+@Log
 class MalabarStart {
 
   private String defaultPort = '4428';
@@ -23,7 +25,7 @@ class MalabarStart {
     def argMap = new SpreadMap(args);
     String port = defaultPort;
     if(argMap["-p"] != null) port = argMap["-p"];
-    println "Starting with :" + argMap
+    log.fine "Starting with :" + argMap
     startP(port);
     
   }
