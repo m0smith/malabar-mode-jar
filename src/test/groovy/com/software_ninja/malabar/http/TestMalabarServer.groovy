@@ -87,7 +87,8 @@ class TestMalabarServer {
   
   @Test
   public void testPi(){
-    URL url = createGetURL("pi", [pm:root+"/src/test/resources/projects/simple/pom.xml"]);
+    URL url = createGetURL("pi", [pmfile:root+"/src/test/resources/projects/simple/pom.xml",
+				  pm:'maven']);
     println url
     InputStream is = url.openStream();
     println readInputStreamAsString(is);
@@ -97,13 +98,15 @@ class TestMalabarServer {
 
   public
   @Test void testParse(){
-    URL url = createGetURL("parse", [pm:root + "/src/test/resources/projects/simple/pom.xml",
+    URL url = createGetURL("parse", [pmfile:root + "/src/test/resources/projects/simple/pom.xml",
+				     pm:'maven',
 				     script: root + "/src/test/projects/simple/src/test/java/com/software_ninja/test/project/AppTest.java" ]);
 
     println url
     InputStream is = url.openStream();
 
-    url = createGetURL("parse", [pm : root + "/src/test/resources/projects/simple/pom.xml",
+    url = createGetURL("parse", [pmfile : root + "/src/test/resources/projects/simple/pom.xml",
+				 pm : 'maven',
 				 scriptBody: "x=;" ]);
     is = url.openStream();
     println readInputStreamAsString(is);

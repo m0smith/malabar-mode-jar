@@ -15,6 +15,7 @@ public class TestUnitTestImpl {
   private Map config;
   private MavenProjectHandler mph;
   private String defaultRepo =  System.getProperty("user.home") +  "/.m2/repository";
+  private String pm = 'maven';
 
   @Before
   public void init() {
@@ -26,11 +27,12 @@ public class TestUnitTestImpl {
   public void testUnitTest() {
     String simple = 'src/test/resources/projects/simple/';
     String scriptIn = simple + '/src/test/java/com/software_ninja/test/project/AppTest.java';
-    String pm = simple + "pom.xml";
+    String pmfile = simple + "pom.xml";
     String method = "testApp";
-    println 'http://localhost:4429/test/?pm=' + pm +'&script=' + scriptIn + '&method=' + method;
-    println mph.unitTest (defaultRepo, pm, scriptIn, null, "java");
-    println mph.unitTest (defaultRepo, pm, scriptIn, method, "java");
+    println String.format( 'http://localhost:4429/test/?pm=%s&pmfile=%s&script=%s&&method=%s',
+			   pm, pmfile, scriptIn, method);
+    println mph.unitTest (defaultRepo, pm, pmfile, scriptIn, null, "java");
+    println mph.unitTest (defaultRepo, pm, pmfile, scriptIn, method, "java");
   }
 
 }

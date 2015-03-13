@@ -15,6 +15,7 @@ public class TestParserImpl {
   private Map config;
   private MavenProjectHandler mph;
   private String defaultRepo =  System.getProperty("user.home") +  "/.m2/repository";
+  private String pm = 'maven';
 
   @Before
   public void init() {
@@ -26,17 +27,18 @@ public class TestParserImpl {
   public void testParser() {
     String simple = 'src/test/resources/projects/simple/';
     String scriptIn = simple + '/src/test/java/com/software_ninja/test/project/AppTest.java';
-    String pm = simple + "pom.xml";
+    String pmfile = simple + "pom.xml";
+
     String method = "testApp";
 
-    println 'http://localhost:4429/parse/?pm=' + pm +'&script=' + scriptIn ;
+    //println 'http://localhost:4429/parse/?pm=' + pm +'&script=' + scriptIn ;
 
-    def actual = mph.parse(defaultRepo, pm, scriptIn, null, "groovy");
+    def actual = mph.parse(defaultRepo, pm, pmfile, scriptIn, null, "groovy");
     assertEquals( [], actual)
 
 
 
-    println mph.parse(defaultRepo, pm, scriptIn, null, "groovy-strict");
+    println mph.parse(defaultRepo, pm, pmfile, scriptIn, null, "groovy-strict");
   }
 
 }

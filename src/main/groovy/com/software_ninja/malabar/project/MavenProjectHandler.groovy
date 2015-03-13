@@ -148,21 +148,22 @@ public class MavenProjectHandler {
     if( f != null )   f.clear();
   }
 
-  def lookInCache(pom, func) {
+  def lookInCache(pm, pmfile, func) {
     def name = this.getClass().getName();
-    def pomFile = new File(MalabarUtil.expandFile(pom as String));
+    def pomFile = new File(MalabarUtil.expandFile(pmfile as String));
     def mod = pomFile.lastModified();
     def cache1 = cache[name];
     if(cache1 == null) {
       cache1 = [:]
       cache.put(name, cache1);
     }
-    
-    def rtnval = cache1[pom];
+    def key = [pm, pmfile];
+    def rtnval = cache1[key];
   
     if(rtnval == null || rtnval['timestamp'] != mod) {
+      log.fine("cache miss:" + pm + " " + pmfile);
       rtnval = createCacheEntry(pomFile, mod , func); 
-      cache[name].put( pom , rtnval);
+      cache[name].put( key , rtnval);
     }
     return rtnval;
   }
@@ -231,12 +232,12 @@ public class MavenProjectHandler {
   /**
    * Load and execute the class.  Assumes the class has been compiled/parsed already.
    */
-  def exec(repo, pom, clazzName, args) { 
+  def exec(repo, pm, pmfile, clazzName, args) { 
     log.fine "Start Exec of " + clazzName;
 
     try{
 
-      def cached = lookInCache( pom, { fecthProjectInfo(repo, pom)});
+      def cached = lookInCache( pm, pmfile, { fecthProjectInfo(repo, pm, pmfile)});
 
       def cl = cached['classLoader'];
       def clazz = Class.forName(clazzName, true, cl);
@@ -250,11 +251,11 @@ public class MavenProjectHandler {
   /**
    * Parse the script on disk.  Return errors as a list
    */
-  def parse(repo, pom, scriptIn, scriptBody, parserName) {
+  def parse(repo, pm, pmfile, scriptIn, scriptBody, parserName) {
     log.fine "Start Parse";
     try{
 
-      def cached = lookInCache( pom, { fecthProjectInfo(repo, pom)});
+      def cached = lookInCache( pm, pmfile, { fecthProjectInfo(repo, pm, pmfile)});
 
       def parser = cached['parsers'][parserName];
       def rtnval = null;
@@ -282,9 +283,9 @@ public class MavenProjectHandler {
    * Run a unit test.  Return a list of failures.
    */
 
-  def unitTest (repo, pm, scriptIn, method, parserName) {    
+  def unitTest (repo, pm, pmfile, scriptIn, method, parserName) {    
     String script = MalabarUtil.expandFile(scriptIn);
-    def cached = lookInCache( pm, { fecthProjectInfo(repo, pm)});
+    def cached = lookInCache( pm, pmfile, { fecthProjectInfo(repo, pm, pmfile)});
     try{
       def parser = cached['parsers'][parserName];
       def parseResult = parser.parse(new File(script));
@@ -329,8 +330,8 @@ public class MavenProjectHandler {
    *   @param isClass If null or true, look for only class names
    *   @param useRegex If null or true, treat pattern as a regex
    */
-  def resource(repo, pm, pattern, max, isClass, useRegex){
-    def cached = lookInCache( pm, { fecthProjectInfo(repo, pm)});
+  def resource(repo, pm, pmfile, pattern, max, isClass, useRegex){
+    def cached = lookInCache( pm, pmfile, { fecthProjectInfo(repo, pm, pmfile)});
     def resourceCache = cached['resourceCache'];
     log.fine "RESOURCE:" + resourceCache + " " + isClass + " " + useRegex + " " + max;
     if( isClass == null || isClass ){
@@ -350,8 +351,8 @@ public class MavenProjectHandler {
    *   @param isClass If null or true, look for only class names
    *   @param useRegex If null or true, treat pattern as a regex
    */
-  def tags(repo, pm, className){
-    def cached = lookInCache( pm, { fecthProjectInfo(repo, pm)});
+  def tags(repo, pm, pmfile, className){
+    def cached = lookInCache( pm, pmfile, { fecthProjectInfo(repo, pm, pmfile)});
     def classLoader = cached.get('classLoader');
     new SemanticReflector().asSemanticTag(classLoader.loadClass(className));
 
@@ -363,8 +364,8 @@ public class MavenProjectHandler {
    *
    */
 
-  def debug(repo, pm){
-    def cached = lookInCache( pm, { fecthProjectInfo(repo, pm)});
+  def debug(repo, pm, pmfile){
+    def cached = lookInCache( pm, pmfile, { fecthProjectInfo(repo, pm, pmfile)});
     def classLoader = cached.get('classLoader');
     [ classpath   : classLoader.classPath,
       projectInfo : cached['projectInfo'],
@@ -379,12 +380,12 @@ public class MavenProjectHandler {
   // Project Info
   //
 
-  def fecthProjectInfo = { repo, pom -> 
+  def fecthProjectInfo = { repo, pm, pmfile -> 
     def repox = (repo == null ? "~/.m2/repository" : repo);
 
     try {
       def x = new MavenProjectsCreator();
-      def pjs = x.create(MalabarUtil.expandFile(repox), MalabarUtil.expandFile(pom))
+      def pjs = x.create(MalabarUtil.expandFile(repox), MalabarUtil.expandFile(pmfile))
       return [runtime: x.resolveDependencies(pjs[0], repox, "runtime"),
 	      systemProperties : System.getProperties(), 
 	      test:    x.resolveDependencies(pjs[0], repox, "test")]
@@ -395,12 +396,12 @@ public class MavenProjectHandler {
       ex.printStackTrace();
       throw new Exception( ex.getMessage() + " repo:" + 
 			   MalabarUtil.expandFile(repox) + 
-			   " pom:" + MalabarUtil.expandFile(pom), ex);
+			   " pmfile:" + MalabarUtil.expandFile(pmfile), ex);
     }
   }
   
-  def projectInfo(repo, pom) {
-    return lookInCache(pom, { fecthProjectInfo(repo, pom)} )['projectInfo'];
+  def projectInfo(repo, pm, pmfile) {
+    return lookInCache(pm, pmfile, { fecthProjectInfo(repo, pm, pmfile)} )['projectInfo'];
   }
 		       
 }

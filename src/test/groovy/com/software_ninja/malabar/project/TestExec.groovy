@@ -15,6 +15,7 @@ public class TestExecImpl {
   private Map config;
   private MavenProjectHandler mph;
   private String defaultRepo =  System.getProperty("user.home") +  "/.m2/repository";
+  private String pm = 'maven';
 
   @Before
   public void init() {
@@ -26,13 +27,13 @@ public class TestExecImpl {
   public void testExec() {
     String simple = 'src/test/resources/projects/simple/';
     String scriptIn = simple + '/src/test/java/com/software_ninja/test/project/App.java';
-    String pm = simple + "pom.xml";
+    String pmfile = simple + "pom.xml";
 
     String clazzName = "com.software_ninja.test.project.App";
-    println 'http://localhost:4429/exec/?pm=' + pm +'&class=' + clazzName + "&repo=" + defaultRepo;
-    mph.parse(defaultRepo, pm, scriptIn, null, "java");
-    mph.exec (defaultRepo, pm, clazzName, null); 
-    mph.exec (defaultRepo, pm, clazzName, ["a", "b", "c"] as String[]);
+    //println 'http://localhost:4429/exec/?pm=' + pm +'&class=' + clazzName + "&repo=" + defaultRepo;
+    mph.parse(defaultRepo, pm, pmfile, scriptIn, null, "java");
+    mph.exec (defaultRepo, pm, pmfile, clazzName, null); 
+    mph.exec (defaultRepo, pm, pmfile, clazzName, ["a", "b", "c"] as String[]);
   }
 
 }

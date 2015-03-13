@@ -24,6 +24,7 @@ import groovy.io.FileType
 class MavenProjectTester {
 
   private Map config;
+  String pm = 'maven';
 
   /**
    * A generator that takes a list and returns the elements in random order
@@ -107,9 +108,9 @@ class MavenProjectTester {
           File pom = pair.getSecond();
           println "processing " + pom;
 	  MavenProjectHandler mph = new MavenProjectHandler(config);
-	  Map cacheEntry = mph.lookInCache(pom, { mph.fecthProjectInfo(pair.getFirst(), pom.absolutePath )} )
-          Map projectInfo = mph.projectInfo(pair.getFirst(),
-                                                          pom.absolutePath);
+	  String pmfile = pom.absolutePath;
+	  Map cacheEntry = mph.lookInCache(pm, pmfile, { mph.fecthProjectInfo(pair.getFirst(), pm, pmfile )} )
+          Map projectInfo = mph.projectInfo(pair.getFirst(), pm, pom.absolutePath);
 	  println "CacheEntry: " + cacheEntry;
 	  projectInfo.each { k,v -> println " KEY:" + k; }
           assertNotNull( projectInfo['test']);
@@ -125,7 +126,7 @@ class MavenProjectTester {
   void  testResource(){
 
     File pomFile = new File(this.getClass().getClassLoader().getResource( "pom/jdom-1.0.pom").toURI());
-    String pom = pomFile.getAbsolutePath();
+    String pmfile = pomFile.getAbsolutePath();
     String defaultRepo =  System.getProperty("user.home") +  "/.m2/repository";
     def mph = new MavenProjectHandler(config);
     for (Triple data : toIterable( triples(integers(), booleans(), booleans()))){
@@ -133,7 +134,7 @@ class MavenProjectTester {
       boolean isClass = data.getSecond();
       boolean useRegex = data.getThird();
       def pattern = /S*/;
-      def result =  mph.resource(defaultRepo, pom, pattern, max, isClass, useRegex);
+      def result =  mph.resource(defaultRepo, pm, pmfile, pattern, max, isClass, useRegex);
       int size = result.size();
       assertTrue( "Size should be <= than max size:" + size + " max:" + max, size <= Math.max(max, 0));
       //if( size > 0) println result.first();
@@ -143,36 +144,38 @@ class MavenProjectTester {
   void  testResourceFullClass(){
 
     File pomFile = new File(this.getClass().getClassLoader().getResource( "pom/jdom-1.0.pom").toURI());
-    String pom = pomFile.getAbsolutePath();
+    String pmfile = pomFile.getAbsolutePath();
     String defaultRepo =  System.getProperty("user.home") +  "/.m2/repository";
     def mph = new MavenProjectHandler(config);
     int max = 10
     boolean isClass = true;
     boolean useRegex = false;
     def pattern = "org.apache.xalan.xsltc.compiler.util.ResultTreeType"
-    def result =  mph.resource(defaultRepo, pom, pattern, max, isClass, useRegex);
+    def result =  mph.resource(defaultRepo, pm, pmfile, pattern, max, isClass, useRegex);
   }
 
   @Test
   void  testTags(){
 
     File pomFile = new File(this.getClass().getClassLoader().getResource( "pom/jdom-1.0.pom").toURI());
-    String pom = pomFile.getAbsolutePath();
+    String pmfile = pomFile.getAbsolutePath();
+
     String defaultRepo =  System.getProperty("user.home") +  "/.m2/repository";
     def mph = new MavenProjectHandler(config);
     def className = "org.apache.xalan.xsltc.compiler.util.ResultTreeType"
-    def result =  mph.tags(defaultRepo, pom, className);
+    def result =  mph.tags(defaultRepo, pm, pmfile, className);
   }
 
   @Test
   public void testFileUnitTest() throws Exception {
     String simple = 'src/test/resources/projects/simple/';
     String scriptIn = simple + '/src/test/java/com/software_ninja/test/project/AppTest.java';
-    String pm = simple + "pom.xml";
+    String pmfile = simple + "pom.xml";
+    String pm = 'maven';
     String repo = "~/.m2/repository";
     new File(simple + "target").deleteDir();
     def mph = new MavenProjectHandler(config);
-    def rtnval = mph.unitTest(repo, pm, scriptIn, null, "java");
+    def rtnval = mph.unitTest(repo, pm, pmfile, scriptIn, null, "java");
     assertEquals("This always fails", rtnval[0][1]);
   }
 

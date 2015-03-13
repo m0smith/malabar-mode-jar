@@ -18,6 +18,31 @@ import java.util.logging.ConsoleHandler;
 class MalabarServer {
   def cache = [:];
   def config = [ cache :cache ];
+
+  def MAVEN = 'maven';
+
+
+  def standardizeParams(params) {
+    Map rtnval = params;
+
+    if( rtnval['pm'] == null ) {
+      throw new IllegalArgumentException("pm is required");
+    }
+
+    if( rtnval['repo'] == null ) {
+      rtnval['repo'] = MalabarUtil.expandFile("~/.m2/repository/");
+    }
+
+    if(rtnval['pmfile'] != null ) {
+      rtnval['pmfile'] = MalabarUtil.expandFile(rtnval['pmfile']);
+    } else {
+      throw new IllegalArgumentException("pmfile is required");
+    }
+
+
+    return rtnval;
+
+  }
     
   def start(String port) {
 
@@ -25,39 +50,38 @@ class MalabarServer {
     def addr = new InetSocketAddress(Integer.parseInt(port))
     def httpServer = com.sun.net.httpserver.HttpServer.create(addr, 0)
 
-    def context = httpServer.createContext('/pi/', new JsonHandlerFactory(config).build({params ->
-      def pmIn = params["pm"];
-      def pm = (pmIn == null ? null : MalabarUtil.expandFile(pmIn));
-      mph.projectInfo(params["repo"], pm);}));
+    def context = httpServer.createContext('/pi/', new JsonHandlerFactory(config).build({paramsIn ->
+      def params = standardizeParams(paramsIn);
+      mph.projectInfo(params["repo"], params['pm'], params['pmfile']);}));
     context.getFilters().add(new ParameterFilter());
     
-    context = httpServer.createContext('/parse/', new JsonHandlerFactory(config).build({params ->
-	String pmIn = params["pm"];
-	def pm = (pmIn == null ? null : MalabarUtil.expandFile(pmIn));
-	mph.parse(params["repo"], pm, params["script"], params["scriptBody"],
-		  params['parser']);}));
+    context = httpServer.createContext('/parse/', new JsonHandlerFactory(config).build({paramsIn ->
+      def params = standardizeParams(paramsIn);
+      
+      mph.parse(params["repo"], params['pm'], params['pmfile'], 
+		params["script"], params["scriptBody"], params['parser']);}));
     context.getFilters().add(new ParameterFilter());
     
-    context = httpServer.createContext('/test/', new JsonHandlerFactory(config).build({params ->
-	def pmIn = params["pm"];
-	def pm = (pmIn == null ? null : MalabarUtil.expandFile(pmIn));
-	mph.unitTest(params["repo"], pm, params["script"], params["method"],
-		     params['parser']);}));
+    context = httpServer.createContext('/test/', new JsonHandlerFactory(config).build({paramsIn ->
+      def params = standardizeParams(paramsIn);
+      mph.unitTest(params["repo"], params['pm'], params['pmfile'], 
+		   params["script"], params["method"], params['parser']);}));
     context.getFilters().add(new ParameterFilter());
         
-    context = httpServer.createContext('/exec/', new JsonHandlerFactory(config).build({params ->
-	def pmIn = params["pm"];
-	def pm = (pmIn == null ? null : MalabarUtil.expandFile(pmIn));
-	mph.exec(params["repo"], pm, params["class"], params["arg"]);}));
+    context = httpServer.createContext('/exec/', new JsonHandlerFactory(config).build({paramsIn ->
+      def params = standardizeParams(paramsIn);
+      mph.exec(params["repo"], params['pm'], params['pmfile'], 
+	       params["class"], params["arg"]);}));
     context.getFilters().add(new ParameterFilter());
         
-    context = httpServer.createContext('/tags/', new JsonHandlerFactory(config).build({params ->
-	def pmIn = params["pm"];
-	def pm = (pmIn == null ? null : MalabarUtil.expandFile(pmIn));
- 	mph.tags(params["repo"], pm, params["class"]);})); 
+    context = httpServer.createContext('/tags/', new JsonHandlerFactory(config).build({paramsIn ->
+      def params = standardizeParams(paramsIn);
+      mph.tags(params["repo"], params['pm'], params['pmfile'], 
+	       params["class"]);})); 
     context.getFilters().add(new ParameterFilter());
         
-    context = httpServer.createContext('/debug/', new JsonHandlerFactory(config).build({params ->
+    context = httpServer.createContext('/debug/', new JsonHandlerFactory(config).build({paramsIn ->
+      def params = standardizeParams(paramsIn);
       def lm = LogManager.getLogManager();
       lm.loggerNames.each( { if( it.startsWith("com.software_ninja")) {
 			       def l = lm.getLogger(it);
@@ -69,12 +93,12 @@ class MalabarServer {
       
       def pmIn = params["pm"];
       def pm = (pmIn == null ? null : MalabarUtil.expandFile(pmIn));
-      mph.debug(params["repo"], pm)}));
+      mph.debug(params["repo"], params['pm'], params['pmfile'])}));
 
     context.getFilters().add(new ParameterFilter());
         
     context = httpServer.createContext('/spawn/', new JsonHandlerFactory(config).build({params ->
-      
+      //def params = standardizeParams(paramsIn);
       com.software_ninja.malabar.lang.NewVM.startSecondJVM(params["version"], params["jdk"], 
 							   params["port"], params["cwd"], 
 							   true); 
@@ -85,10 +109,10 @@ class MalabarServer {
 	"class"  : params['class']] }));
     context.getFilters().add(new ParameterFilter());
         
-    context = httpServer.createContext('/resource/', new JsonHandlerFactory(config).build({params ->
-	def pmIn = params["pm"];
-	def pm = (pmIn == null ? null : MalabarUtil.expandFile(pmIn));
-	mph.resource(params["repo"], pm, params["pattern"], params["max"] as int, params['isClass'] as boolean,
+    context = httpServer.createContext('/resource/', new JsonHandlerFactory(config).build({paramsIn ->
+      def params = standardizeParams(paramsIn);
+	mph.resource(params["repo"], params['pm'], params['pmfile'], 
+		     params["pattern"], params["max"] as int, params['isClass'] as boolean,
 		     params['useRegex'] as boolean);}));
     context.getFilters().add(new ParameterFilter());
         
@@ -97,7 +121,7 @@ class MalabarServer {
       mph.additionalClasspath(params["relative"], params["absolute"]);}));
     context.getFilters().add(new ParameterFilter());
         
-    context = httpServer.createContext('/stop/', new JsonHandlerFactory(config).build({params ->  httpServer.stop(1); System.exit(0); }));
+    context = httpServer.createContext('/stop/', new JsonHandlerFactory(config).build({paramsIn ->  httpServer.stop(1); System.exit(0); }));
     context.getFilters().add(new ParameterFilter());
 
 

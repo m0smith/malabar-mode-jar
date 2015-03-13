@@ -15,11 +15,12 @@ public class TestJavaParser {
   String simple = 'src/test/resources/projects/simple/';
   String scriptIn = simple + '/src/test/java/com/software_ninja/test/project/AppTest.java';
   String errorScriptIn = simple + '/src/test/java/com/software_ninja/test/project/ParserTargetWithError.java';
-  String pm = simple + "pom.xml";
+  String pmfile = simple + "pom.xml";
+  String pm = 'maven';
   String repo = "~/.m2/repository";
   
   def mavenProjectHandler = new MavenProjectHandler([cache:[:]]);
-  def cacheEntry = mavenProjectHandler.lookInCache( pm, { mavenProjectHandler.fecthProjectInfo(repo, pm)});
+  def cacheEntry = mavenProjectHandler.lookInCache( pm,pmfile, { mavenProjectHandler.fecthProjectInfo(repo, pm, pmfile)});
   
   
   def javaParser = cacheEntry['parsers']['java'];
