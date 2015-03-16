@@ -107,7 +107,7 @@ class MyDiagnosticListener implements DiagnosticListener{
 
   public String getSourceLocator(Diagnostic diagnostic) {
     JavaFileObject jfo = diagnostic.getSource();
-    return (jfo != null) ? new File(jfo.toUri()) : "";
+    return (jfo != null) ? jfo.toUri() : "";
   }
 
   public void report(Diagnostic diagnostic) {
