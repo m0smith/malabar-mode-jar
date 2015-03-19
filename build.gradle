@@ -180,6 +180,10 @@ buildscript {
 }
 apply plugin: 'release'
 
+release {
+  failOnCommitNeeded = false
+}
+
 createReleaseTag.dependsOn uploadArchives
 
 //
