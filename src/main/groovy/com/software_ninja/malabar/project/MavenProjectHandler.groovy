@@ -369,7 +369,7 @@ public class MavenProjectHandler {
     def repox = (repo == null ? "~/.m2/repository" : repo);
 
     try {
-      def x = new MavenProjectsCreator();
+      def x = pm == "gradle" ? new GradleProjectsCreator() : new MavenProjectsCreator();
       def pjs = x.create(MalabarUtil.expandFile(repox), MalabarUtil.expandFile(pmfile))
       return [runtime: x.resolveDependencies(pjs[0], repox, "runtime"),
 	      systemProperties : System.getProperties(), 

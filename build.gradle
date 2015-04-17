@@ -12,13 +12,8 @@ version version
 mainClassName = "com.software_ninja.malabar.Malabar"
 
 repositories {
-  maven {
-    url "http://repo.gradle.org/gradle/libs-releases-local"
-  }
-
-  maven {
-    url "http://artifacts.co.ihc.com/repomgr/content/groups/combined/"
-  }
+  mavenLocal()
+  maven {    url "http://repo.gradle.org/gradle/libs-releases-local"  }
   mavenCentral()   
 
 }
@@ -42,7 +37,7 @@ dependencies {
   compile 'org.fusesource.jansi:jansi:1.11'
   compile 'junit:junit:4.11'
   compile 'org.slf4j:slf4j-jdk14:1.7.5'
-  compile "org.gradle:gradle-tooling-api:2.2.1"
+  compile "org.gradle:gradle-tooling-api:2.3"
 
 
   testCompile 'net.java.quickcheck:quickcheck:0.6'
