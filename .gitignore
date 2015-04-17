@@ -4,3 +4,7 @@ target
 TAGS
 .gradle
 build
+logs
+*.log
+*.old
+
