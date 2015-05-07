@@ -110,7 +110,7 @@ public class MavenProjectHandler {
       projectInfo['runtime']['elements'] +
       projectInfo['test']['classpath'];
       def resourceCache = new ResourceCache();
-      classpath.each({if(it != null) resourceCache.submit(it)});
+      classpath.each({if(it != null) {println "IT:" + it; resourceCache.submit(it)}});
       bootClasspath.split(System.getProperty("path.separator")).each({if(it != null) resourceCache.submit(it)});
 
       def staticClassloader = createClassLoaderStatic(classpath);

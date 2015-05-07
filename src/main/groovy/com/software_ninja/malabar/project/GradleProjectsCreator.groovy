@@ -27,17 +27,29 @@ public class GradleProjectsCreator {
     println deps0;
     def deps = deps0.grep({ it.scope == gradleScope });
     println deps;
+    println "COntect Roots:" + model.contentRoots;
+    def crs = model.contentRoots;
+    def dependencies = model.dependencies;
 
-    [ dependencies : deps.gather{it.file.toString()},
+    [ dependencies : dependencies.collect({ it.file.absolutePath}), 
 
       resources: [] ,
 
-      sources:   "test" == scope ? model.modules.contentRoots.testDirectories.gather({it.directory}) :
-                                   model.modules.contentRoots.sourceDirectories.gather({it.directory}),
+      sources:   "test" == scope ?  crs.collect({cr -> [cr.testDirectories.collect({it.directory.absolutePath}),
+							cr.generatedTestDirectories.collect({it.directory.absolutePath})
+							]}).flatten() 
+      :
+                                    crs.collect({cr -> [cr.sourceDirectories.collect({it.directory.absolutePath}),
+							cr.generatedSourceDirectories.collect({it.directory.absolutePath})
+
+						       ]}).flatten() ,
+
 
       elements:  "test" == scope ? model.compilerOutput.outputDir.toString() :
                                    model.compilerOutput.testOutputDir.toString() ]
 
   }
+
+  
 
 }
