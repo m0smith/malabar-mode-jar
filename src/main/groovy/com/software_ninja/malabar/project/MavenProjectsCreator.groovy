@@ -1,47 +1,36 @@
 package com.software_ninja.malabar.project;
 
-import org.apache.maven.execution.MavenSession;
-
-import org.apache.maven.execution.MavenExecutionResult;
-
-import org.apache.maven.execution.DefaultMavenExecutionResult;
-
-import org.apache.maven.execution.DefaultMavenExecutionRequest;
-
-import org.apache.maven.project.ProjectBuildingRequest;
-
-import org.apache.maven.project.ProjectBuildingResult;
-
-import org.apache.maven.execution.MavenExecutionRequestPopulator;
-
-import org.apache.maven.execution.MavenExecutionRequest;
-import org.apache.maven.project.ProjectBuilder;
-
-
-import java.util.logging.Level;
-import org.codehaus.plexus.DefaultPlexusContainer;
-import org.apache.maven.project.ProjectBuildingException;
-import org.apache.maven.execution.MavenExecutionRequestPopulationException;
-
+import com.jcabi.aether.Aether
 import groovy.util.logging.Log;
 import java.util.List;
+import java.util.logging.Level;
+import org.apache.maven.execution.DefaultMavenExecutionRequest;
+import org.apache.maven.execution.DefaultMavenExecutionResult;
+import org.apache.maven.execution.MavenExecutionRequest;
+import org.apache.maven.execution.MavenExecutionRequestPopulationException;
+import org.apache.maven.execution.MavenExecutionRequestPopulator;
+import org.apache.maven.execution.MavenExecutionResult;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.ProjectBuilder;
+import org.apache.maven.project.ProjectBuildingException;
+import org.apache.maven.project.ProjectBuildingRequest;
+import org.apache.maven.project.ProjectBuildingResult;
 import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.DefaultContainerConfiguration;
+import org.codehaus.plexus.DefaultPlexusContainer;
 import org.codehaus.plexus.DefaultPlexusContainer;
 import org.codehaus.plexus.PlexusContainerException;
 import org.codehaus.plexus.classworlds.ClassWorld;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.configuration.PlexusConfigurationException;
 import org.sonatype.aether.RepositorySystemSession;
-import org.sonatype.aether.util.DefaultRepositorySystemSession;
-import com.jcabi.aether.Aether
-import org.sonatype.aether.repository.RemoteRepository;
-import org.sonatype.aether.util.artifact.DefaultArtifact;
 import org.sonatype.aether.artifact.Artifact;
-
 import org.sonatype.aether.graph.DependencyNode
+import org.sonatype.aether.repository.RemoteRepository;
+import org.sonatype.aether.util.DefaultRepositorySystemSession;
+import org.sonatype.aether.util.artifact.DefaultArtifact;
 
 @Log
 public class MavenProjectsCreator {
@@ -61,9 +50,9 @@ public class MavenProjectsCreator {
   }
 
   private List<MavenProject> createNow(Settings settings, File pomFile) throws PlexusContainerException, PlexusConfigurationException, ComponentLookupException, MavenExecutionRequestPopulationException, ProjectBuildingException {
-    //using jarjar for maven3 classes affects the contents of the effective pom
-    //references to certain Maven standard plugins contain jarjar in the fqn
-    //not sure if this is a problem.
+    // using jarjar for maven3 classes affects the contents of the effective pom
+    // references to certain Maven standard plugins contain jarjar in the fqn
+    // not sure if this is a problem.
     ContainerConfiguration containerConfiguration = new DefaultContainerConfiguration()
     .setClassWorld(new ClassWorld("plexus.core", ClassWorld.class.getClassLoader()))
     .setName("mavenCore");
@@ -71,7 +60,7 @@ public class MavenProjectsCreator {
     ProjectBuilder builder = container.lookup(ProjectBuilder.class);
     MavenExecutionRequest executionRequest = new DefaultMavenExecutionRequest();
     final Properties properties = new Properties(System.getProperties());
-    //    properties.putAll(SystemProperties.asMap());
+    // properties.putAll(SystemProperties.asMap());
     executionRequest.setSystemProperties(properties);
     MavenExecutionRequestPopulator populator = container.lookup(MavenExecutionRequestPopulator.class);
     populator.populateFromSettings(executionRequest, settings);
@@ -88,13 +77,6 @@ public class MavenProjectsCreator {
 
     allProjects.collect( { p -> reactorProjects.add(p.getProject()); })
     
-    // CollectionUtils.collect(allProjects, reactorProjects, new Transformer<MavenProject, ProjectBuildingResult>() {
-    // 			      public MavenProject transform(ProjectBuildingResult original) {
-    // 				return original.getProject();
-    // 			      }
-    // 			    });
-
-
     MavenExecutionResult result = new DefaultMavenExecutionResult();
     result.setProject(mavenProject);
     RepositorySystemSession repoSession = new DefaultRepositorySystemSession();
@@ -112,7 +94,7 @@ public class MavenProjectsCreator {
     List depLists = project.getDependencies().collect { 
       
       DefaultArtifact  art = new DefaultArtifact(it.getGroupId(), it.getArtifactId(), 
-					       it.getClassifier(), it.getType(),it.getVersion());
+						 it.getClassifier(), it.getType(),it.getVersion());
 
       org.sonatype.aether.graph.DependencyFilter filter = new org.sonatype.aether.graph.DependencyFilter() {
 	boolean accept( DependencyNode node, List<DependencyNode> parents )
@@ -128,13 +110,9 @@ public class MavenProjectsCreator {
 	  
 	}
       }
+
       try {
-
-
-
-
-	Collection<Artifact> deps = aether.resolve( art, scope , filter);
-	
+	Collection<Artifact> deps = aether.resolve( art, scope , filter);	
 	deps.collect{  it.getFile().getAbsolutePath() }
       } catch (  org.sonatype.aether.resolution.DependencyResolutionException ex) {
 	log.log(Level.WARNING, ex.getResult().toString(), ex);
@@ -142,14 +120,14 @@ public class MavenProjectsCreator {
       } catch (Exception ex) {
 	log.log(Level.WARNING, ex.getMessage(), ex);
 	[];
-    }
+      }
       
     }.grep({it.size() > 0})
     
     [ dependencies : depLists.collect {it.first()},  classpath : depLists.flatten() ,
-      resources: "test"== scope ? project.getTestResources() : project.getResources() ,
-      sources : "test"== scope ? project.getTestCompileSourceRoots() :project.getCompileSourceRoots() ,
-      elements:  "test"== scope ? project.getTestClasspathElements() : project.getCompileClasspathElements()]
+    resources: "test"== scope ? project.getTestResources() : project.getResources() ,
+    sources : "test"== scope ? project.getTestCompileSourceRoots() :project.getCompileSourceRoots() ,
+    elements:  "test"== scope ? project.getTestClasspathElements() : project.getCompileClasspathElements()]
   }
 
 }

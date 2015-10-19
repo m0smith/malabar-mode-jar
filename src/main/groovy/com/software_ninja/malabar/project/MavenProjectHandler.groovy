@@ -1,19 +1,17 @@
 // To RUN
 // groovy -Dhttp.proxyHost=proxy.ihc.com -Dhttp.proxyPort=8080 -Dgroovy.grape.report.downloads=true -Djava.net.useSystemProxies=true src/main/groovy/com/software_ninja/malabar/D.groovy
 // https://docs.oracle.com/javase/7/docs/api/java/net/doc-files/net-properties.html
-
-//groovy.grape.Grape.grab([group:'org.apache.maven', module:'maven-core', version:'3.0.5']);
-//groovy.grape.Grape.grab([group:'org.apache.maven', module:'maven-compat', version:'3.0.5']);
-//groovy.grape.Grape.grab([group:'com.jcabi', module:'jcabi-aether', version:'0.10.1']);
-
-
+//
+// groovy.grape.Grape.grab([group:'org.apache.maven', module:'maven-core', version:'3.0.5']);
+// groovy.grape.Grape.grab([group:'org.apache.maven', module:'maven-compat', version:'3.0.5']);
+// groovy.grape.Grape.grab([group:'com.jcabi', module:'jcabi-aether', version:'0.10.1']);
+// 
+//
 // http://www.programcreek.com/java-api-examples/index.php?api=org.apache.maven.project.MavenProjectBuilder See # 20
 // See also https://code-review.gradle.org/changelog/Gradle?cs=5272714e45bf6eb2cd87c1c7611fde5ddd32cdc5
 // https://github.com/gradle/gradle/blob/master/subprojects/build-init/src/main/groovy/org/gradle/buildinit/plugins/internal/maven/MavenProjectsCreator.java
 
 package com.software_ninja.malabar.project;
-
-
 
 /*
  * Stolen wholesale from https://github.com/gradle/gradle/blob/master/subprojects/build-init/src/main/groovy/org/gradle/buildinit/plugins/internal/maven/MavenProjectsCreator.java
@@ -21,32 +19,19 @@ package com.software_ninja.malabar.project;
 
 //this.getClass().classLoader.rootLoader.addURL(new File("c:/Users/lpmsmith/projects/malabar-mode-jar/build/libs/malabar-mode-jar.jar").toURL())
 
-
-//import com.google.common.collect.ImmutableList;
-//import org.gradle.api.Transformer;
-//import org.gradle.internal.SystemProperties;
-
-
-
 import org.apache.maven.execution.*;
 import org.apache.maven.project.*;
-
-
-
 import com.software_ninja.malabar.MalabarUtil 
 import com.software_ninja.malabar.ResourceCache;
 import com.software_ninja.malabar.SemanticReflector;
 import com.software_ninja.malabar.lang.GroovyParser;
 import com.software_ninja.malabar.lang.JavaParser;
-
 import org.codehaus.groovy.control.ErrorCollector;
 import org.codehaus.groovy.control.CompilerConfiguration
 import org.codehaus.groovy.control.customizers.ASTTransformationCustomizer
-
 import org.junit.runner.Result;
 import org.junit.runner.Request;
 import org.junit.runner.JUnitCore;
-
 import java.io.File;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -63,10 +48,9 @@ public class MavenProjectHandler {
    *             [pom]
    *  cache keys [timestamp projectInfo cloassLoader]
    */
-  public Map cache;
-
-  public List relative;
-  public List absolute;
+  private Map cache;
+  private List relative;
+  private List absolute;
   
   public MavenProjectHandler(config) {
     this.cache = config['cache'];
@@ -156,7 +140,6 @@ public class MavenProjectHandler {
   //
   // Add extra class path elements
   //
-
   def additionalClasspath(relativeJson ,absoluteJson) {
     
     def newRelative = relativeJson != null ? new groovy.json.JsonSlurper().parseText (relativeJson ) : [];
@@ -167,14 +150,11 @@ public class MavenProjectHandler {
       this.absolute = newAbsolute;
       clearCache();
     }
-    
   }
   
   //
   // Parsing
   //
-
-
   def handleUnitTestCompileException(org.codehaus.groovy.control.messages.SyntaxErrorMessage ex) {
     def cause = ex.getCause();
     return [ "Compile Error (" + cause.line +',' + cause.startColumn +")", 
@@ -212,8 +192,6 @@ public class MavenProjectHandler {
     return args as String[];
   }
 
-
-  
   /**
    * Load and execute the class.  Assumes the class has been compiled/parsed already.
    */
@@ -223,7 +201,6 @@ public class MavenProjectHandler {
     try{
 
       def cached = lookInCache( pm, pmfile, { fecthProjectInfo(repo, pm, pmfile)});
-
       def cl = cached['classLoader'];
       def clazz = Class.forName(clazzName, true, cl);
       clazz.main(fixArgs(args));
@@ -241,7 +218,6 @@ public class MavenProjectHandler {
     try{
 
       def cached = lookInCache( pm, pmfile, { fecthProjectInfo(repo, pm, pmfile)});
-
       def parser = cached['parsers'][parserName];
       def rtnval = null;
       if(scriptBody == null) {
@@ -260,14 +236,11 @@ public class MavenProjectHandler {
     } catch (Exception ex){
       ex.printStackTrace();
     }
-    
-    
   }
 
   /**
    * Run a unit test.  Return a list of failures.
    */
-
   def unitTest (repo, pm, pmfile, scriptIn, method, parserName) {    
     String script = MalabarUtil.expandFile(scriptIn);
     def cached = lookInCache( pm, pmfile, { fecthProjectInfo(repo, pm, pmfile)});
@@ -304,10 +277,7 @@ public class MavenProjectHandler {
 	ex.getStackTrace()]]
 
     }
-    
-
   }
-
 
   /**
    * Get info on a class or resource
@@ -329,7 +299,6 @@ public class MavenProjectHandler {
     }
   } 
 
-
   /**
    * Get info on a class or resource
    *
@@ -343,12 +312,10 @@ public class MavenProjectHandler {
 
   } 
 
-
   /**
    * Return current status of a project.
    *
    */
-
   def debug(repo, pm, pmfile){
     def cached = lookInCache( pm, pmfile, { fecthProjectInfo(repo, pm, pmfile)});
     def classLoader = cached.get('classLoader');
@@ -358,13 +325,9 @@ public class MavenProjectHandler {
 
   } 
 
-
-
-
   //
   // Project Info
   //
-
   def fecthProjectInfo = { repo, pm, pmfile -> 
     def repox = (repo == null ? "~/.m2/repository" : repo);
 
@@ -374,8 +337,6 @@ public class MavenProjectHandler {
       return [runtime: x.resolveDependencies(pjs[0], repox, "runtime"),
 	      systemProperties : System.getProperties(), 
 	      test:    x.resolveDependencies(pjs[0], repox, "test")]
-
-
 
     } catch (Exception ex) {
       ex.printStackTrace();
