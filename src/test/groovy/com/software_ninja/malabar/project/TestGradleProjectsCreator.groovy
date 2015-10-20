@@ -10,6 +10,7 @@ public class TestGradleProjectsCreator {
 
   @Test
   void  testArgs() throws Exception {
+
     println "USER.DIR" + System.getProperty ('user.dir');
     def proj = target.create("", ".");
     println "GRADLE PROJECT:" + proj;
@@ -19,8 +20,6 @@ public class TestGradleProjectsCreator {
       String interfaceName = theInterfaces[i].getName();
       System.out.println( "INTERFACE:" + interfaceName);
     }
-    println "DEPENDENCIES: " + target.resolveDependencies(  proj[0],  "", "runtime") ;
-    
+    println "DEPENDENCIES: " + target.resolveDependencies(  proj[0],  "", "runtime") ;    
   }
-  
 }

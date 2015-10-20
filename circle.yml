@@ -3,5 +3,4 @@ machine:
     version: openjdk7
 
 general:
-  branches:
-    - personal-develop
+  branches: personal-develop

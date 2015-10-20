@@ -20,9 +20,11 @@ import com.software_ninja.malabar.MalabarUtil;
 /**
  *  A resource cache stores a "map" of the contents of jar files to the path to the file.
  **/
-   
 class TestResourceCacheImpl {
-    private String jar = MalabarUtil.expandFile("~/.m2/repository/xalan/xalan/2.7.1/xalan-2.7.1.jar"); 
+
+  private String defaultRepo = System.getProperty("user.home") + "/.m2/repository";
+  private String jar = MalabarUtil.expandFile(defaultRepo + "/xalan/xalan/2.7.1/xalan-2.7.1.jar");
+
   @Test
   public void testCache() {
     def rc = new ResourceCache();
@@ -31,14 +33,11 @@ class TestResourceCacheImpl {
     assertEquals (name, rc.find(name,10).first().getKey());
     name = "org.apache.xpath.XPathVisitor";
     assertEquals (name, rc.findExact(name,10).first().getKey());
-
     name = "org.apache.xpath.jaxp.JAXPVariableStack";
     assertEquals (name, rc.findClass(name,10).first().getKey());
-
   } 
 
-
- @Test
+  @Test
   public void testFindClass() {
     def rc = new ResourceCache();
     rc.submit(jar);
