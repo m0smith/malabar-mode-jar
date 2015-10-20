@@ -1,0 +1,18 @@
+cache:
+  directories:
+    - $HOME/.m2/repository
+
+language: java
+
+branches:
+   - personal-develop
+
+jdk:
+   - oraclejdk7
+   - openjdk7
+
+notifications:
+  email: true
+
+script:
+  - mvn compile && mvn test
