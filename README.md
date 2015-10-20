@@ -1,4 +1,4 @@
-# malabar-mode-jar
+# malabar-mode-jar [![Build Status](https://drone.io/github.com/Hiroyuki-Nagata/malabar-mode-jar/status.png)](https://drone.io/github.com/Hiroyuki-Nagata/malabar-mode-jar/latest)
  A support JAR for malabar-mode: JVM Integration minor mode for EMACS
 
 See malabar-mode: https://github.com/m0smith/malabar-mode
