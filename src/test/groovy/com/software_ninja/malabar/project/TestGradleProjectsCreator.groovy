@@ -11,6 +11,9 @@ public class TestGradleProjectsCreator {
   @Test
   void  testArgs() throws Exception {
 
+    if (System.getProperty("surefire.test.class.path") != null)
+       return // we don't test in a case of maven build
+
     println "USER.DIR" + System.getProperty ('user.dir');
     def proj = target.create("", ".");
     println "GRADLE PROJECT:" + proj;
