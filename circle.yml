@@ -6,7 +6,7 @@ machine:
 
 dependencies:
   pre:
-    - mvn resolve
+    - mvn dependency:resolve
 
 test:
   override:
