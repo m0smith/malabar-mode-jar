@@ -1,6 +1,13 @@
 machine:
   java:
     version: openjdk7
+  services:
+    - docker
 
-general:
-  branches: personal-develop
+dependencies:
+  pre:
+    - mvn resolve
+
+test:
+  override:
+    - mvn test
