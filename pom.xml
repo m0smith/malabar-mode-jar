@@ -13,6 +13,13 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
+    <groovy.version>2.3.7</groovy.version>
+  </properties>
+
   <repositories>
     <repository>
       <snapshots>
@@ -28,7 +35,7 @@
       <plugin>
 	<groupId>org.codehaus.gmaven</groupId>
 	<artifactId>gmaven-plugin</artifactId>
-	<version>1.4</version>
+	<version>1.5</version>
 	<configuration> 
           <providerSelection>1.7</providerSelection> 
 	</configuration> 
@@ -47,7 +54,7 @@
           <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
-            <version>1.7.0</version>
+            <version>${groovy.version}</version>
           </dependency>
 	</dependencies>
 	<executions>
@@ -61,6 +68,17 @@
           </execution>
 	</executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.19</version>
+        <configuration>
+          <excludes>
+            <exclude>**/AppTest.java</exclude>
+            <exclude>**/HamsterTest.java</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <dependencies>
@@ -68,31 +86,26 @@
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-compat</artifactId>
       <version>3.0.5</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>jline</groupId>
       <artifactId>jline</artifactId>
       <version>2.11</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.jcabi</groupId>
       <artifactId>jcabi-aether</artifactId>
       <version>0.10.1</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.groovy</groupId>
       <artifactId>groovy-all</artifactId>
-      <version>2.3.7</version>
-      <scope>compile</scope>
+      <version>${groovy.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-aether-provider</artifactId>
       <version>3.0.5</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>net.java.quickcheck</groupId>
@@ -104,48 +117,47 @@
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
       <version>3.0.5</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.sonatype.aether</groupId>
       <artifactId>aether-connector-wagon</artifactId>
       <version>1.13.1</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.11</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-jdk14</artifactId>
       <version>1.7.5</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-embedder</artifactId>
       <version>3.0.5</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.fusesource.jansi</groupId>
       <artifactId>jansi</artifactId>
       <version>1.11</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.ivy</groupId>
       <artifactId>ivy</artifactId>
       <version>2.3.0</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.gradle</groupId>
       <artifactId>gradle-tooling-api</artifactId>
       <version>2.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>xalan</groupId>
+      <artifactId>xalan</artifactId>
+      <version>2.7.1</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

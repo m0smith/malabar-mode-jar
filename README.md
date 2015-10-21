@@ -1,4 +1,4 @@
-# malabar-mode-jar
+# malabar-mode-jar [![Circle CI](https://circleci.com/gh/Hiroyuki-Nagata/malabar-mode-jar.svg?style=svg)](https://circleci.com/gh/Hiroyuki-Nagata/malabar-mode-jar)
  A support JAR for malabar-mode: JVM Integration minor mode for EMACS
 
 See malabar-mode: https://github.com/m0smith/malabar-mode
