@@ -45,9 +45,8 @@ public class GradleProjectsCreator {
 						       ]}).flatten() ,
 
 
-      elements:  "test" == scope ? model.compilerOutput.outputDir.toString() :
-                                   model.compilerOutput.testOutputDir.toString() ]
-
+      elements:  ([ "test" == scope ? model.compilerOutput.testOutputDir : model.compilerOutput.outputDir ] - null).collect { it.toString() }
+   ]
   }
 
   
