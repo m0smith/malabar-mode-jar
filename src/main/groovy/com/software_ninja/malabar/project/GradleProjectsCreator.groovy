@@ -10,7 +10,7 @@ public class GradleProjectsCreator {
 
 
   public create( String repo, String pmfile){
-    def connection = GradleConnector.newConnector().forProjectDirectory(new File(pmfile)).useInstallation(new File("c:/Users/lpmsmith/.gradle/wrapper/dists/gradle-2.2.1-bin/88n1whbyjvxg3s40jzz5ur27/gradle-2.2.1")).connect();
+    def connection = GradleConnector.newConnector().forProjectDirectory(new File(pmfile).getParentFile()).connect();
     println " /// Connected"
     def builder = connection.model(IdeaProject.class);
     println " /// Made builder"
