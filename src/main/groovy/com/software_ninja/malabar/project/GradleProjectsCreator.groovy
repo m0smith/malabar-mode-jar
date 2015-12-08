@@ -21,17 +21,12 @@ public class GradleProjectsCreator {
   }
 
   public resolveDependencies(  model,  _repo, scope) {
-    def gradleScope = scope == 'runtime' ? 'COMPILE' : 'TEST';
-    println model.getClass().getName();
-    def deps0 = model.getDependencies();
-    println deps0;
-    def deps = deps0.grep({ it.scope == gradleScope });
-    println deps;
-    println "COntect Roots:" + model.contentRoots;
     def crs = model.contentRoots;
     def dependencies = model.dependencies;
 
-    [ dependencies : dependencies.collect({ it.file.absolutePath}), 
+    [ dependencies : dependencies.grep({ !it.exported } ).collect({ it.file.absolutePath }), 
+
+      classpath : dependencies.collect({ it.file.absolutePath }),
 
       resources: [] ,
 
