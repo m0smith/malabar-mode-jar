@@ -72,7 +72,7 @@ class JsonHandlerFactory {
 				 " Message: " + ex.getMessage(), ex);
 	  } catch (Exception ex2) {
 	    ex2.printStackTrace(new PrintStream(httpExchange.responseBody));
-	    ex2.printStackTrace();x
+	    ex2.printStackTrace();
 	  }
 	
 	} finally {
