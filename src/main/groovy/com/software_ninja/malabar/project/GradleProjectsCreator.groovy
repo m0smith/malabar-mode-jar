@@ -10,7 +10,7 @@ public class GradleProjectsCreator {
 
 
   public create( String repo, String pmfile){
-    def connection = GradleConnector.newConnector().forProjectDirectory(new File(pmfile)).useInstallation(new File("c:/Users/lpmsmith/.gradle/wrapper/dists/gradle-2.2.1-bin/88n1whbyjvxg3s40jzz5ur27/gradle-2.2.1")).connect();
+    def connection = GradleConnector.newConnector().forProjectDirectory(new File(pmfile).getParentFile()).connect();
     println " /// Connected"
     def builder = connection.model(IdeaProject.class);
     println " /// Made builder"
@@ -21,17 +21,12 @@ public class GradleProjectsCreator {
   }
 
   public resolveDependencies(  model,  _repo, scope) {
-    def gradleScope = scope == 'runtime' ? 'COMPILE' : 'TEST';
-    println model.getClass().getName();
-    def deps0 = model.getDependencies();
-    println deps0;
-    def deps = deps0.grep({ it.scope == gradleScope });
-    println deps;
-    println "COntect Roots:" + model.contentRoots;
     def crs = model.contentRoots;
     def dependencies = model.dependencies;
 
-    [ dependencies : dependencies.collect({ it.file.absolutePath}), 
+    [ dependencies : dependencies.grep({ !it.exported } ).collect({ it.file.absolutePath }), 
+
+      classpath : dependencies.collect({ it.file.absolutePath }),
 
       resources: [] ,
 
@@ -45,9 +40,8 @@ public class GradleProjectsCreator {
 						       ]}).flatten() ,
 
 
-      elements:  "test" == scope ? model.compilerOutput.outputDir.toString() :
-                                   model.compilerOutput.testOutputDir.toString() ]
-
+      elements:  ([ "test" == scope ? model.compilerOutput.testOutputDir : model.compilerOutput.outputDir ] - null).collect { it.toString() }
+   ]
   }
 
   

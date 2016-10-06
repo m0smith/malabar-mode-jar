@@ -108,7 +108,8 @@ public class MavenProjectHandler {
       projectInfo['runtime']['sources'] +
       projectInfo['test']['elements'] +
       projectInfo['runtime']['elements'] +
-      projectInfo['test']['classpath'];
+      projectInfo['test']['classpath'] +
+      projectInfo['runtime']['classpath'] 
       def resourceCache = new ResourceCache();
       classpath.each({if(it != null) {println "IT:" + it; resourceCache.submit(it)}});
       bootClasspath.split(System.getProperty("path.separator")).each({if(it != null) resourceCache.submit(it)});
