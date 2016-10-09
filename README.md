@@ -48,9 +48,9 @@ gradle -Dexec.args="-p 4429" run
 
 ```groovy
 def malabar = { classLoader = new groovy.lang.GroovyClassLoader();
-    Map[] grapez = [[group: 'com.software-ninja' , module:'malabar', version:'2.0.4']]
+    Map[] grapez = [[group: 'com.software-ninja' , module:'malabar', version:'2.3.1']]
     groovy.grape.Grape.grab(classLoader: classLoader, grapez)
-    classLoader.loadClass('com.software_ninja.malabar.Malabar').newInstance().startCL(classLoader); }; 
+    classLoader.loadClass('com.software_ninja.malabar.MalabarStart').newInstance().startCL(classLoader); }; 
 malabar();
 ```
 
